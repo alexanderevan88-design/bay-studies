@@ -1,0 +1,33 @@
+{
+  "name": "Bay Studies",
+  "short_name": "Bay Studies",
+  "description": "Trusted focus groups and paid studies across the SF Bay Area. Verified firms. No fee. Ever.",
+  "start_url": "/feed",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#5F6F52",
+  "theme_color": "#5F6F52",
+  "lang": "en-US",
+  "categories": ["lifestyle", "business"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

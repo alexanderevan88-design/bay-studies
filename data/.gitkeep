@@ -1,0 +1,1 @@
+# Keep data/ in git; runtime inbox.json is gitignored (see .gitignore).
