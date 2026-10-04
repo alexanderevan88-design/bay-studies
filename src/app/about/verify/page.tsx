@@ -5,6 +5,7 @@ import { AppShell } from "@/components/AppShell";
 import { Logo } from "@/components/Logo";
 import { TRUST_CHECKLIST, TRUST_FIRMS } from "@/data/trustChecklist";
 import { SOURCES } from "@/data/sources";
+import { SEED_FIRM_COUNT } from "@/data/studies";
 
 export default function VerifySourcesPage() {
   return (
@@ -20,20 +21,51 @@ export default function VerifySourcesPage() {
           </Link>
         </div>
         <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-sage-600">
-          Trust
+          Trust · Bay Area
         </p>
         <h1 className="font-serif text-3xl font-semibold text-sage-900">
-          How we verify sources
+          How we verify &amp; source
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-stone-600">
-          Bay Studies is a soft-launch aggregator — not a job board dump. Every
-          invite passes From-gate, parse confidence, and (for new domains) a
-          human review before it hits your feed.
+          Bay Studies is a soft-launch aggregator for the SF Bay Area — not a
+          job-board dump. We only list verified research firms. Every invite
+          passes a From-domain allowlist, parse checks, and (for new domains) a{" "}
+          <strong className="font-semibold text-stone-800">human Approve</strong>{" "}
+          before it hits your feed.
         </p>
       </header>
 
       <div className="space-y-3 px-5 py-5 pb-10">
-        <section className="rounded-2xl border border-sage-100 bg-sage-50/80 p-4">
+        <section className="rounded-2xl border border-sage-200 bg-sage-50/80 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-sage-700">
+            Soft launch — honest scope
+          </p>
+          <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-stone-700">
+            <li>
+              <strong className="font-semibold text-sage-900">Bay Area only</strong>{" "}
+              (MVP metros: SF, East Bay, Peninsula, South Bay / San Jose).
+            </li>
+            <li>
+              <strong className="font-semibold text-sage-900">
+                {SEED_FIRM_COUNT} verified firms
+              </strong>{" "}
+              on our allowlist — focus facilities, sensory labs, big-tech panels,
+              and vetted UX / playtest platforms.
+            </li>
+            <li>
+              <strong className="font-semibold text-sage-900">Human gate</strong>{" "}
+              — new From domains stay in review until an admin Approves once.
+              Auto-publish only after that, and only at high confidence.
+            </li>
+            <li>
+              <strong className="font-semibold text-sage-900">No fee. Ever.</strong>{" "}
+              You apply on the firm&apos;s own site. We never take a cut or
+              collect screener answers.
+            </li>
+          </ul>
+        </section>
+
+        <section className="rounded-2xl border border-sage-100 bg-white p-4 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wide text-stone-400">
             Firms we list
           </p>
@@ -76,9 +108,13 @@ export default function VerifySourcesPage() {
         </ol>
 
         <p className="rounded-xl border border-dashed border-sage-200 bg-white px-4 py-3 text-center text-sm font-medium text-sage-800">
-          No fee. Ever.{" "}
+          No fee. Ever. · Bay Area verified firms ·{" "}
           <Link href="/privacy" className="underline">
             Privacy
+          </Link>
+          {" · "}
+          <Link href="/feed" className="underline">
+            Back to feed
           </Link>
         </p>
       </div>

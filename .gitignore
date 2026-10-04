@@ -41,3 +41,7 @@ next-env.d.ts
 
 # server-side inbox store (runtime)
 /data/inbox.json
+.env*
+
+# server-side published studies store (runtime)
+/data/published.json

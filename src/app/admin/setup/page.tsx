@@ -13,6 +13,7 @@ type CheckId =
   | "mailgun"
   | "webhook"
   | "secret"
+  | "adminSecret"
   | "firmEmail";
 
 type CheckItem = {
@@ -47,6 +48,12 @@ const CHECKS: CheckItem[] = [
       "Set a strong secret on the host. When set, unsigned POSTs to /api/inbound are rejected with 401.",
   },
   {
+    id: "adminSecret",
+    title: "ADMIN_SECRET",
+    detail:
+      "Shared secret for /admin/* pages. When set, middleware redirects to /admin/login. Leave empty only for local/dev (amber banner). Soft-launch: not OAuth.",
+  },
+  {
     id: "firmEmail",
     title: "First firm panel signup email",
     detail:
@@ -62,6 +69,7 @@ function loadDone(): Record<CheckId, boolean> {
     mailgun: false,
     webhook: false,
     secret: false,
+    adminSecret: false,
     firmEmail: false,
   };
   if (typeof window === "undefined") return empty;
@@ -81,6 +89,7 @@ export default function AdminSetupPage() {
     mailgun: false,
     webhook: false,
     secret: false,
+    adminSecret: false,
     firmEmail: false,
   });
   const [ready, setReady] = useState(false);

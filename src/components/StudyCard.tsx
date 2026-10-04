@@ -3,7 +3,12 @@
 import Link from "next/link";
 import type { Study } from "@/lib/types";
 import { STUDY_TYPE_LABELS } from "@/lib/types";
-import { formatDuration } from "@/lib/match";
+import {
+  applyCtaLabel,
+  formatStudyDuration,
+  formatStudyPay,
+  studySnippet,
+} from "@/lib/enrich";
 import { TrustLine } from "./TrustLine";
 import { VerifiedBadge } from "./VerifiedBadge";
 
@@ -24,19 +29,37 @@ export function StudyCard({
   profileReady?: boolean;
 }) {
   const fromEmail = study.id.startsWith("pub-");
+  const payLabel = formatStudyPay(study);
+  const durationLabel = formatStudyDuration(study);
+  const snippet = studySnippet(study);
+  const cta = applyCtaLabel(study);
+  const metaBits = [
+    STUDY_TYPE_LABELS[study.type],
+    study.location,
+    study.modality === "remote" ? "Remote" : null,
+  ].filter(Boolean);
 
   return (
     <article className="overflow-hidden rounded-2xl border border-sage-100 bg-white p-4 shadow-sm shadow-sage-900/5 transition hover:border-sage-200 hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-lg font-semibold tracking-tight text-sage-900">
-            ${study.pay}{" "}
-            <span className="font-normal text-stone-500">
-              · {formatDuration(study.durationMinutes)}
-            </span>
-          </p>
-          <p className="mt-0.5 break-words text-sm text-stone-600">
-            {STUDY_TYPE_LABELS[study.type]} · {study.location}
+          {(payLabel || durationLabel) && (
+            <p className="text-lg font-semibold tracking-tight text-sage-900">
+              {payLabel ?? "Pay TBD"}
+              {durationLabel && (
+                <span className="font-normal text-stone-500">
+                  {" "}
+                  · {durationLabel}
+                </span>
+              )}
+            </p>
+          )}
+          <p
+            className={`break-words text-sm text-stone-600 ${
+              payLabel || durationLabel ? "mt-0.5" : ""
+            }`}
+          >
+            {metaBits.join(" · ")}
           </p>
         </div>
         {study.verified && (
@@ -47,10 +70,15 @@ export function StudyCard({
       </div>
 
       <h3 className="mt-3 break-words font-serif text-base leading-snug text-stone-900">
-        {study.title}
+        <Link
+          href={`/studies/${study.id}`}
+          className="hover:text-sage-800 hover:underline"
+        >
+          {study.title}
+        </Link>
       </h3>
 
-      <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-stone-600">
+      <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-stone-600">
         <span className="max-w-full break-words font-medium text-sage-800">
           {study.firm}
         </span>
@@ -114,16 +142,39 @@ export function StudyCard({
         )}
       </div>
 
+      {snippet && (
+        <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-stone-600">
+          {snippet}
+        </p>
+      )}
+
+      {study.portalNote && (
+        <p className="mt-2 rounded-lg bg-amber-50 px-2.5 py-1.5 text-xs text-amber-950">
+          {study.portalNote}
+        </p>
+      )}
+
       <div className="mt-3">
         <TrustLine domain={study.firmDomain} compact />
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+        <a
+          href={study.applyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-11 w-full flex-1 items-center justify-center gap-1.5 rounded-xl bg-sage-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sage-800 active:scale-[0.99]"
+        >
+          {cta}
+          <span aria-hidden className="text-xs font-normal opacity-90">
+            ↗
+          </span>
+        </a>
         <Link
           href={`/studies/${study.id}`}
-          className="inline-flex w-full items-center justify-center rounded-xl bg-sage-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sage-800 active:scale-[0.99]"
+          className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-sage-200 bg-white px-4 py-2.5 text-sm font-semibold text-sage-800 transition hover:bg-sage-50 sm:w-auto sm:shrink-0"
         >
-          View
+          Details
         </Link>
       </div>
     </article>

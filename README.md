@@ -23,6 +23,8 @@ npm start       # serve production build
 
 ## Deploy (public + Mailgun)
 
+Craigslist SF Bay **jobs → etc** is an inspiration scrape only: weekly import into the admin inbox, human Approve still required, clinical and out-of-area skipped by default. See **[docs/CRAIGSLIST.md](docs/CRAIGSLIST.md)**.
+
 See **[docs/DEPLOY.md](docs/DEPLOY.md)** for Vercel (preferred), env vars (`INBOUND_WEBHOOK_SECRET`, `MAIL_PROVIDER`), pointing a Mailgun inbound route at `https://YOUR_DOMAIN/api/inbound`, MX/domain notes, and an ngrok tunnel alternative before you buy a domain.
 
 In-app checklist: [/admin/setup](http://localhost:3000/admin/setup) after `npm run dev` (or on your deployed host).

@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
+import { get, put } from "@vercel/blob";
 import type { ParseLog, RawEmail, StudyDraft } from "./types";
 
 /** One persisted inbound email + parse result (server-side store). */
@@ -12,15 +13,29 @@ export interface InboxItem {
   storedAt: string;
 }
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const INBOX_PATH = path.join(DATA_DIR, "inbox.json");
+const BLOB_PATHNAME = "inbox/bay-studies-inbox.json";
 
-// Persistence: data/inbox.json is gitignored and works locally / on a single disk host.
-// On Vercel serverless the filesystem is ephemeral — do not rely on it for production volume.
-// TODO: swap read/write/upsert for Vercel Blob or Postgres (keep InboxItem shape).
+/**
+ * Local / single-disk hosts: data/inbox.json
+ * Vercel serverless without Blob: /tmp (writable; ephemeral per instance)
+ * With BLOB_READ_WRITE_TOKEN: durable Vercel Blob JSON at inbox/bay-studies-inbox.json
+ */
+function resolveInboxPath(): string {
+  if (process.env.VERCEL || process.env.INBOX_USE_TMP === "1") {
+    return path.join("/tmp", "bay-studies-inbox.json");
+  }
+  return path.join(process.cwd(), "data", "inbox.json");
+}
 
-async function ensureStore(): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
+const INBOX_PATH = resolveInboxPath();
+
+function blobEnabled(): boolean {
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim());
+}
+
+async function ensureFileStore(): Promise<void> {
+  const dir = path.dirname(INBOX_PATH);
+  await fs.mkdir(dir, { recursive: true });
   try {
     await fs.access(INBOX_PATH);
   } catch {
@@ -28,8 +43,8 @@ async function ensureStore(): Promise<void> {
   }
 }
 
-export async function readInbox(): Promise<InboxItem[]> {
-  await ensureStore();
+async function readInboxFromFile(): Promise<InboxItem[]> {
+  await ensureFileStore();
   try {
     const raw = await fs.readFile(INBOX_PATH, "utf8");
     const parsed = JSON.parse(raw) as InboxItem[];
@@ -39,9 +54,66 @@ export async function readInbox(): Promise<InboxItem[]> {
   }
 }
 
-export async function writeInbox(items: InboxItem[]): Promise<void> {
-  await ensureStore();
+async function writeInboxToFile(items: InboxItem[]): Promise<void> {
+  await ensureFileStore();
   await fs.writeFile(INBOX_PATH, JSON.stringify(items, null, 2) + "\n", "utf8");
+}
+
+async function readInboxFromBlob(): Promise<InboxItem[]> {
+  try {
+    const result = await get(BLOB_PATHNAME, {
+      access: "private",
+      useCache: false,
+    });
+    if (!result || result.statusCode !== 200 || !result.stream) {
+      return [];
+    }
+    const raw = await new Response(result.stream).text();
+    const parsed = JSON.parse(raw) as InboxItem[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    const name = err && typeof err === "object" && "name" in err ? String((err as { name: string }).name) : "";
+    const message = err instanceof Error ? err.message : String(err);
+    // Missing blob on first boot — start empty.
+    if (
+      name === "BlobNotFoundError" ||
+      /not found|404/i.test(message)
+    ) {
+      return [];
+    }
+    console.error("[inboxStore] blob read failed, falling back to file:", message);
+    return readInboxFromFile();
+  }
+}
+
+async function writeInboxToBlob(items: InboxItem[]): Promise<void> {
+  const body = JSON.stringify(items, null, 2) + "\n";
+  await put(BLOB_PATHNAME, body, {
+    access: "private",
+    contentType: "application/json",
+    allowOverwrite: true,
+    addRandomSuffix: false,
+  });
+}
+
+export async function readInbox(): Promise<InboxItem[]> {
+  if (blobEnabled()) {
+    return readInboxFromBlob();
+  }
+  return readInboxFromFile();
+}
+
+export async function writeInbox(items: InboxItem[]): Promise<void> {
+  if (blobEnabled()) {
+    try {
+      await writeInboxToBlob(items);
+      return;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error("[inboxStore] blob write failed, falling back to file:", message);
+    }
+  }
+  await writeInboxToFile(items);
 }
 
 /** Append or replace by messageId / email.id. Newest first. */
@@ -69,5 +141,8 @@ export async function findByMessageId(
 }
 
 export function inboxPath(): string {
+  if (blobEnabled()) {
+    return `blob:${BLOB_PATHNAME}`;
+  }
   return INBOX_PATH;
 }

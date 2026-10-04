@@ -15,8 +15,10 @@ export const SOURCES: Source[] = [
       "consumerlearningcenter.com",
       "clc-research.com",
       "mail.consumerlearningcenter.com",
+      "theclc.com",
+      "mail.theclc.com",
     ],
-    applyDomains: ["consumerlearningcenter.com", "clc-research.com", "theclc.com"],
+    applyDomains: ["consumerlearningcenter.com", "clc-research.com", "theclc.com", "my.theclc.com"],
     defaultType: "ux-interview",
     defaultModality: "remote",
   },
@@ -51,8 +53,19 @@ export const SOURCES: Source[] = [
   {
     id: "fieldwork",
     name: "Fieldwork",
-    fromDomains: ["fieldwork.com", "mail.fieldwork.com", "e.fieldwork.com"],
-    applyDomains: ["fieldwork.com"],
+    fromDomains: [
+      "fieldwork.com",
+      "mail.fieldwork.com",
+      "e.fieldwork.com",
+      // Profile / portal mail (live: DoNotReply@focusgroupresearch.com). From only —
+      // click-tracking hosts on this domain are not apply links.
+      "focusgroupresearch.com",
+    ],
+    applyDomains: [
+      "fieldwork.com",
+      "participate.fieldwork.com",
+      "pate.fieldwork.com",
+    ],
     defaultType: "focus-group",
     defaultModality: "in-person",
   },
@@ -164,13 +177,35 @@ export const SOURCES: Source[] = [
       "arvr-researchpanel.com",
       "arvr-researchcommunity.com",
       "mail.arvr-researchpanel.com",
+      // Alida hosts the AR/VR community. Suffix match covers mail./community. subdomains.
+      // facebook.com / fb.com are intentionally not allowlisted (shared consumer mail).
+      "alida.com",
     ],
     applyDomains: [
       "meta.com",
       "arvr-researchpanel.com",
       "arvr-researchcommunity.com",
+      "alida.com",
     ],
     defaultType: "ux-interview",
+    defaultModality: "in-person",
+  },
+  {
+    id: "watchlab",
+    name: "watchLAB",
+    fromDomains: ["watchlab.com", "tfaforms.com"],
+    applyDomains: ["watchlab.com", "tfaforms.com"],
+    defaultType: "focus-group",
+    defaultModality: "in-person",
+  },
+  {
+    // Inspiration only — not a verified research firm. From-gate so admin
+    // Approve is not blocked. Publish path forces verified:false.
+    id: "craigslist-sfbay-etc",
+    name: "Craigslist SF Bay etc",
+    fromDomains: ["craigslist.org"],
+    applyDomains: ["craigslist.org"],
+    defaultType: "focus-group",
     defaultModality: "in-person",
   },
 ];

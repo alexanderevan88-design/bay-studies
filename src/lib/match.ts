@@ -202,7 +202,12 @@ export function ageRangeLabel(study: Study): string {
 
 /** Push / toast title: "New $150 study — ages 25–40". */
 export function formatMatchNotifyTitle(study: Study): string {
-  return `New $${study.pay} study — ${ageRangeLabel(study)}`;
+  const payBit =
+    study.payLabel?.trim() ||
+    (study.pay > 0 ? `$${study.pay}` : null);
+  return payBit
+    ? `New ${payBit} study — ${ageRangeLabel(study)}`
+    : `New study — ${ageRangeLabel(study)}`;
 }
 
 export function formatDuration(minutes: number): string {

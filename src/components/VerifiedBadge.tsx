@@ -18,7 +18,7 @@ export function VerifiedBadge({
       >
         <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zm3.03 4.72l-3.5 3.5a.75.75 0 01-1.06 0l-1.5-1.5a.75.75 0 111.06-1.06l.97.97 2.97-2.97a.75.75 0 111.06 1.06z" />
       </svg>
-      Verified
+      Verified firm
     </>
   );
 
@@ -29,12 +29,16 @@ export function VerifiedBadge({
       <Link
         href={href}
         className={`${classes} transition hover:bg-sage-100 hover:ring-sage-300`}
-        title="How we verify sources"
+        title="Allowlisted Bay Area firm — how we verify"
       >
         {inner}
       </Link>
     );
   }
 
-  return <span className={classes}>{inner}</span>;
+  return (
+    <span className={classes} title="Allowlisted Bay Area firm">
+      {inner}
+    </span>
+  );
 }

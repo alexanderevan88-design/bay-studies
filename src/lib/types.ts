@@ -77,6 +77,12 @@ export interface Study {
   };
   description: string;
   applyUrl: string;
+  /** Freeform pay when not a clean dollar amount (e.g. "gift card", "up to $200"). */
+  payLabel?: string;
+  /** Freeform duration when minutes are unknown (e.g. "90–120 min"). */
+  durationLabel?: string;
+  /** Operator note for portal-only invites (shown on detail + optional card). */
+  portalNote?: string;
   /** Week 3: link-health — non-2xx apply URL */
   expired?: boolean;
   linkCheckedAt?: string;
@@ -193,10 +199,18 @@ export interface StudyDraft {
   eligibilityNotes?: string;
   description?: string;
   applyUrl?: string;
+  /** Freeform pay string from enrich form when not purely numeric. */
+  payLabel?: string;
+  /** Freeform duration string from enrich form. */
+  durationLabel?: string;
+  /** Optional portal / login hint for consumers. */
+  portalNote?: string;
   confidence: number;
   warnings: string[];
   fromAllowed: boolean;
   matchedSourceId?: string;
+  /** Original firm From recovered from a Gmail forwarded block (audit: email.from stays envelope). */
+  recoveredFrom?: string;
   extractedLinks: string[];
 }
 

@@ -34,7 +34,7 @@ export default function FeedPage() {
 
 function FeedInner() {
   const { profile, ready } = useProfile();
-  const { studies, ready: studiesReady } = useFeedStudies();
+  const { studies, published, ready: studiesReady } = useFeedStudies();
   const {
     toast,
     unread,
@@ -59,6 +59,7 @@ function FeedInner() {
   }, [pullPendingToast]);
 
   const ranked = useMemo(() => {
+    const publishedIds = new Set(published.map((study) => study.id));
     const list = studies
       .filter((s) => !profile.dismissedStudyIds.includes(s.id))
       .map((s) => ({
@@ -67,11 +68,13 @@ function FeedInner() {
         matched: isProfileMatch(s, profile),
       }));
 
-    // Soft filter by prefs when onboarded (keep expired visible with badge)
+    // Soft filter by prefs when onboarded (keep expired visible with badge).
+    // Pay is intentionally not a soft filter during soft launch: keep the feed full.
+    // Server-published studies are human-approved, so never hide them for prefs.
     let filtered = list;
     if (profile.onboarded) {
       filtered = list.filter(({ study }) => {
-        if (study.pay < profile.minPay) return false;
+        if (publishedIds.has(study.id)) return true;
         if (!profile.studyTypes.includes(study.type)) return false;
         if (
           profile.modality !== "both" &&
@@ -93,11 +96,15 @@ function FeedInner() {
       if (Boolean(a.study.expired) !== Boolean(b.study.expired)) {
         return a.study.expired ? 1 : -1;
       }
-      return b.match - a.match;
+      if (a.match !== b.match) return b.match - a.match;
+      // Human-approved publications win ties with seed studies.
+      const aPublished = publishedIds.has(a.study.id) ? 1 : 0;
+      const bPublished = publishedIds.has(b.study.id) ? 1 : 0;
+      return bPublished - aPublished;
     });
 
     return { cards: sorted, softFilteredEmpty, rawCount: list.length };
-  }, [profile, studies, isNewMatch]);
+  }, [profile, studies, published, isNewMatch]);
 
   const saved = useMemo(
     () =>
@@ -281,11 +288,30 @@ function FeedInner() {
             </div>
           )}
 
+        {tab === "feed" && cards.length > 0 && (
+          <div className="rounded-xl border border-sage-100 bg-white/80 px-3.5 py-2.5 text-xs leading-relaxed text-stone-600">
+            <span className="font-semibold text-sage-800">
+              Bay Area · verified firms
+            </span>
+            {" · "}
+            Soft-launch: allowlisted sources, human Approve for new domains.{" "}
+            <Link
+              href="/about/verify"
+              className="font-semibold text-sage-800 underline"
+            >
+              How we source
+            </Link>
+            {" · "}
+            No fee. Ever.
+          </div>
+        )}
+
         {cards.length === 0 ? (
           <EmptyState
             tab={tab}
             profileIncomplete={profileIncomplete}
             hasAnyStudies={studies.length > 0}
+            publishedEmpty={published.length === 0}
           />
         ) : (
           cards.map(({ study, match, matched }) => {
@@ -362,7 +388,8 @@ function IncompleteProfileCard({ onboarded }: { onboarded: boolean }) {
         </h2>
         <p className="mt-1.5 text-sm text-stone-600">
           Metro, age, and study types help us filter junk and surface real paid
-          studies from {SEED_FIRM_COUNT} verified Bay Area firms.
+          studies from {SEED_FIRM_COUNT} verified Bay Area firms (soft-launch:
+          human Approve for new domains).
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           <Link
@@ -387,10 +414,13 @@ function EmptyState({
   tab,
   profileIncomplete,
   hasAnyStudies,
+  publishedEmpty,
 }: {
   tab: FeedTab;
   profileIncomplete: boolean;
   hasAnyStudies: boolean;
+  /** True when server published store has no approved email studies yet. */
+  publishedEmpty: boolean;
 }) {
   if (tab === "saved") {
     return (
@@ -451,7 +481,10 @@ function EmptyState({
     );
   }
 
-  // Feed — no matches
+  // Feed — empty: distinguish no published mail yet vs prefs miss vs true quiet
+  const quietPublished =
+    publishedEmpty && !hasAnyStudies;
+
   return (
     <div className="rounded-2xl border border-dashed border-sage-200 bg-white px-6 py-12 text-center">
       <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sage-50 text-sage-700">
@@ -472,16 +505,20 @@ function EmptyState({
       <p className="mt-4 font-serif text-xl text-sage-900">
         {profileIncomplete
           ? "Your feed wakes up after a quick profile"
-          : hasAnyStudies
-            ? "Nothing fits your filters right now"
-            : "Quiet week — we’re still watching"}
+          : quietPublished
+            ? "Still warming up — check back soon"
+            : hasAnyStudies
+              ? "Nothing fits your filters right now"
+              : "Quiet week — we’re still watching"}
       </p>
       <p className="mt-2 text-sm leading-relaxed text-stone-500">
         {profileIncomplete
-          ? `Add metro, age, and study types so we can match you against ${SEED_FIRM_COUNT} verified Bay Area firms.`
-          : hasAnyStudies
-            ? "Try lowering min pay or turning on more study types — then check Alerts so you don’t miss the next fit."
-            : `We watch ${SEED_FIRM_COUNT} verified firms. Keep Alerts on and we’ll nudge you when a paid study lands.`}
+          ? `Add metro, age, and study types so we can match you against ${SEED_FIRM_COUNT} verified Bay Area firms. Soft-launch: every listing is allowlisted and human-reviewed.`
+          : quietPublished
+            ? `We’re onboarding ${SEED_FIRM_COUNT} verified Bay Area firms. New invites need a human Approve before they appear — keep Alerts on and complete your profile so you’re ready.`
+            : hasAnyStudies
+              ? "Try lowering min pay or turning on more study types — then check Alerts so you don’t miss the next verified fit."
+              : `We watch ${SEED_FIRM_COUNT} verified Bay Area firms. Soft-launch means human Approve for new domains. Keep Alerts on and we’ll nudge you when a paid study lands.`}
       </p>
       <div className="mt-5 flex flex-wrap justify-center gap-2">
         {profileIncomplete ? (
@@ -505,17 +542,16 @@ function EmptyState({
         >
           Check Alerts
         </Link>
-        {!profileIncomplete && (
-          <Link
-            href="/about/verify"
-            className="inline-flex rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm font-medium text-stone-600"
-          >
-            How we verify
-          </Link>
-        )}
+        <Link
+          href="/about/verify"
+          className="inline-flex rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm font-medium text-stone-600"
+        >
+          How we verify
+        </Link>
       </div>
       <p className="mt-4 text-xs text-stone-400">
-        {SEED_FIRM_COUNT} verified firms · No fee. Ever.
+        {SEED_FIRM_COUNT} verified Bay Area firms · Human Approve · No fee.
+        Ever.
       </p>
     </div>
   );

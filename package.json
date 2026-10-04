@@ -8,21 +8,24 @@
     "start": "next start",
     "lint": "next lint",
     "dev:send-email": "npx --yes tsx scripts/dev-send-email.ts",
-    "test:inbound": "bash scripts/test-inbound.sh"
+    "test:inbound": "bash scripts/test-inbound.sh",
+    "test:parse": "npx --yes tsx scripts/parse-apply-url.test.ts",
+    "cl:import": "npx --yes tsx scripts/craigslist-etc-import.ts"
   },
   "dependencies": {
+    "@vercel/blob": "^2.8.0",
+    "next": "14.2.35",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.35"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.35"
+    "typescript": "^5"
   }
 }

@@ -25,16 +25,24 @@ import {
   draftToStudy,
   parseEmail,
 } from "@/lib/parseEmail";
+import {
+  draftToEnrich,
+  isTipStyleDraft,
+  mergeEnrichIntoDraft,
+  type EnrichFields,
+} from "@/lib/enrich";
 import { onStudyApproved } from "@/lib/notify";
 import {
   clearAllDemoData,
   loadIngestStates,
-  loadPublishedStudies,
-  patchPublishedStudy,
-  removePublishedStudy,
   setIngestState,
-  upsertPublishedStudy,
 } from "@/lib/storage";
+import {
+  apiPatchPublished,
+  apiRemovePublished,
+  apiUpsertPublished,
+  fetchPublishedStudies,
+} from "@/lib/publishedApi";
 import type {
   DraftStatus,
   IngestItemState,
@@ -75,6 +83,11 @@ export default function AdminIngestPage() {
     checking: false,
     lastMessage: null,
   });
+  const [reparsing, setReparsing] = useState(false);
+  /** Operator edits keyed by email id — Approve uses these over raw draft. */
+  const [enrichById, setEnrichById] = useState<Record<string, EnrichFields>>(
+    {}
+  );
   const [autoPublishOn, setAutoPublishOn] = useState(false);
   const [analytics, setAnalytics] = useState<AnalyticsCounters>({
     publishes: 0,
@@ -82,12 +95,20 @@ export default function AdminIngestPage() {
     falseRejects: 0,
   });
   const autoRanRef = useRef(false);
+  // Refs so rebuild/loadInbox stay stable. Putting liveEmails in those
+  // callbacks and then listing loadInbox in an effect re-fetches forever:
+  // setLiveEmails(new array) → new rebuild → new loadInbox → effect again.
+  const liveEmailsRef = useRef<RawEmail[] | null>(null);
+  const inboxSourceRef = useRef(inboxSource);
+  liveEmailsRef.current = liveEmails;
+  inboxSourceRef.current = inboxSource;
 
-  const rebuild = useCallback((emails?: RawEmail[]) => {
+  const rebuild = useCallback((emails?: RawEmail[], publishedOverride?: Study[]) => {
+    const source = inboxSourceRef.current;
     const list =
       emails ??
-      liveEmails ??
-      (inboxSource === "live" ? [] : SAMPLE_EMAILS);
+      liveEmailsRef.current ??
+      (source === "live" ? [] : SAMPLE_EMAILS);
     const states = loadIngestStates();
     const next: Row[] = list.map((email) => {
       const draft = parseEmail(email);
@@ -115,14 +136,21 @@ export default function AdminIngestPage() {
       if (prev && next.some((r) => r.email.id === prev)) return prev;
       return next[0]?.email.id ?? null;
     });
-    const pub = loadPublishedStudies();
-    setPublished(pub);
-    setPublishedCount(pub.length);
+    // Mutations already returned the list — don't GET /api/published again.
+    if (publishedOverride) {
+      setPublished(publishedOverride);
+      setPublishedCount(publishedOverride.length);
+    } else {
+      void fetchPublishedStudies({ fresh: true }).then((pub) => {
+        setPublished(pub);
+        setPublishedCount(pub.length);
+      });
+    }
     setAnalytics(loadAnalytics());
     setAutoPublishOn(loadAutoPublishEnabled());
     setReady(true);
     return next;
-  }, [liveEmails, inboxSource]);
+  }, []);
 
   const loadInbox = useCallback(async () => {
     try {
@@ -134,6 +162,8 @@ export default function AdminIngestPage() {
       };
       if (res.ok && data.ok && Array.isArray(data.items) && data.items.length > 0) {
         const emails = data.items.map((i) => i.email);
+        liveEmailsRef.current = emails;
+        inboxSourceRef.current = "live";
         setLiveEmails(emails);
         setInboxSource("live");
         rebuild(emails);
@@ -142,14 +172,19 @@ export default function AdminIngestPage() {
     } catch {
       /* fall through to fixtures */
     }
+    liveEmailsRef.current = null;
+    inboxSourceRef.current = "fixtures";
     setLiveEmails(null);
     setInboxSource("fixtures");
     rebuild(SAMPLE_EMAILS);
   }, [rebuild]);
 
+  // Once on mount. Refresh calls loadInbox directly. Do not depend on
+  // loadInbox: a live inbox used to change its identity every fetch and loop.
   useEffect(() => {
     void loadInbox();
-  }, [loadInbox]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const onAnalytics = () => setAnalytics(loadAnalytics());
@@ -162,13 +197,32 @@ export default function AdminIngestPage() {
     [rows, selectedId]
   );
 
+  const getEnrich = useCallback(
+    (row: Row): EnrichFields =>
+      enrichById[row.email.id] ?? draftToEnrich(row.draft),
+    [enrichById]
+  );
+
+  const patchEnrich = useCallback(
+    (emailId: string, patch: Partial<EnrichFields>, baseDraft: StudyDraft) => {
+      setEnrichById((prev) => {
+        const current = prev[emailId] ?? draftToEnrich(baseDraft);
+        return { ...prev, [emailId]: { ...current, ...patch } };
+      });
+    },
+    []
+  );
+
   const flash = (msg: string) => {
     setToast(msg);
     window.setTimeout(() => setToast(null), 3200);
   };
 
   const publishRow = useCallback(
-    (emailId: string, opts: { viaAuto: boolean; trustDomain: boolean }) => {
+    async (
+      emailId: string,
+      opts: { viaAuto: boolean; trustDomain: boolean }
+    ): Promise<boolean> => {
       const row = rows.find((r) => r.email.id === emailId);
       if (!row) return false;
       if (!row.draft.fromAllowed) {
@@ -190,8 +244,18 @@ export default function AdminIngestPage() {
       }
 
       const wasRejected = row.status === "rejected";
-      const study = draftToStudy(row.draft, emailId);
-      upsertPublishedStudy(study);
+      const enrich = getEnrich(row);
+      const merged = mergeEnrichIntoDraft(row.draft, enrich);
+      if (!merged.applyUrl?.trim()) {
+        flash("Add a screener / portal link before publishing.");
+        return false;
+      }
+      if (!merged.title?.trim()) {
+        flash("Add a title before publishing.");
+        return false;
+      }
+      const study = draftToStudy(merged, emailId);
+      const publishedList = await apiUpsertPublished(study);
       setIngestState({
         emailId,
         status: "approved",
@@ -207,7 +271,7 @@ export default function AdminIngestPage() {
       }
       const { matched, notification } = onStudyApproved(study);
       notifyFeedUpdated();
-      rebuild();
+      rebuild(undefined, publishedList);
       const how = opts.viaAuto ? "Auto-published" : "Approved";
       if (matched && notification) {
         flash(
@@ -222,15 +286,15 @@ export default function AdminIngestPage() {
       }
       return true;
     },
-    [rows, rebuild]
+    [rows, rebuild, getEnrich]
   );
 
   const approve = (emailId: string) => {
-    publishRow(emailId, { viaAuto: false, trustDomain: true });
+    void publishRow(emailId, { viaAuto: false, trustDomain: true });
   };
 
   const autoPublish = (emailId: string) => {
-    publishRow(emailId, { viaAuto: true, trustDomain: false });
+    void publishRow(emailId, { viaAuto: true, trustDomain: false });
   };
 
   // When global toggle is on, auto-publish eligible pending rows once per mount/toggle
@@ -245,30 +309,37 @@ export default function AdminIngestPage() {
     );
     if (eligible.length === 0) return;
     autoRanRef.current = true;
-    let n = 0;
-    for (const r of eligible) {
-      const ok = publishRow(r.email.id, { viaAuto: true, trustDomain: false });
-      if (ok) n += 1;
-    }
-    if (n > 0) {
-      flash(`Auto-publish ran for ${n} eligible invite(s).`);
-    }
+    void (async () => {
+      let n = 0;
+      for (const r of eligible) {
+        const ok = await publishRow(r.email.id, {
+          viaAuto: true,
+          trustDomain: false,
+        });
+        if (ok) n += 1;
+      }
+      if (n > 0) {
+        flash(`Auto-publish ran for ${n} eligible invite(s).`);
+      }
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional one-shot on toggle/ready
   }, [ready, autoPublishOn, rows]);
 
   const reject = (emailId: string) => {
-    const row = rows.find((r) => r.email.id === emailId);
-    if (row?.publishedStudyId) {
-      removePublishedStudy(row.publishedStudyId);
-    }
-    setIngestState({
-      emailId,
-      status: "rejected",
-      reviewedAt: new Date().toISOString(),
-    });
-    notifyFeedUpdated();
-    rebuild();
-    flash("Rejected — removed from feed if it was published.");
+    void (async () => {
+      const row = rows.find((r) => r.email.id === emailId);
+      const publishedList = row?.publishedStudyId
+        ? await apiRemovePublished(row.publishedStudyId)
+        : undefined;
+      setIngestState({
+        emailId,
+        status: "rejected",
+        reviewedAt: new Date().toISOString(),
+      });
+      notifyFeedUpdated();
+      rebuild(undefined, publishedList);
+      flash("Rejected — removed from feed if it was published.");
+    })();
   };
 
   const resetDemo = () => {
@@ -276,6 +347,7 @@ export default function AdminIngestPage() {
     clearAutoPublishPref();
     resetAnalytics();
     autoRanRef.current = false;
+    setEnrichById({});
     notifyFeedUpdated();
     rebuild();
     flash("Cleared published + ingest + notifications + analytics demo state.");
@@ -307,7 +379,11 @@ export default function AdminIngestPage() {
   };
 
   const checkSelectedLink = async () => {
-    if (!selected?.draft.applyUrl && !selected?.publishedStudyId) {
+    if (
+      !selected?.draft.applyUrl &&
+      !selected?.publishedStudyId &&
+      !(selected && getEnrich(selected).applyUrl.trim())
+    ) {
       flash("No apply URL on this draft.");
       return;
     }
@@ -316,6 +392,7 @@ export default function AdminIngestPage() {
       (studyId
         ? published.find((s) => s.id === studyId)?.applyUrl
         : undefined) ??
+      (getEnrich(selected).applyUrl.trim() || undefined) ??
       selected.draft.applyUrl;
     if (!url) {
       flash("No apply URL to check.");
@@ -325,13 +402,13 @@ export default function AdminIngestPage() {
     try {
       const result = await checkUrl(url);
       if (studyId) {
-        patchPublishedStudy(studyId, {
+        const publishedList = await apiPatchPublished(studyId, {
           expired: !result.ok,
           linkStatus: result.status,
           linkCheckedAt: result.checkedAt,
         });
         notifyFeedUpdated();
-        rebuild();
+        rebuild(undefined, publishedList);
       }
       const msg = result.ok
         ? `Link OK (${result.status})`
@@ -348,25 +425,26 @@ export default function AdminIngestPage() {
   };
 
   const checkAllPublishedLinks = async () => {
-    const list = loadPublishedStudies();
+    const list = await fetchPublishedStudies({ fresh: true });
     if (list.length === 0) {
       flash("No published studies to check.");
       return;
     }
     setLinkCheck({ checking: true, lastMessage: null });
     let expiredCount = 0;
+    let publishedList = list;
     try {
       for (const study of list) {
         const result = await checkUrl(study.applyUrl);
         if (!result.ok) expiredCount += 1;
-        patchPublishedStudy(study.id, {
+        publishedList = await apiPatchPublished(study.id, {
           expired: !result.ok,
           linkStatus: result.status,
           linkCheckedAt: result.checkedAt,
         });
       }
       notifyFeedUpdated();
-      rebuild();
+      rebuild(undefined, publishedList);
       const msg = `Checked ${list.length} link(s) — ${expiredCount} expired / non-2xx.`;
       setLinkCheck({ checking: false, lastMessage: msg });
       flash(msg);
@@ -374,6 +452,78 @@ export default function AdminIngestPage() {
       const msg = e instanceof Error ? e.message : "Batch check failed";
       setLinkCheck({ checking: false, lastMessage: msg });
       flash(msg);
+    }
+  };
+
+  /** Re-run parseEmail on a live inbox item; persist draft+parseLog to inbox store. */
+  const reparseSelected = async () => {
+    if (!selected) return;
+    if (inboxSource !== "live") {
+      flash("Re-parse only applies to live inbox items (not fixtures).");
+      return;
+    }
+    setReparsing(true);
+    try {
+      const res = await fetch("/api/inbox/reparse", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          emailId: selected.email.id,
+          messageId: selected.email.messageId,
+        }),
+      });
+      const data = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        item?: { email: RawEmail; draft: StudyDraft; parseLog: ParseLog };
+        recoveredFrom?: string | null;
+        fromAllowed?: boolean;
+        confidence?: number;
+        matchedSourceId?: string | null;
+      };
+      if (!res.ok || !data.ok || !data.item) {
+        flash(data.error ?? "Re-parse failed");
+        return;
+      }
+      const { email, draft, parseLog } = data.item;
+      setRows((prev) =>
+        prev.map((r) => {
+          if (r.email.id !== email.id) return r;
+          const fromDomain = extractEmailDomain(email.from);
+          const newDomain = isNewFromDomain(fromDomain);
+          return {
+            ...r,
+            email,
+            draft,
+            parseLog,
+            fromDomain,
+            isNewDomain: newDomain,
+            autoEligible: canAutoPublish({
+              confidence: draft.confidence,
+              fromAllowed: draft.fromAllowed,
+              fromDomain,
+            }),
+          };
+        })
+      );
+      // Clear enrich overrides so form shows fresh draft values
+      setEnrichById((prev) => {
+        const next = { ...prev };
+        delete next[email.id];
+        return next;
+      });
+      const bits = [
+        `Re-parsed · ${data.confidence ?? draft.confidence}% conf`,
+        data.fromAllowed ? "From OK" : "From blocked",
+      ];
+      if (data.recoveredFrom) bits.push(`recoveredFrom: ${data.recoveredFrom}`);
+      if (data.matchedSourceId) bits.push(`source ${data.matchedSourceId}`);
+      flash(bits.join(" · "));
+    } catch (e) {
+      flash(e instanceof Error ? e.message : "Re-parse failed");
+    } finally {
+      setReparsing(false);
     }
   };
 
@@ -386,6 +536,9 @@ export default function AdminIngestPage() {
   const selectedPublished = selected?.publishedStudyId
     ? published.find((s) => s.id === selected.publishedStudyId)
     : undefined;
+  const selectedEnrich = selected ? getEnrich(selected) : null;
+  const tipStyle = selected ? isTipStyleDraft(selected.draft) : false;
+  const enrichDisabled = selected?.status === "approved";
 
   if (!ready) {
     return (
@@ -531,17 +684,25 @@ export default function AdminIngestPage() {
                   <StatusPill status={row.status} />
                 </div>
                 <p className="mt-1 truncate text-xs text-stone-500">
-                  {row.email.from}
+                  {row.draft.matchedSourceId === "craigslist-sfbay-etc"
+                    ? `Craigslist etc · ${row.draft.firm ?? "unverified"}`
+                    : row.email.from}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
                   <span
                     className={`rounded-full px-2 py-0.5 font-medium ${
-                      row.draft.fromAllowed
-                        ? "bg-sage-100 text-sage-800"
-                        : "bg-rose-100 text-rose-800"
+                      row.draft.matchedSourceId === "craigslist-sfbay-etc"
+                        ? "bg-amber-100 text-amber-900"
+                        : row.draft.fromAllowed
+                          ? "bg-sage-100 text-sage-800"
+                          : "bg-rose-100 text-rose-800"
                     }`}
                   >
-                    {row.draft.fromAllowed ? "From OK" : "From blocked"}
+                    {row.draft.matchedSourceId === "craigslist-sfbay-etc"
+                      ? "CL source"
+                      : row.draft.fromAllowed
+                        ? "From OK"
+                        : "From blocked"}
                   </span>
                   {row.isNewDomain && (
                     <span className="rounded-full bg-amber-100 px-2 py-0.5 font-bold text-amber-900">
@@ -561,6 +722,14 @@ export default function AdminIngestPage() {
                       ${row.draft.pay}
                     </span>
                   )}
+                  {isTipStyleDraft(row.draft) && row.status === "pending" && (
+                    <span
+                      className="rounded-full bg-sky-100 px-2 py-0.5 font-medium text-sky-900"
+                      title="Tip-style invite — open firm portal, paste title/pay/screener into Enrich before Approve"
+                    >
+                      Tip
+                    </span>
+                  )}
                   {pub?.expired && (
                     <span className="rounded-full bg-rose-100 px-2 py-0.5 font-medium text-rose-800">
                       Expired
@@ -577,7 +746,7 @@ export default function AdminIngestPage() {
             </p>
             <p className="mt-1 leading-relaxed">
               {inboxSource === "live"
-                ? "Loaded from GET /api/inbox (data/inbox.json). New mail arrives via POST /api/inbound (Mailgun) or POST /api/inbound/dev for local inject."
+                ? "Loaded from GET /api/inbox. Email via POST /api/inbound. Craigslist etc drafts via scripts/craigslist-etc-import.ts → POST /api/inbox/import (human Approve; not auto-published)."
                 : "No items in data/inbox.json yet — showing sample firm invites so you can demo Approve → feed. Inject a test with npm run dev:send-email, then Refresh inbox."}
             </p>
             {inboxSource !== "live" && (
@@ -620,15 +789,23 @@ export default function AdminIngestPage() {
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wide text-stone-400">
-                      Raw email
+                      {selected.draft.matchedSourceId === "craigslist-sfbay-etc"
+                        ? "Craigslist listing"
+                        : "Raw email"}
                     </p>
                     <h2 className="mt-1 font-serif text-lg font-semibold text-stone-900">
                       {selected.email.subject}
                     </h2>
                     <dl className="mt-2 space-y-1 text-xs text-stone-600">
                       <div>
-                        <span className="font-medium text-stone-400">From </span>
-                        {selected.email.from}
+                        <span className="font-medium text-stone-400">
+                          {selected.draft.matchedSourceId === "craigslist-sfbay-etc"
+                            ? "Source "
+                            : "From "}
+                        </span>
+                        {selected.draft.matchedSourceId === "craigslist-sfbay-etc"
+                          ? "Craigslist SF Bay · jobs → etc"
+                          : selected.email.from}
                         {selected.isNewDomain && (
                           <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold uppercase text-amber-900">
                             New domain — review required
@@ -697,6 +874,7 @@ export default function AdminIngestPage() {
                       disabled={
                         linkCheck.checking ||
                         !(
+                          selectedEnrich?.applyUrl.trim() ||
                           selected.draft.applyUrl ||
                           selectedPublished?.applyUrl
                         )
@@ -705,6 +883,17 @@ export default function AdminIngestPage() {
                       className="rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm font-semibold text-stone-700 hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       Check apply link
+                    </button>
+                    <button
+                      type="button"
+                      disabled={reparsing || inboxSource !== "live"}
+                      onClick={() => {
+                        void reparseSelected();
+                      }}
+                      className="rounded-xl border border-sky-300 bg-sky-50 px-4 py-2 text-sm font-semibold text-sky-900 hover:bg-sky-100 disabled:cursor-not-allowed disabled:opacity-50"
+                      title="Re-run parseEmail on this inbox item and save draft+parseLog (Gmail forwards / allowlist updates)"
+                    >
+                      {reparsing ? "Re-parsing…" : "Re-parse draft"}
                     </button>
                   </div>
                 </div>
@@ -715,10 +904,239 @@ export default function AdminIngestPage() {
                     auto-publish. Auto-publish stays disabled until then.
                   </div>
                 )}
+                {tipStyle && (
+                  <div className="mt-3 rounded-lg border border-sky-200 bg-sky-50 px-3 py-2 text-xs text-sky-950">
+                    <strong>Tip email</strong> — open the firm portal, grab
+                    the study title / pay / screener link, then paste into{" "}
+                    <em>Enrich before Approve</em> below. Dashboard-only links
+                    (e.g. my.theclc.com) make thin feed cards until you enrich.
+                  </div>
+                )}
+                {selected.draft.matchedSourceId === "craigslist-sfbay-etc" && (
+                  <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-950">
+                    <strong>Craigslist etc.</strong> Inspiration source, not a
+                    verified firm. Confidence stays low and the card publishes
+                    unverified. Confirm the apply link before Approve → feed.
+                    {selected.draft.applyUrl && (
+                      <>
+                        {" "}
+                        Apply:{" "}
+                        <a
+                          href={selected.draft.applyUrl}
+                          className="font-semibold underline"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {selected.draft.applyUrl}
+                        </a>
+                      </>
+                    )}
+                  </div>
+                )}
                 <pre className="mt-4 max-h-56 overflow-auto rounded-xl bg-stone-50 p-3 text-xs leading-relaxed text-stone-700 whitespace-pre-wrap">
                   {selected.email.text}
                 </pre>
               </section>
+
+              {selectedEnrich && (
+                <section className="rounded-2xl border border-sage-200 bg-white p-4 shadow-sm">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-sage-600">
+                        Enrich before Approve
+                      </p>
+                      <p className="mt-0.5 text-sm text-stone-600">
+                        Edits publish to the feed — not the raw parser draft
+                        alone. Screener / portal link is required.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      disabled={enrichDisabled}
+                      onClick={() =>
+                        setEnrichById((prev) => {
+                          const next = { ...prev };
+                          delete next[selected.email.id];
+                          return next;
+                        })
+                      }
+                      className="rounded-lg border border-stone-300 bg-white px-2.5 py-1 text-xs font-medium text-stone-600 hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      Reset to draft
+                    </button>
+                  </div>
+
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    <label className="block text-xs font-medium text-stone-600 sm:col-span-2">
+                      Title
+                      <input
+                        type="text"
+                        disabled={enrichDisabled}
+                        value={selectedEnrich.title}
+                        onChange={(e) =>
+                          patchEnrich(
+                            selected.email.id,
+                            { title: e.target.value },
+                            selected.draft
+                          )
+                        }
+                        className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 disabled:bg-stone-50"
+                        placeholder="Study title for the feed"
+                      />
+                    </label>
+                    <label className="block text-xs font-medium text-stone-600">
+                      Firm
+                      <input
+                        type="text"
+                        disabled={enrichDisabled}
+                        value={selectedEnrich.firm}
+                        onChange={(e) =>
+                          patchEnrich(
+                            selected.email.id,
+                            { firm: e.target.value },
+                            selected.draft
+                          )
+                        }
+                        className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 disabled:bg-stone-50"
+                      />
+                    </label>
+                    <label className="block text-xs font-medium text-stone-600">
+                      Location / modality
+                      <div className="mt-1 flex gap-2">
+                        <input
+                          type="text"
+                          disabled={enrichDisabled}
+                          value={selectedEnrich.location}
+                          onChange={(e) =>
+                            patchEnrich(
+                              selected.email.id,
+                              { location: e.target.value },
+                              selected.draft
+                            )
+                          }
+                          className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 disabled:bg-stone-50"
+                          placeholder="Location"
+                        />
+                        <select
+                          disabled={enrichDisabled}
+                          value={selectedEnrich.modality}
+                          onChange={(e) =>
+                            patchEnrich(
+                              selected.email.id,
+                              {
+                                modality: e.target.value as EnrichFields["modality"],
+                              },
+                              selected.draft
+                            )
+                          }
+                          className="rounded-lg border border-stone-300 bg-white px-2 py-2 text-sm text-stone-900 disabled:bg-stone-50"
+                        >
+                          <option value="">—</option>
+                          <option value="in-person">In-person</option>
+                          <option value="remote">Remote</option>
+                        </select>
+                      </div>
+                    </label>
+                    <label className="block text-xs font-medium text-stone-600">
+                      Pay{" "}
+                      <span className="font-normal text-stone-400">
+                        (optional · number or text)
+                      </span>
+                      <input
+                        type="text"
+                        disabled={enrichDisabled}
+                        value={selectedEnrich.pay}
+                        onChange={(e) =>
+                          patchEnrich(
+                            selected.email.id,
+                            { pay: e.target.value },
+                            selected.draft
+                          )
+                        }
+                        className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 disabled:bg-stone-50"
+                        placeholder="125 or gift card"
+                      />
+                    </label>
+                    <label className="block text-xs font-medium text-stone-600">
+                      Duration{" "}
+                      <span className="font-normal text-stone-400">
+                        (optional)
+                      </span>
+                      <input
+                        type="text"
+                        disabled={enrichDisabled}
+                        value={selectedEnrich.duration}
+                        onChange={(e) =>
+                          patchEnrich(
+                            selected.email.id,
+                            { duration: e.target.value },
+                            selected.draft
+                          )
+                        }
+                        className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 disabled:bg-stone-50"
+                        placeholder="60 or 90 min"
+                      />
+                    </label>
+                    <label className="block text-xs font-medium text-stone-600 sm:col-span-2">
+                      Who it&apos;s looking for / short description
+                      <textarea
+                        disabled={enrichDisabled}
+                        value={selectedEnrich.description}
+                        onChange={(e) =>
+                          patchEnrich(
+                            selected.email.id,
+                            { description: e.target.value },
+                            selected.draft
+                          )
+                        }
+                        rows={3}
+                        className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 disabled:bg-stone-50"
+                        placeholder="Ages, who qualifies, what the session is about"
+                      />
+                    </label>
+                    <label className="block text-xs font-medium text-stone-600 sm:col-span-2">
+                      Screener / apply URL{" "}
+                      <span className="font-normal text-rose-600">
+                        (required)
+                      </span>
+                      <input
+                        type="url"
+                        disabled={enrichDisabled}
+                        value={selectedEnrich.applyUrl}
+                        onChange={(e) =>
+                          patchEnrich(
+                            selected.email.id,
+                            { applyUrl: e.target.value },
+                            selected.draft
+                          )
+                        }
+                        className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-sm text-stone-900 disabled:bg-stone-50"
+                        placeholder="https://…"
+                      />
+                    </label>
+                    <label className="block text-xs font-medium text-stone-600 sm:col-span-2">
+                      Portal note{" "}
+                      <span className="font-normal text-stone-400">
+                        (optional)
+                      </span>
+                      <input
+                        type="text"
+                        disabled={enrichDisabled}
+                        value={selectedEnrich.portalNote}
+                        onChange={(e) =>
+                          patchEnrich(
+                            selected.email.id,
+                            { portalNote: e.target.value },
+                            selected.draft
+                          )
+                        }
+                        className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 disabled:bg-stone-50"
+                        placeholder='e.g. Log into CLC Activities for full details'
+                      />
+                    </label>
+                  </div>
+                </section>
+              )}
 
               <section className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -812,7 +1230,7 @@ export default function AdminIngestPage() {
             <Stat label="False rejects" value={analytics.falseRejects} />
           </div>
           <p className="text-stone-400">
-            localStorage · demo only · opens count on study detail
+            Published list: server store (/api/published) · analytics still localStorage
           </p>
         </div>
       </footer>

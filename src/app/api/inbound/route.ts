@@ -5,7 +5,7 @@ import {
   normalizedToRawEmail,
   verifyInboundSecret,
 } from "@/lib/inboundPayload";
-import { upsertInboxItem, findByMessageId } from "@/lib/inboxStore";
+import { upsertInboxItem, findByMessageId, inboxPath } from "@/lib/inboxStore";
 import { buildParseLog, parseEmail } from "@/lib/parseEmail";
 
 export const dynamic = "force-dynamic";
@@ -83,33 +83,45 @@ export async function POST(request: Request) {
     );
   }
 
-  const existing = await findByMessageId(normalized.messageId);
-  const email = normalizedToRawEmail(normalized, existing?.email.id);
-  const draft = parseEmail(email);
-  const parseLog = buildParseLog(email, draft);
+  try {
+    const existing = await findByMessageId(normalized.messageId);
+    const email = normalizedToRawEmail(normalized, existing?.email.id);
+    const draft = parseEmail(email);
+    const parseLog = buildParseLog(email, draft);
 
-  const item = await upsertInboxItem({
-    email,
-    draft,
-    parseLog,
-    provider: normalized.provider,
-    storedAt: new Date().toISOString(),
-  });
+    const item = await upsertInboxItem({
+      email,
+      draft,
+      parseLog,
+      provider: normalized.provider,
+      storedAt: new Date().toISOString(),
+    });
 
-  return NextResponse.json(
-    {
-      ok: true,
-      id: item.email.id,
-      messageId: item.email.messageId,
-      provider: item.provider,
-      fromAllowed: draft.fromAllowed,
-      confidence: draft.confidence,
-      subject: email.subject,
-      duplicate: Boolean(existing),
-    },
-    { status: existing ? 200 : 201 }
-  );
+    return NextResponse.json(
+      {
+        ok: true,
+        id: item.email.id,
+        messageId: item.email.messageId,
+        provider: item.provider,
+        fromAllowed: draft.fromAllowed,
+        confidence: draft.confidence,
+        subject: email.subject,
+        duplicate: Boolean(existing),
+        store: inboxPath(),
+      },
+      { status: existing ? 200 : 201 }
+    );
+  } catch (storeErr) {
+    const message =
+      storeErr instanceof Error ? storeErr.message : "Inbox store failed";
+    console.error("[inbound] store error", storeErr);
+    return NextResponse.json(
+      { ok: false, error: message, hint: "inbox persistence failed" },
+      { status: 500 }
+    );
+  }
 }
+
 
 export async function GET() {
   return NextResponse.json({

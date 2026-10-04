@@ -13,7 +13,7 @@ export const TRUST_CHECKLIST: TrustCheckItem[] = [
     id: "allowlist",
     title: "Firm on our allowlist",
     body:
-      "Sender From domain must match a known research firm (Bay Area facilities, sensory labs, big-tech public panels, and vetted playtest/UX platforms). Unknown senders never auto-publish.",
+      "Sender From domain must match a known SF Bay Area research firm (facilities, sensory labs, big-tech public panels, and vetted playtest/UX platforms). Unknown senders never auto-publish.",
   },
   {
     id: "apply-domain",
@@ -31,7 +31,7 @@ export const TRUST_CHECKLIST: TrustCheckItem[] = [
     id: "verified-badge",
     title: "Verified firm badge",
     body:
-      "Cards show Verified when From is allowlisted and parse confidence is solid — so you can spot trusted invites at a glance.",
+      "Cards show Verified firm when From is allowlisted and parse confidence is solid — so you can spot trusted Bay Area invites at a glance.",
   },
   {
     id: "no-fee",
@@ -55,7 +55,7 @@ export const TRUST_CHECKLIST: TrustCheckItem[] = [
     id: "human-gate",
     title: "Human gate for soft launch",
     body:
-      "Auto-publish only runs when confidence ≥ 75%, From is allowlisted, and the domain was previously approved. Manual Approve / Reject always available.",
+      "Soft launch: auto-publish only when confidence ≥ 75%, From is allowlisted, and the domain was previously human-approved. Manual Approve / Reject always available.",
   },
 ];
 
@@ -75,4 +75,5 @@ export const TRUST_FIRMS = [
   "PlaytestCloud",
   "User Interviews",
   "Meta AR/VR",
+  "watchLAB",
 ] as const;

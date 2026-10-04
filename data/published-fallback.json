@@ -1,0 +1,247 @@
+[
+  {
+    "id": "pub-cl-7974124959",
+    "title": "Participants needed, paid Market Research Study \u2014 pays $400",
+    "firm": "paidfocusgroupstudies.com",
+    "firmDomain": "paidfocusgroupstudies.com",
+    "verified": false,
+    "pay": 400,
+    "durationMinutes": 0,
+    "type": "focus-group",
+    "modality": "in-person",
+    "location": "San Francisco",
+    "metro": [
+      "sf",
+      "oakland",
+      "peninsula",
+      "san-jose",
+      "east-bay"
+    ],
+    "when": "See screener",
+    "eligibility": {
+      "notes": "Resident of San Francisco County or a surrounding county. See the screener."
+    },
+    "description": "Paid focus group on social issues. $400 for San Francisco County residents or surrounding counties. Found on Craigslist SF Bay jobs \u2192 etc. The firm is an unverified aggregator \u2014 confirm before you apply.",
+    "applyUrl": "https://paidfocusgroupstudies.com",
+    "portalNote": "Source: Craigslist SF Bay jobs \u2192 etc. Unverified aggregator \u2014 confirm the firm before you apply.",
+    "publishedAt": "2026-10-04T17:50:00.000Z",
+    "expired": false,
+    "linkStatus": null
+  },
+  {
+    "id": "pub-cl-7975583982",
+    "title": "Get paid for your opinions \u2014 Research America panel (Bay Area)",
+    "firm": "Research America",
+    "firmDomain": "metrixmatrix.com",
+    "verified": false,
+    "pay": 0,
+    "payLabel": "Varies / panel",
+    "durationMinutes": 0,
+    "type": "focus-group",
+    "modality": "remote",
+    "location": "Bay Area",
+    "metro": [
+      "sf",
+      "oakland",
+      "peninsula",
+      "san-jose",
+      "east-bay"
+    ],
+    "when": "Ongoing panel \u2014 invites vary",
+    "eligibility": {
+      "notes": "Adults. Panel signup, not one session. Pay varies by study."
+    },
+    "description": "Research America panel signup from a Craigslist Bay Area posting (Sacramento duplicate not listed). Surveys, interviews, or focus groups, online or occasionally in person. Pay varies. Confirm the signup link before you join.",
+    "applyUrl": "https://survey.metrixmatrix.com/SE/?st=tV6aAl7DSRd1VVaA33cNMZ78Z3luCjlalwqpRB7u+rc=",
+    "portalNote": "Source: Craigslist SF Bay jobs \u2192 etc. Generic research panel \u2014 pay varies. Unverified until you confirm the firm.",
+    "publishedAt": "2026-10-04T17:50:00.000Z",
+    "expired": false,
+    "linkStatus": null
+  },
+  {
+    "id": "pub-cl-7977416475",
+    "title": "$300 \u2014 Paid in-person focus group (Oct 27, Jamestown)",
+    "firm": "realfocusgroup.com",
+    "firmDomain": "realfocusgroup.com",
+    "verified": false,
+    "pay": 300,
+    "durationMinutes": 600,
+    "durationLabel": "8:00 a.m.\u20136:00 p.m.",
+    "type": "focus-group",
+    "modality": "in-person",
+    "location": "Jamestown, CA (Tuolumne County)",
+    "metro": [
+      "sf",
+      "oakland",
+      "peninsula",
+      "san-jose",
+      "east-bay"
+    ],
+    "when": "Tuesday, October 27",
+    "eligibility": {
+      "notes": "Tuolumne County residents. Outside the core Bay Area metros."
+    },
+    "description": "In-person focus group on Tuesday, October 27, 8:00 a.m. to 6:00 p.m., at a venue in Jamestown. $300. Tuolumne County residents. Breakfast, lunch, and snacks included. Not a Bay Area facility. Found on Craigslist \u2014 confirm the firm before you apply.",
+    "applyUrl": "https://realfocusgroup.com/groups/in-person-tuolumne-county-ca-october-27/",
+    "portalNote": "Source: Craigslist. In-person in Jamestown (Tuolumne County), not a Bay Area facility. Unverified \u2014 confirm before you apply.",
+    "publishedAt": "2026-10-04T17:50:00.000Z",
+    "expired": false,
+    "linkStatus": null
+  },
+  {
+    "id": "pub-em-live-muu104zt-47lmip",
+    "title": "You've been matched! Earn $150 for November Palo Alto Customer Clinic 1:1 Research Session with Sarah",
+    "firm": "User Interviews",
+    "firmDomain": "userinterviews.com",
+    "verified": true,
+    "pay": 150,
+    "durationMinutes": 60,
+    "type": "ux-interview",
+    "modality": "remote",
+    "location": "Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "when": "Session",
+    "eligibility": {
+      "notes": "See screener for full eligibility details"
+    },
+    "description": "---------- Forwarded message ----------\r\nFrom: *User Interviews* <>\r\nDate: Sun, Oct 4, 2026 at 1:53 PM\r\nSubject: You've been matched! Earn $150 for November Palo Alto Customer\r\nClinic 1:1 Research Session with Sarah\r\nTo: Jake Alexander <>\r\n\r\n[image: ui-logo]\r\n\r\n\ud83d\udc4b\r\nYou've been matched with a study based on your professional profile!\r\nInterested? Start screener here\r\n<https://www.userinterviews.com/projects/WG08mjKwIA/apply",
+    "applyUrl": "https://www.userinterviews.com/projects/WG08mjKwIA/apply",
+    "publishedAt": "2026-10-04T16:21:04.508Z",
+    "expired": false,
+    "linkStatus": null
+  },
+  {
+    "id": "pub-em-ui-palo-alto-clinic-oct3",
+    "title": "November Palo Alto Customer Clinic (1:1)",
+    "firm": "User Interviews",
+    "firmDomain": "userinterviews.com",
+    "verified": true,
+    "pay": 75,
+    "payLabel": "$75 via digital gift card",
+    "durationMinutes": 60,
+    "type": "interview",
+    "modality": "in-person",
+    "location": "Palo Alto, CA",
+    "metro": [
+      "peninsula",
+      "sf",
+      "san-jose"
+    ],
+    "when": "November \u2014 see screener for dates",
+    "eligibility": {
+      "notes": "Early applicant invite; see screener for full eligibility."
+    },
+    "description": "1-on-1 research session in Palo Alto via User Interviews. Incentive $75 digital gift card. 60 minutes.",
+    "applyUrl": "https://www.userinterviews.com/projects/lPQ46bMxzA/apply",
+    "publishedAt": "2026-10-04T04:42:32.524Z",
+    "expired": false,
+    "linkStatus": null
+  },
+  {
+    "id": "pub-em-live-muta8tdg-sb57lw",
+    "title": "\ud83d\udd25 New Study: Get Paid to Workout! NEW On-Site Study (Fremont, CA) - Earn $75.00 via Visa gift card",
+    "firm": "User Interviews",
+    "firmDomain": "userinterviews.com",
+    "verified": true,
+    "pay": 75,
+    "durationMinutes": 60,
+    "type": "focus-group",
+    "modality": "in-person",
+    "location": "Bay Area",
+    "metro": [
+      "sf",
+      "oakland",
+      "peninsula",
+      "san-jose",
+      "east-bay"
+    ],
+    "when": "Session",
+    "eligibility": {
+      "notes": "See screener for full eligibility details"
+    },
+    "description": "\ud83d\udc4b Apply below to be considered if you think you may be a fit!\r\n\r\nInterested? Start screener here!\r\nhttps://www.userinterviews.com/projects/XfxPIhjs7g/apply\r\n\r\nTitle: Get Paid to Workout! NEW On-Site Study (Fremont, CA)\r\n\r\nIncentive: $75.00 via Visa gift card\r\n\r\n\r\nSession length: 60 minutes\r\n\r\nFormat:\r\n\r\n Focus Group in Fremont, CA\r\n\r\n\r\nIf selecte",
+    "applyUrl": "https://www.userinterviews.com/projects/XfxPIhjs7g/apply",
+    "publishedAt": "2026-10-04T04:18:00.134Z",
+    "expired": false,
+    "linkStatus": null
+  },
+  {
+    "id": "pub-fieldwork-2653SF26",
+    "title": "San Francisco community focus group (2653SF26)",
+    "firm": "Fieldwork",
+    "firmDomain": "fieldwork.com",
+    "verified": true,
+    "pay": 300,
+    "durationMinutes": 120,
+    "type": "focus-group",
+    "modality": "in-person",
+    "location": "San Francisco",
+    "metro": [
+      "sf"
+    ],
+    "when": "Thursday, Oct 15 \u2014 2-hour focus groups",
+    "address": "Fieldwork San Francisco (see portal for facility)",
+    "eligibility": {
+      "notes": "SF-area respondents. See the Fieldwork portal for full eligibility."
+    },
+    "description": "Fieldwork in-person focus group in San Francisco. About 2 hours. $300 incentive. Sessions on Oct 15 for SF-area respondents. Open the Fieldwork dashboard to check if you qualify and pick a slot. Does not overlap the Curion Redwood City sessions on Oct 12\u201313.",
+    "applyUrl": "https://pate.fieldwork.com",
+    "portalNote": "Listed on the Fieldwork respondent dashboard. Open the portal to confirm times and apply.",
+    "publishedAt": "2026-10-03T16:29:57.608088Z",
+    "matchedSourceId": "fieldwork"
+  },
+  {
+    "id": "pub-em-live-murjji27-epj6ow",
+    "title": "Redwood City beverage study (RWC_J105195_10)",
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "pay": 40,
+    "durationMinutes": 30,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "when": "Tuesday, October 13th \u2014 Sessions available from 9:00 AM - 2:15 PM",
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "description": "Curion in-person beverage study in Redwood City. About 30 minutes. $40 incentive. Tuesday, October 13th \u2014 Sessions available from 9:00 AM - 2:15 PM. Location: 350 Bridge Parkway, Redwood City, CA 94065. Open screener to check if you qualify.",
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Apply via the Curion portal screener link.",
+    "sourceEmailId": "em-live-murjji27-epj6ow",
+    "publishedAt": "2026-10-02T22:36:32.915838Z",
+    "matchedSourceId": "curion"
+  },
+  {
+    "id": "pub-em-live-murgxgsl-rmrgy7",
+    "title": "Redwood City in-person study (RWC_J105148)",
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "pay": 40,
+    "durationMinutes": 30,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "when": "Monday, Oct 12 \u2014 sessions 9:00 AM\u20135:30 PM",
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility."
+    },
+    "description": "Curion in-person study in Redwood City. About 30 minutes. $40 incentive. Sessions available Oct 12 from 9:00 AM to 5:30 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Curion portal \u2014 use your panelist login. Screener link is the email\u2019s CLICK HERE (SendGrid tracking).",
+    "sourceEmailId": "em-live-murgxgsl-rmrgy7",
+    "publishedAt": "2026-10-02T21:35:58.010420Z",
+    "matchedSourceId": "curion"
+  }
+]

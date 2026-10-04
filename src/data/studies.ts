@@ -1,9 +1,9 @@
 import type { Study } from "@/lib/types";
 
 /**
- * Seed feed for local / soft-launch demo.
- * Spans the expanded 15-firm allowlist (FIRST + STRETCH) with realistic
- * Bay Area pay, durations, and locations. Published email ingest merges on top.
+ * Local/dev sample studies only. The public production feed does not use these.
+ * Spans the expanded 16-firm allowlist (FIRST + STRETCH) with realistic
+ * Bay Area pay, durations, and locations.
  */
 export const STUDIES: Study[] = [
   {
@@ -364,16 +364,42 @@ export function getStudyById(id: string): Study | undefined {
   return STUDIES.find((s) => s.id === id);
 }
 
+const SEED_IDS = new Set(STUDIES.map((study) => study.id));
+
+/** True for placeholder rows in STUDIES, not human-approved publications. */
+export function isSeedStudy(id: string): boolean {
+  return SEED_IDS.has(id);
+}
+
+function seedStudiesOptIn(): boolean {
+  return (
+    process.env.SHOW_SEED_STUDIES === "1" ||
+    process.env.NEXT_PUBLIC_SHOW_SEED_STUDIES === "1"
+  );
+}
+
 /**
- * Merge Week 1 seed + Week 2 approved publications.
- * Published wins on id collision.
+ * Public feed list.
+ * Approved publications always win: if any exist, seeds are not merged in.
+ * Production default is published-only (empty array when nothing is approved).
+ * Seeds fill an empty list only for local/dev (NODE_ENV=development), or when
+ * SHOW_SEED_STUDIES / NEXT_PUBLIC_SHOW_SEED_STUDIES is "1" outside production.
  */
 export function mergeStudies(published: Study[]): Study[] {
-  const map = new Map<string, Study>();
-  for (const s of STUDIES) map.set(s.id, s);
-  for (const s of published) map.set(s.id, s);
-  return Array.from(map.values());
+  const approved: Study[] = [];
+  const seen = new Set<string>();
+  for (const study of published) {
+    if (seen.has(study.id)) continue;
+    seen.add(study.id);
+    approved.push(study);
+  }
+  if (approved.length > 0) return approved;
+
+  const allowSeeds =
+    process.env.NODE_ENV !== "production" &&
+    (process.env.NODE_ENV === "development" || seedStudiesOptIn());
+  return allowSeeds ? STUDIES.slice() : [];
 }
 
 /** Soft-launch firm count for empty-state / trust copy. */
-export const SEED_FIRM_COUNT = 15;
+export const SEED_FIRM_COUNT = 16;

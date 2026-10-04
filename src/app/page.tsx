@@ -7,7 +7,6 @@ import { Logo } from "@/components/Logo";
 import { TrustLine } from "@/components/TrustLine";
 import { useProfile } from "@/hooks/useProfile";
 import { METRO_LABELS, type Metro } from "@/lib/types";
-import { SEED_FIRM_COUNT } from "@/data/studies";
 
 const METROS = Object.keys(METRO_LABELS) as Metro[];
 
@@ -86,8 +85,9 @@ export default function WelcomePage() {
             <span className="text-sage-600">No scam board junk.</span>
           </h1>
           <p className="mt-4 text-base text-stone-600">
-            Bay Area only (MVP). {SEED_FIRM_COUNT} verified firms — you apply on
-            their site. No fee. Ever.
+            Bay Area only (MVP). The feed lists paid studies only after a
+            human Approve — not sample listings. You apply on the firm&apos;s
+            site. No fee. Ever.
           </p>
         </div>
       )}

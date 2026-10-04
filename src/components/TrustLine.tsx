@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function TrustLine({
   domain,
   compact = false,
@@ -16,27 +18,45 @@ export function TrustLine({
             <span className="font-medium text-sage-800">{domain}</span>
           </>
         ) : (
-          <> · Verified firms only</>
+          <> · Verified Bay Area firms</>
         )}
+        {" · "}
+        <Link
+          href="/about/verify"
+          className="font-medium text-sage-700 underline decoration-sage-300 underline-offset-2 hover:text-sage-900"
+        >
+          How we source
+        </Link>
       </p>
     );
   }
 
   return (
     <div className="rounded-xl border border-sage-100 bg-sage-50/80 px-3.5 py-3 text-sm text-sage-900">
-      <p className="font-medium">No fee. Ever.</p>
+      <p className="font-medium">No fee. Ever. · Bay Area verified firms</p>
       <p className="mt-1 text-stone-600">
         {domain ? (
           <>
             You&apos;ll finish on{" "}
             <span className="font-semibold text-sage-800">{domain}</span> — we
-            never take a cut. Verified firms only.
+            never take a cut. Soft-launch: invites are allowlisted and
+            human-approved before they hit your feed.
           </>
         ) : (
           <>
-            Verified local firms only. You leave the app to apply on their site.
+            Soft-launch aggregator for SF Bay Area focus groups &amp; paid
+            studies. Verified firms only — a human reviews new domains before
+            publish. You leave the app to apply on their site.
           </>
         )}
+      </p>
+      <p className="mt-2 text-xs text-sage-800">
+        <Link
+          href="/about/verify"
+          className="font-semibold underline decoration-sage-300 underline-offset-2 hover:text-sage-950"
+        >
+          How we verify &amp; source →
+        </Link>
       </p>
     </div>
   );

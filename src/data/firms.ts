@@ -19,7 +19,8 @@ export type FirmOnboard = {
     | "focusgroup"
     | "vgm"
     | "google-ux"
-    | "ea";
+    | "ea"
+    | "watchlab";
   name: string;
   /** Public panel / join page */
   joinUrl: string;
@@ -81,7 +82,7 @@ export const FIRST_FIRMS: FirmOnboard[] = [
     joinUrl: "https://participate.fieldwork.com/Account/Register",
     suggestedIngestEmail: "fieldwork@studies.YOUR_DOMAIN",
     notes:
-      "Register and choose San Francisco as nearest facility. Focus groups in FiDi. From: fieldwork.com.",
+      "Register and choose San Francisco as nearest facility. Focus groups in FiDi. From: fieldwork.com / focusgroupresearch.com (profile mail). Apply: fieldwork.com, participate.fieldwork.com, pate.fieldwork.com.",
     metroHint: "SF · Financial District",
   },
   {
@@ -139,6 +140,15 @@ export const FIRST_FIRMS: FirmOnboard[] = [
       "Create a Playtester profile for Redwood Shores campus sessions. Invites from @ea.com / @e.ea.com.",
     metroHint: "Peninsula · Redwood Shores",
   },
+  {
+    id: "watchlab",
+    name: "watchLAB",
+    joinUrl: "https://watchlab.com/sign-up/",
+    suggestedIngestEmail: "watchlab@studies.YOUR_DOMAIN",
+    notes:
+      "watchLAB qualitative recruiting — SF listed as a top market (also San Jose metro on signup). Join the community panel for email/SMS study invites. From: watchlab.com and tfaforms.com (FormAssembly invites). Screeners often on tfaforms.com.",
+    metroHint: "SF · Oakland · San Jose",
+  },
 ];
 
 /** Optional next join targets — already on SOURCES From-gate. */
@@ -176,7 +186,7 @@ export const STRETCH_FIRMS: StretchFirmOnboard[] = [
     joinUrl: "https://www.meta.com/research/ar-vr-panel/",
     suggestedIngestEmail: "meta-arvr@studies.YOUR_DOMAIN",
     notes:
-      "AR/VR user research panel (Alida community). Confirm invites from arvr-researchpanel.com — not Viewpoints app.",
+      "AR/VR user research panel (Alida community). From: arvr-researchpanel.com / arvr-researchcommunity.com / meta.com / alida.com (subdomains included). Not Viewpoints, and not facebook.com.",
     metroHint: "Bay Area · Menlo Park area",
   },
 ];
@@ -506,6 +516,28 @@ Learn more / screener:
 https://www.meta.com/research/ar-vr-panel/
 
 — Meta AR/VR Research Panel
+`,
+  },
+  watchlab: {
+    id: "watchlab",
+    from: "watchLAB <service@watchlab.com>",
+    to: "watchlab@studies.YOUR_DOMAIN",
+    subject: "SF Bay Area focus group: streaming habits — $175 / 90 min",
+    text: `Hi,
+
+watchLAB is recruiting for an in-person focus group in the San Francisco Bay Area.
+
+Topic: Streaming & entertainment habits
+Pay: $175
+Duration: 90 minutes
+Ages: 21–55
+Location: In-person · San Francisco
+When: Weekday evening sessions
+
+Screener:
+https://watchlab.com/sign-up/
+
+— watchLAB Recruiting
 `,
   },
 };

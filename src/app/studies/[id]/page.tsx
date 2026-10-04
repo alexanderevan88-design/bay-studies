@@ -6,15 +6,20 @@ import { useParams, useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { TrustLine } from "@/components/TrustLine";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
+import { isSeedStudy } from "@/data/studies";
 import { useFeedStudies } from "@/hooks/useFeedStudies";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useProfile } from "@/hooks/useProfile";
 import {
   computeMatchPercent,
   explainMatch,
-  formatDuration,
   isProfileMatch,
 } from "@/lib/match";
+import {
+  applyCtaLabel,
+  formatStudyDuration,
+  formatStudyPay,
+} from "@/lib/enrich";
 import { bumpOpen } from "@/lib/analytics";
 import { STUDY_TYPE_LABELS } from "@/lib/types";
 
@@ -89,6 +94,9 @@ export default function StudyDetailPage() {
   const applied = profile.appliedStudyIds.includes(study.id);
   const matched = isProfileMatch(study, profile);
   const neu = isNewMatch(study.id, matched);
+  const payLabel = formatStudyPay(study);
+  const durationLabel = formatStudyDuration(study);
+  const ctaLabel = applyCtaLabel(study);
 
   return (
     <AppShell>
@@ -173,12 +181,17 @@ export default function StudyDetailPage() {
           )}
         </div>
 
-        <p className="mt-4 text-2xl font-semibold tracking-tight text-sage-900">
-          ${study.pay}{" "}
-          <span className="text-lg font-normal text-stone-500">
-            · ~{formatDuration(study.durationMinutes)}
-          </span>
-        </p>
+        {(payLabel || durationLabel) && (
+          <p className="mt-4 text-2xl font-semibold tracking-tight text-sage-900">
+            {payLabel ?? "Pay TBD"}
+            {durationLabel && (
+              <span className="text-lg font-normal text-stone-500">
+                {" "}
+                · ~{durationLabel}
+              </span>
+            )}
+          </p>
+        )}
         <p className="mt-1 text-sm text-stone-600">
           {STUDY_TYPE_LABELS[study.type]} ·{" "}
           {study.modality === "remote" ? "Remote" : "In-person"}
@@ -251,8 +264,38 @@ export default function StudyDetailPage() {
           {study.description}
         </p>
 
-        <div className="mt-6">
+        {study.portalNote && (
+          <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+            <p className="text-xs font-semibold uppercase tracking-wide text-amber-800/80">
+              Portal note
+            </p>
+            <p className="mt-1">{study.portalNote}</p>
+          </div>
+        )}
+
+        <div className="mt-6 space-y-2">
           <TrustLine domain={study.firmDomain} />
+          <p className="px-0.5 text-xs leading-relaxed text-stone-500">
+            {study.verified ? (
+              <>
+                <span className="font-medium text-sage-800">Verified firm</span>
+                {" · "}
+                Allowlisted Bay Area source
+                {isSeedStudy(study.id)
+                  ? " · sample listing for local demo only"
+                  : " · human-approved for this feed"}
+                .{" "}
+              </>
+            ) : (
+              <>Pending verification · </>
+            )}
+            <Link
+              href="/about/verify"
+              className="font-medium text-sage-800 underline"
+            >
+              How we source
+            </Link>
+          </p>
         </div>
 
         <section className="mt-5 rounded-2xl border border-sage-100 bg-white p-4">
@@ -321,7 +364,7 @@ export default function StudyDetailPage() {
               onClick={() => markApplied(study.id)}
               className="flex min-h-12 w-full items-center justify-center rounded-xl border border-rose-300 bg-white px-4 py-3.5 text-base font-semibold text-rose-900 transition hover:bg-rose-50"
             >
-              Try apply link anyway
+              Try link anyway
             </a>
             <a
               href={`https://${study.firmDomain}`}
@@ -340,7 +383,7 @@ export default function StudyDetailPage() {
             onClick={() => markApplied(study.id)}
             className="mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-sage-700 px-4 py-3.5 text-base font-semibold text-white transition hover:bg-sage-800"
           >
-            Apply on {study.firm}
+            {ctaLabel}
             <span aria-hidden className="text-sm font-normal opacity-90">
               ↗
             </span>

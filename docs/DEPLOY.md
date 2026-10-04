@@ -27,27 +27,44 @@ Bay Studies is a Next.js 14 App Router app. **Vercel** is the simplest path.
 
 ### Important: inbox storage on serverless (persistence limits)
 
-Inbound mail is stored in `data/inbox.json` on the server filesystem (`src/lib/inboxStore.ts`). The file is **gitignored**; `data/.gitkeep` keeps the directory in the repo.
+Inbound mail is stored via `src/lib/inboxStore.ts`:
 
-**Vercel / serverless limits**
+| Mode | When | Path / key |
+|------|------|------------|
+| **Vercel Blob** (preferred on Vercel) | `BLOB_READ_WRITE_TOKEN` is set | Blob pathname `inbox/bay-studies-inbox.json` |
+| Ephemeral file | Vercel without Blob token | `/tmp/bay-studies-inbox.json` |
+| Local file | Laptop / single-disk host | `data/inbox.json` (gitignored; `data/.gitkeep` keeps the dir) |
+
+**Without Blob on Vercel**
 
 - Each serverless invocation may run on a **different instance** with an empty or reset filesystem.
-- Writes to `data/inbox.json` on Vercel are **ephemeral**: they can disappear between deploys, cold starts, or across concurrent instances. Do **not** treat this store as durable production storage.
-- Fine for a soft-launch smoke test (inject a few emails, Approve once). Not fine for real firm volume or multi-user review.
+- `/tmp` writes are **ephemeral**: mail can vanish on cold starts, deploys, or across concurrent instances.
+- Soft-launch still works without Blob (inject a few emails, Approve once). Expect lost mail under load.
 
-**When you outgrow the JSON file**
+**Enable Vercel Blob (recommended before real firm volume)**
+
+1. In the Vercel dashboard: open the **bay-studies** project → **Storage** → **Create** → **Blob**.
+2. Choose **Private** access (inbox JSON must not be public). Connect the store to **Production** (and Preview if you want).
+3. Vercel adds `BLOB_READ_WRITE_TOKEN` to the project env automatically. Redeploy so the runtime picks it up.
+4. Or from a linked CLI (already logged in as the project owner):
+
+```bash
+vercel blob create-store bay-studies-inbox --access private --yes --environment production
+vercel --prod
+```
+
+5. Confirm: after deploy, inbound mail should survive cold starts. `inboxPath()` reports `blob:inbox/bay-studies-inbox.json` when the token is present.
+
+**When you outgrow a single JSON blob**
 
 ```
-# TODO: replace data/inbox.json with durable storage before real production volume.
-# Preferred options on Vercel:
-#   - Vercel Blob (simple object store for JSON / serialized inbox items)
-#   - Postgres (Vercel Postgres / Neon / Supabase) — better for query, dedupe by messageId, multi-admin
-# Keep the same InboxItem shape in src/lib/inboxStore.ts; swap readInbox / writeInbox / upsertInboxItem.
+# TODO: Postgres (Vercel Postgres / Neon / Supabase) for query, dedupe by messageId, multi-admin.
+# Keep the same InboxItem shape; swap readInbox / writeInbox / upsertInboxItem.
 ```
 
 **Hosts with a disk**
 
-- On a **single Node host** (Fly volume, Railway, Render, VPS) with persistent disk, the JSON store is OK for early demo traffic.
+- On a **single Node host** (Fly volume, Railway, Render, VPS) with persistent disk, the local JSON store is OK for early demo traffic (leave `BLOB_READ_WRITE_TOKEN` unset).
 
 ---
 
@@ -60,6 +77,8 @@ Copy from `.env.example`. In Vercel: **Project → Settings → Environment Vari
 | `INBOUND_WEBHOOK_SECRET` | **Yes in production** | Shared secret. When set (non-empty), `POST /api/inbound` returns **401** unless the request includes the secret (see below). Leave empty only for local demo. |
 | `MAIL_PROVIDER` | Recommended | `mailgun` in prod. Use `dev` locally so `/api/inbound/dev` stays open. |
 | `ALLOW_INBOUND_DEV` | Optional | Set to `1` only if you intentionally want the open `/api/inbound/dev` injector in production. Keep unset in real prod. |
+| `BLOB_READ_WRITE_TOKEN` | Recommended on Vercel | When set, inbox persists to Vercel Blob (`inbox/bay-studies-inbox.json`) instead of ephemeral `/tmp`. Created automatically when you add a Blob store in the Vercel UI / CLI. Soft-launch works without it; mail can vanish on cold starts. |
+| `ADMIN_SECRET` | **Yes in production** | Shared secret for `/admin/*` (ingest, firms, setup). When set, middleware redirects unauthenticated browsers to `/admin/login`. Leave empty only for local/dev (amber warning banner). Soft-launch: not OAuth. |
 
 ### How the secret is sent
 
@@ -77,6 +96,59 @@ Generate a strong secret, e.g.:
 
 ```bash
 openssl rand -hex 32
+```
+
+---
+
+## 2b. Admin UI gate (`ADMIN_SECRET`)
+
+Soft-launch protection for `/admin/ingest`, `/admin/firms`, and `/admin/setup` (not OAuth).
+
+1. Generate: `openssl rand -hex 32`
+2. Set on Vercel **Production** (and Preview if you want):
+
+```bash
+printf '%s' 'YOUR_SECRET' | vercel env add ADMIN_SECRET production --project bay-studies
+# or: vercel env add ADMIN_SECRET production
+```
+
+3. Redeploy so middleware picks it up: `vercel --prod`
+
+**When `ADMIN_SECRET` is set**, unauthenticated visits to `/admin/*` redirect to `/admin/login`. Auth via any one of:
+
+1. Password form on `/admin/login` → httpOnly cookie `bay_studies_admin`
+2. Header: `Authorization: Bearer <secret>`
+3. Header: `X-Admin-Secret: <secret>`
+4. Query once: `https://YOUR_DOMAIN/admin/ingest?admin_secret=<secret>` (sets cookie, strips query)
+
+**When unset/empty** (local/dev): admin pages stay open and show an amber **ADMIN_SECRET unset** banner. Do not ship Production without the secret.
+
+Sign out: use **Sign out** in the admin chrome (clears the cookie) or `POST /api/admin/logout`.
+
+### Mutating APIs (same `ADMIN_SECRET`)
+
+When `ADMIN_SECRET` is set, these writes require the same auth as `/admin` (cookie from login, Bearer, `X-Admin-Secret`, or query). Same-origin browser calls from `/admin/ingest` send the httpOnly cookie automatically (`credentials: "same-origin"`).
+
+| Method | Path | Auth |
+|--------|------|------|
+| GET | `/api/published` | **Public** (feed) |
+| POST / PATCH / DELETE | `/api/published` | Admin |
+| GET | `/api/inbox` | **Public** (admin UI reads; soft-launch) |
+| POST | `/api/inbox/reparse` | Admin |
+| POST | `/api/inbox/import` | Admin — Craigslist etc drafts only (does not publish) |
+| POST | `/api/inbound` | **Mailgun webhook** (`INBOUND_WEBHOOK_SECRET`, not admin) |
+| POST | `/api/inbound/dev` | Dev gate only (`ALLOW_INBOUND_DEV` / `MAIL_PROVIDER`) |
+
+Unauthenticated mutating calls return `401` `{ "ok": false, "error": "Unauthorized — …" }`. When `ADMIN_SECRET` is unset, writes stay open (local/dev).
+
+Quick check after deploy:
+
+```bash
+# should 401 when ADMIN_SECRET is set
+curl -s -o /dev/null -w "%{http_code}\n" -X POST https://YOUR_DOMAIN/api/published \
+  -H 'Content-Type: application/json' -d '{"study":{"id":"x"}}'
+
+# logged-in Approve/Reject/reparse in /admin/ingest still works via cookie
 ```
 
 ---
@@ -140,16 +212,25 @@ Use the in-app page **[/admin/setup](/admin/setup)** or this list:
 
 - [ ] App deployed on HTTPS (`YOUR_DOMAIN`)
 - [ ] `INBOUND_WEBHOOK_SECRET` set on the host (non-empty)
+- [ ] `ADMIN_SECRET` set on Production (non-empty) — `/admin/*` redirects to login
 - [ ] `MAIL_PROVIDER=mailgun`
 - [ ] Mailgun domain verified (MX / DNS)
 - [ ] Mailgun route → `https://YOUR_DOMAIN/api/inbound?secret=…`
 - [ ] First firm panel signup uses ingest address `studies@YOUR_DOMAIN` (or whatever you matched in the route)
 - [ ] Test email appears under `/admin/ingest` (Live inbox)
 - [ ] Approve → feed still works
+- [ ] Enrich form used for thin/tip emails before Approve
+- [ ] (Recommended) Vercel Blob store connected + `BLOB_READ_WRITE_TOKEN` set so inbox survives cold starts
 
 Also open `GET https://YOUR_DOMAIN/api/inbound` — JSON should show `secretConfigured: true` when the secret is set (it does not reveal the secret).
 
 ---
+
+---
+
+## Enrich before Approve (/admin/ingest)
+
+Pending inbox items show an **Enrich before Approve** form (title, firm, who/what, pay, duration, location/modality, screener URL, optional portal note). **Approve → feed** publishes the edited values, not the raw parser draft alone. Tip-style emails (low confidence, no pay, dashboard-only links like `my.theclc.com`) show a gentle hint to add a title + screener/portal link first. Reject is unchanged. Feed cards then surface title, firm, a short who/what snippet, pay/duration when set, and an **Open screener** / **View at firm** CTA.
 
 ## 7. What humans still must do
 

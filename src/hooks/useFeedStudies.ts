@@ -3,32 +3,39 @@
 import { useCallback, useEffect, useState } from "react";
 import { mergeStudies } from "@/data/studies";
 import {
-  loadPublishedStudies,
-  removePublishedStudy,
-  upsertPublishedStudy,
-} from "@/lib/storage";
+  apiRemovePublished,
+  apiUpsertPublished,
+  fetchPublishedStudies,
+} from "@/lib/publishedApi";
 import type { Study } from "@/lib/types";
 
 /**
- * Seed STUDIES + localStorage-approved publications.
- * Re-reads on window focus / custom event so admin approve updates /feed.
+ * Public feed from GET /api/published (human-approved studies only).
+ * Seed placeholders are not mixed in on production. In local dev, seeds
+ * show only while the published list is empty. Re-reads on focus / custom event.
+ * The fetch honors Cache-Control (about 45s on the CDN). Admin ingest uses
+ * fetchPublishedStudies({ fresh: true }) so Approve stays no-store.
  */
 export function useFeedStudies() {
   const [studies, setStudies] = useState<Study[]>(() => mergeStudies([]));
   const [published, setPublished] = useState<Study[]>([]);
   const [ready, setReady] = useState(false);
 
-  const refresh = useCallback(() => {
-    const pub = loadPublishedStudies();
+  const refresh = useCallback(async () => {
+    const pub = await fetchPublishedStudies();
     setPublished(pub);
     setStudies(mergeStudies(pub));
     setReady(true);
   }, []);
 
   useEffect(() => {
-    refresh();
-    const onFocus = () => refresh();
-    const onCustom = () => refresh();
+    void refresh();
+    const onFocus = () => {
+      void refresh();
+    };
+    const onCustom = () => {
+      void refresh();
+    };
     window.addEventListener("focus", onFocus);
     window.addEventListener("bay-studies-feed-updated", onCustom);
     return () => {
@@ -37,19 +44,16 @@ export function useFeedStudies() {
     };
   }, [refresh]);
 
-  const publish = useCallback(
-    (study: Study) => {
-      const next = upsertPublishedStudy(study);
-      setPublished(next);
-      setStudies(mergeStudies(next));
-      window.dispatchEvent(new Event("bay-studies-feed-updated"));
-      return study;
-    },
-    []
-  );
+  const publish = useCallback(async (study: Study) => {
+    const next = await apiUpsertPublished(study);
+    setPublished(next);
+    setStudies(mergeStudies(next));
+    window.dispatchEvent(new Event("bay-studies-feed-updated"));
+    return study;
+  }, []);
 
-  const unpublish = useCallback((id: string) => {
-    const next = removePublishedStudy(id);
+  const unpublish = useCallback(async (id: string) => {
+    const next = await apiRemovePublished(id);
     setPublished(next);
     setStudies(mergeStudies(next));
     window.dispatchEvent(new Event("bay-studies-feed-updated"));

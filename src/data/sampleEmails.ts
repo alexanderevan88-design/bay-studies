@@ -7,7 +7,7 @@ import type { RawEmail } from "@/lib/types";
 
 /**
  * Fixture inbound emails for local demo (no live SMTP / Mailgun).
- * One invite per allowlisted firm (11 FIRST + 4 STRETCH = 15).
+ * One invite per allowlisted firm (12 FIRST + 4 STRETCH = 16).
  * Bodies stay in sync with FIRM_INBOUND_PRESETS.
  */
 const RECEIVED_AT: Record<FirmPresetId, string> = {
@@ -26,6 +26,7 @@ const RECEIVED_AT: Record<FirmPresetId, string> = {
   playtestcloud: "2026-09-20T14:25:00-07:00",
   "user-interviews": "2026-09-19T12:00:00-07:00",
   "meta-arvr": "2026-09-18T17:35:00-07:00",
+  watchlab: "2026-10-02T10:00:00-07:00",
 };
 
 export const SAMPLE_EMAILS: RawEmail[] = FIRM_PRESET_IDS.map((id, index) => {
