@@ -229,7 +229,14 @@ async function main() {
     );
   }
   const againstFeed = skipAlreadyOnFeed(scraped.kept, feed.studies);
-  const skipped = [...scraped.skipped, ...againstFeed.skipped];
+  // Each search query re-reports the same old/out-of-area posts; list each once.
+  const seenSkip = new Set<string>();
+  const skipped = [...scraped.skipped, ...againstFeed.skipped].filter((s) => {
+    const key = s.postingId != null ? `id:${s.postingId}` : `r:${s.reason}`;
+    if (seenSkip.has(key)) return false;
+    seenSkip.add(key);
+    return true;
+  });
   const items = againstFeed.kept.map((listing) => listingToInboxItem(listing));
   const report = {
     dryRun: dry && !has("--write-inbox") && !has("--post"),
@@ -242,6 +249,10 @@ async function main() {
       pay: l.pay ?? null,
       location: l.location,
     })),
+    counts: {
+      kept: againstFeed.kept.length,
+      skipped: skipped.length,
+    },
     skipped,
     published: false,
   };
