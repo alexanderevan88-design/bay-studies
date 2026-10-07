@@ -1,6 +1,9 @@
 # Bay Studies — Real firm-site autofill (product sketch)
 
-_Status: sketch for review, Oct 5, 2026. Nothing here is built yet. Builds on
+_Status: sketch for review, Oct 5, 2026. **Update Oct 7, 2026:** option B
+("Copy next" phone helper) is built and live for the five pilot firms; see
+[§11](#11-shipped-copy-next-phone-helper-option-b). The extension (A) is not
+built yet. Builds on
 [PROFILE_VAULT.md](./PROFILE_VAULT.md) and today's copy-only "Fill this
 screener" helper._
 
@@ -256,3 +259,72 @@ DOB or any answer we don't have.
 5. **Anonymous usage counts — yes or no?** Opt-in counts like "fill used, 8
    fields, 1 undone" (no answers, no names) help us fix bad maps; or ship with
    zero collection and rely on feedback.
+
+---
+
+## 11. Shipped: "Copy next" phone helper (option B)
+
+_Live Oct 7, 2026. Code: `src/lib/copyNext.ts`, `src/components/CopyNextHelper.tsx`._
+
+**Decisions locked by Evan (Oct 5):** phone helper first, extension later;
+device-only vault; zero fill telemetry; blank answers stay blank (skipped);
+pilot firms Curion, Fieldwork, CLC, Tasteocracy, Nichols; quiet launch, no
+firm outreach. Future in-house matching uses opt-in member profiles, never
+fill data.
+
+### What it does
+
+On a study page for a pilot firm, the "How to sign up" box shows **Fill
+helper: Copy next** instead of the copy chips. Non-pilot firms keep the chips.
+
+1. The person ticks the same four-item consent checklist once per study.
+2. The helper shows **Up next: First name** (with the value) and one big
+   button. Each tap copies that answer to the clipboard and moves on, showing
+   what's coming next ("Then: Email").
+3. **Back**, **Skip**, and **Jump to…** (the full list with ✓ copied / – skipped)
+   are always there. **Start over** clears this study's progress.
+4. Sensitive fields (date of birth, street address, ethnicity, health) show
+   masked. The first tap shows the value, a second tap copies it. Same
+   "Show & copy" idea as the chips.
+5. Done screen: "Check every answer, then press their Submit yourself."
+
+### Privacy rules in code
+
+- Values come from this browser's vault + profile and go only to the
+  clipboard. No network calls, no analytics events, no logging.
+- Progress lives in `localStorage` under `bay-studies-copy-next-v1:<studyId>`
+  and stores **field keys and position only** (`nextKey`, `copied`, `skipped`,
+  `consented`), never answers. It expires after 7 days. That's what keeps the
+  person's place when iOS Safari switches tabs or reloads the page; the helper
+  also re-reads vault + progress on `visibilitychange`, `focus` and `pageshow`.
+- Blank answers are dropped from the steps. Nothing is computed or guessed
+  (no DOB from age). The only derived values are **First name / Last name**,
+  split from the saved Full name at the last space, with "Full name (one box)"
+  offered right after for forms that use one box. A one-word name is offered
+  only as Full name.
+- Government ID numbers are never offered: the vault has no such fields, and
+  the step builder also rejects any key or label that looks like SSN, license,
+  passport or tax ID.
+- Clipboard: `navigator.clipboard.writeText` inside the tap, with a hidden
+  textarea + `execCommand("copy")` fallback for older iOS. If both fail, the
+  value is shown selectable so the person can press-and-hold to copy.
+
+### Per-firm field order
+
+**None of these orders has been checked against the firms' live forms yet.**
+They're a sensible default: contact first (nearly every panel form starts
+there), then demographics, then the firm's likely focus. Fix any of them in
+`PILOT_FIRMS` after the first real run on that firm. After the firm order,
+the helper adds anything else already in the vault, in vault section order.
+
+| Firm | Order after contact (First, Last, Full, Email, Phone, ZIP) | Why |
+|---|---|---|
+| Curion | DOB, Age, Gender, Ethnicity, Kids, Marital, Housing, Income, Education, Employment, Job title, Company, Pets | Food/product tests: household first, work later |
+| Tasteocracy | DOB, Age, Gender, Ethnicity, Kids, Pets, Marital, Income, Education, Employment | Taste tests: who lives at home matters early |
+| CLC | DOB, Age, Gender, Ethnicity, Kids, Marital, Education, Income, Employment, Job title, Company, Phone/OS | Mix of taste and tech/UX studies |
+| Fieldwork | DOB, Age, Gender, Ethnicity, Employment, Job title, Company, Education, Income, Marital, Kids | Focus groups screen on work early |
+| Nichols Research | DOB, Age, Gender, Ethnicity, Employment, Job title, Company, Education, Income, Marital, Kids, Housing | Same as Fieldwork, plus housing |
+| Default (non-pilot) | n/a: copy chips, no ordered helper | Pilot only for now |
+
+Firm matching uses the study's firm name and domains (`curion`, `tasteocracy`,
+`fieldwork`, `nichols`, `theclc` / `clc-research` / `consumerlearningcenter`).

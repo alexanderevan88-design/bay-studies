@@ -32,6 +32,8 @@ import {
 } from "@/lib/display";
 import { bumpOpen } from "@/lib/analytics";
 import { FillScreenerHelper } from "@/components/FillScreenerHelper";
+import { CopyNextHelper } from "@/components/CopyNextHelper";
+import { pilotFirmFor } from "@/lib/copyNext";
 
 export default function StudyDetailPage() {
   const params = useParams();
@@ -98,6 +100,7 @@ export default function StudyDetailPage() {
   const about = cleanDescription(study);
   const firmLabel = firmName(study);
   const ctaText = applyButtonText(study);
+  const pilot = pilotFirmFor(study);
 
   return (
     <AppShell showNav={false}>
@@ -234,7 +237,11 @@ export default function StudyDetailPage() {
             </Step>
           </ol>
 
-          <FillScreenerHelper profile={profile} firmName={study.firm} embedded />
+          {pilot ? (
+            <CopyNextHelper profile={profile} firm={pilot} studyId={study.id} />
+          ) : (
+            <FillScreenerHelper profile={profile} firmName={study.firm} embedded />
+          )}
         </section>
 
         {study.expired && (

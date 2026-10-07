@@ -144,3 +144,11 @@ firm screener forms (still no auto-submit; sensitive still per-field confirm).
 ### Next: real autofill
 
 See [AUTOFILL.md](./AUTOFILL.md) for the real firm-site autofill sketch (extension recommended, consent + allowlist, MVP scope, open questions).
+
+## Copy next helper (shipped Oct 7, 2026)
+
+On pilot-firm study pages (Curion, Fieldwork, CLC, Tasteocracy, Nichols), the
+vault powers a step-by-step **Copy next** helper: one tap copies the next
+answer in that firm's usual order. Same consent checklist, sensitive fields
+still need their own tap, blank answers are skipped, and nothing leaves the
+device. Details and per-firm order: [AUTOFILL.md §11](./AUTOFILL.md#11-shipped-copy-next-phone-helper-option-b).
