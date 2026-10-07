@@ -2,6 +2,7 @@
 
 import { BottomNav } from "./BottomNav";
 import { InstallPrompt } from "./InstallPrompt";
+import { JoinReturnPrompt } from "./JoinReturnPrompt";
 
 export function AppShell({
   children,
@@ -19,6 +20,7 @@ export function AppShell({
       >
         {children}
       </div>
+      <JoinReturnPrompt raised={showNav} />
       {showNav && (
         <>
           <InstallPrompt />

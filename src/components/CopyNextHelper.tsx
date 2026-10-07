@@ -22,11 +22,16 @@ export function CopyNextHelper({
   profile,
   firm,
   studyId,
+  mode = "study",
 }: {
   profile: Profile;
   firm: PilotFirm;
+  /** Progress key. Study id, or "signup:<firmId>" in signup mode. */
   studyId: string;
+  /** "signup" = joining the firm's panel (setup page), not a study screener. */
+  mode?: "study" | "signup";
 }) {
+  const formName = mode === "signup" ? `${firm.name}’s signup form` : `${firm.name}’s form`;
   const [vault, setVault] = useState<VaultData>({ fields: {} });
   const [ready, setReady] = useState(false);
   const [nextKey, setNextKey] = useState<string | null>(null);
@@ -118,7 +123,7 @@ export function CopyNextHelper({
       setRevealed(true);
       return;
     }
-    setFlash(`Copied ${lc(step.label)}. Paste it on ${firm.name}’s form, then come back.`);
+    setFlash(`Copied ${lc(step.label)}. Paste it on ${formName}, then come back.`);
     goTo(index + 1, {
       copied: copied.includes(step.key) ? copied : [...copied, step.key],
       skipped: skipped.filter((k) => k !== step.key),
@@ -151,7 +156,7 @@ export function CopyNextHelper({
         <p className="text-sm font-bold text-bay">Fill helper: Copy next</p>
         <p className="mt-0.5 text-xs leading-relaxed text-stone-600">
           Tap to copy each answer in {firm.name}’s usual order, then paste it
-          into their form. It stays on your phone.
+          into their {mode === "signup" ? "signup form" : "form"}. It stays on your phone.
         </p>
       </div>
       {steps.length > 0 && consented && (
@@ -189,7 +194,7 @@ export function CopyNextHelper({
       <section className={box} aria-label="Fill helper">
         {header}
         <ul className="mt-3 space-y-1">
-          {CONSENT_CHECKLIST.map((item, i) => (
+          {CONSENT_CHECKLIST.map((raw) => ({ raw, item: mode === "signup" ? raw.replace("this screener", "this signup form") : raw })).map(({ item }, i) => (
             <li key={item}>
               <label className="flex min-h-11 cursor-pointer items-start gap-2.5 py-1 text-sm text-stone-700">
                 <input
@@ -285,7 +290,7 @@ export function CopyNextHelper({
           <p className="font-display text-xl font-bold text-ink">All done</p>
           <p className="mt-1 text-sm text-muted">
             {copied.length} copied{skipped.length ? `, ${skipped.length} skipped` : ""}.
-            Check every answer on {firm.name}’s form, then press their Submit
+            Check every answer on {formName}, then press their Submit
             yourself.
           </p>
         </div>

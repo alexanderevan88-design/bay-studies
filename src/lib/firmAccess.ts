@@ -33,14 +33,21 @@ export interface FirmConfig {
   /** Members can search by the study code. */
   searchable: boolean;
   caveat?: string;
+  /** One line for the setup page: what they run (facts from our notes only). */
+  blurb: string;
+  /** Name as it appears in feed data (for the avatar color). */
+  dataName: string;
 }
 
 export const FIRMS: FirmConfig[] = [
   {
     id: "curion",
+    blurb: "Product and taste tests at their Redwood City center.",
+    dataName: "Curion",
     name: "Curion",
     test: (h) => /curion/.test(h),
     joinUrl: "https://curionpanelist.com/register",
+    loginUrl: "https://curionpanelist.com/Portal/default",
     homeUrl: "https://curioninsights.com/",
     alwaysPanel: true,
     where: "open screeners",
@@ -48,6 +55,8 @@ export const FIRMS: FirmConfig[] = [
   },
   {
     id: "sago",
+    blurb: "At-home product tests and online studies. Invites come by email, matched to your profile.",
+    dataName: "Focus Group (Sago)",
     name: "Focus Group by Sago",
     buttonName: "Focus Group",
     test: (h) => /\bsago\b|focusgroup\.com|sago\.com/.test(h),
@@ -63,6 +72,8 @@ export const FIRMS: FirmConfig[] = [
   },
   {
     id: "fieldwork",
+    blurb: "Focus groups at their San Francisco office.",
+    dataName: "Fieldwork",
     name: "Fieldwork",
     test: (h) => /fieldwork\.com|\bfieldwork\b/.test(h),
     joinUrl: "https://participate.fieldwork.com/Account/Register",
@@ -74,6 +85,8 @@ export const FIRMS: FirmConfig[] = [
   },
   {
     id: "clc",
+    blurb: "Taste and product tests in Pleasanton (East Bay), plus some tech studies.",
+    dataName: "CLC",
     name: "CLC",
     test: (h) => /theclc\.com|consumer learning center|\bclc\b/.test(h),
     joinUrl: "https://www.theclc.com/individualregistration.html",
@@ -85,6 +98,8 @@ export const FIRMS: FirmConfig[] = [
   },
   {
     id: "tasteocracy",
+    blurb: "Taste tests in Livermore. Invites come by email.",
+    dataName: "Tasteocracy",
     name: "Tasteocracy",
     test: (h) => /tasteocracy/.test(h),
     joinUrl: "https://www.tasteocracy.com/become-tester",
@@ -96,6 +111,8 @@ export const FIRMS: FirmConfig[] = [
   },
   {
     id: "nichols",
+    blurb: "Focus groups around the Bay (Sunnyvale, Peninsula, East Bay).",
+    dataName: "Nichols Research",
     name: "Nichols",
     test: (h) => /nichols ?research|nicholsresearch\.com/.test(h),
     joinUrl: "https://nicholsresearch.com/registration-form/",
@@ -106,6 +123,8 @@ export const FIRMS: FirmConfig[] = [
   },
   {
     id: "userinterviews",
+    blurb: "Paid interviews and product feedback, often online. You apply study by study.",
+    dataName: "User Interviews",
     name: "User Interviews",
     test: (h) => /userinterviews\.com|user interviews/.test(h),
     joinUrl: "https://www.userinterviews.com/participants/signup",
@@ -218,4 +237,18 @@ export function memberLabel(a: LoginAccess): string {
 export function loginThen(a: LoginAccess): string {
   if (a.searchable && a.code) return `then search ${a.code}`;
   return `then look for “${a.lookFor}”`;
+}
+
+/** Primary button once the firm is marked joined: log in (or open the site). */
+export function joinedPrimaryLabel(a: LoginAccess): string {
+  return a.memberIsLogin ? `Log in to ${a.buttonFirm}` : `Open ${a.buttonFirm}`;
+}
+
+export function firmById(id: string): FirmConfig | undefined {
+  return FIRMS.find((f) => f.id === id);
+}
+
+/** Member link for a firm: login page, else homepage. */
+export function firmMemberUrl(f: FirmConfig): string {
+  return f.loginUrl ?? f.homeUrl;
 }

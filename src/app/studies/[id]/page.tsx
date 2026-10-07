@@ -36,7 +36,15 @@ import { CopyNextHelper } from "@/components/CopyNextHelper";
 import { pilotFirmFor } from "@/lib/copyNext";
 import { HeadlineTag } from "@/components/HeadlineTag";
 import { AccessTag, CopyCode } from "@/components/LoginSteps";
-import { loginAccess, memberLabel, primaryLabel, primaryUrl } from "@/lib/firmAccess";
+import {
+  joinedPrimaryLabel,
+  loginAccess,
+  memberLabel,
+  primaryLabel,
+  primaryUrl,
+} from "@/lib/firmAccess";
+import { useJoinedFirms } from "@/hooks/useJoinedFirms";
+import { markJoinPending } from "@/lib/joinedFirms";
 import { useNow } from "@/hooks/useNow";
 import { closesLabel, isClosingSoon, postedAgo } from "@/lib/expiry";
 
@@ -51,6 +59,7 @@ export default function StudyDetailPage() {
   const { seeMatch, isNewMatch } = useNotifications();
   const router = useRouter();
   const now = useNow();
+  const { isJoined, toggle: toggleJoined } = useJoinedFirms();
 
   useEffect(() => {
     if (study && isProfileMatch(study, profile)) {
@@ -162,8 +171,16 @@ export default function StudyDetailPage() {
   const about = cleanDescription(study);
   const firmLabel = firmName(study);
   const login = loginAccess(study);
-  const ctaText = login ? primaryLabel(login) : applyButtonText(study);
-  const ctaHref = login ? primaryUrl(login) : study.applyUrl;
+  const member = !!login && isJoined(login.firmId);
+  const ctaText = login
+    ? member
+      ? joinedPrimaryLabel(login)
+      : primaryLabel(login)
+    : applyButtonText(study);
+  const ctaHref = login ? (member ? login.memberUrl : primaryUrl(login)) : study.applyUrl;
+  const joinTap = () => {
+    if (login?.firmId && login.joinUrl) markJoinPending(login.firmId);
+  };
   const posted = now != null ? postedAgo(study.publishedAt, now) : null;
   const pilot = pilotFirmFor(study);
 
@@ -232,7 +249,7 @@ export default function StudyDetailPage() {
             </span>
           )}
           <HeadlineTag study={study} isNew={neu || isFresh(study)} />
-          <AccessTag access={login} />
+          <AccessTag access={login} member={member} />
           {study.expired && (
             <span className="rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-semibold text-rose-800">
               Link expired
@@ -279,7 +296,23 @@ export default function StudyDetailPage() {
             {login ? (
               <>
                 <Step n={1}>
-                  {login.joinUrl ? (
+                  {member ? (
+                    <>
+                      Tap <strong className="font-semibold">{ctaText}</strong> below
+                      {login.memberIsLogin
+                        ? " and log in with your account."
+                        : ` and sign in to your ${login.firm} account.`}{" "}
+                      <a
+                        href={login.joinUrl ?? login.memberUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={joinTap}
+                        className="text-muted underline"
+                      >
+                        Not a member yet? Join
+                      </a>
+                    </>
+                  ) : login.joinUrl ? (
                     <>
                       Tap <strong className="font-semibold">{ctaText}</strong> below
                       to make your own free account, or{" "}
@@ -357,6 +390,34 @@ export default function StudyDetailPage() {
               ever.
             </Step>
           </ol>
+
+          {login?.firmId && (
+            <button
+              type="button"
+              role="switch"
+              aria-checked={member}
+              onClick={() => toggleJoined(login.firmId!)}
+              className={`mt-3 inline-flex min-h-11 items-center gap-2 rounded-[14px] border px-3.5 text-sm font-bold transition ${
+                member
+                  ? "border-cash/40 bg-cash-tint text-cash"
+                  : "border-line bg-white text-ink hover:bg-fog"
+              }`}
+            >
+              <span
+                aria-hidden
+                className={`flex h-5 w-5 items-center justify-center rounded-md border-2 ${
+                  member ? "border-cash bg-cash text-white" : "border-stone-300 bg-white"
+                }`}
+              >
+                {member && (
+                  <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="3">
+                    <path d="M3.5 8.5l3 3 6-7" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </span>
+              I&apos;m a {login.firm} member
+            </button>
+          )}
 
           {pilot ? (
             <CopyNextHelper profile={profile} firm={pilot} studyId={study.id} />
@@ -522,7 +583,10 @@ export default function StudyDetailPage() {
             href={ctaHref}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => markApplied(study.id)}
+            onClick={() => {
+              if (login && !member) joinTap();
+              markApplied(study.id);
+            }}
             className={`flex min-h-12 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-[14px] px-4 text-base font-bold transition ${
               study.expired
                 ? "border border-rose-300 bg-white text-rose-900 hover:bg-rose-50"
@@ -537,7 +601,17 @@ export default function StudyDetailPage() {
         </div>
         {login ? (
           <div className="mx-auto flex max-w-lg flex-wrap items-center justify-between gap-x-3 px-4 pb-0.5 text-xs">
-            {login.joinUrl ? (
+            {member ? (
+              <a
+                href={login.joinUrl ?? login.memberUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={joinTap}
+                className="inline-flex min-h-11 items-center whitespace-nowrap text-muted underline underline-offset-2"
+              >
+                Not a member yet? Join
+              </a>
+            ) : login.joinUrl ? (
               <a
                 href={login.memberUrl}
                 target="_blank"

@@ -9,6 +9,7 @@ import { Logo } from "@/components/Logo";
 import { NotifyToast } from "@/components/NotifyToast";
 import { StudyCard } from "@/components/StudyCard";
 import { BridgeInFog } from "@/components/BridgeInFog";
+import { SetupFeedNudge } from "@/components/SetupSuggest";
 import { useFeedStudies } from "@/hooks/useFeedStudies";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useProfile } from "@/hooks/useProfile";
@@ -378,6 +379,10 @@ function FeedInner() {
                   profileNeedsDetails &&
                   i === Math.min(2, cards.length - 1) && (
                     <IncompleteProfileCard onboarded={profile.onboarded} />
+                  )}
+                {tab === "feed" &&
+                  i === Math.min(profileNeedsDetails && browse === "all" ? 5 : 2, cards.length - 1) && (
+                    <SetupFeedNudge />
                   )}
               </div>
             );

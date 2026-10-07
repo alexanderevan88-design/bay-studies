@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { shouldSuggestSetup } from "@/components/SetupSuggest";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useProfile } from "@/hooks/useProfile";
@@ -56,7 +57,8 @@ export default function PreferencesPage() {
       pushEnabled,
       onboarded: true,
     });
-    router.push("/feed?view=foryou");
+    // Optional next step: suggest joining the panels (never forced).
+    router.push(shouldSuggestSetup() ? "/onboarding/panels" : "/feed?view=foryou");
   }
 
   return (

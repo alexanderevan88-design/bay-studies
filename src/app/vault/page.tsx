@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { SetupSuggestCard, shouldSuggestSetup } from "@/components/SetupSuggest";
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Logo } from "@/components/Logo";
@@ -27,6 +28,7 @@ const inputClass =
 export default function VaultPage() {
   const { profile, ready } = useProfile();
   const [vault, setVault] = useState<VaultData>({ fields: {} });
+  const [suggestSetup, setSuggestSetup] = useState(false);
   const [vaultReady, setVaultReady] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
 
@@ -49,6 +51,8 @@ export default function VaultPage() {
   const empty = progress.filled === 0;
 
   function saveSection(fields: VaultData["fields"]) {
+    // First save ever: offer the optional Get set up step (inline, not blocking).
+    if (empty && shouldSuggestSetup()) setSuggestSetup(true);
     const next: VaultData = {
       fields: { ...vault.fields, ...fields },
       updatedAt: new Date().toISOString(),
@@ -136,6 +140,10 @@ export default function VaultPage() {
               />
             </div>
           </section>
+        )}
+
+        {suggestSetup && (
+          <SetupSuggestCard onLater={() => setSuggestSetup(false)} />
         )}
 
         {VAULT_SECTIONS.map((section) => (

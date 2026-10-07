@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Logo } from "@/components/Logo";
+import { MyPanels } from "@/components/MyPanels";
 import { useFeedStudies } from "@/hooks/useFeedStudies";
 import { useProfile } from "@/hooks/useProfile";
 import { formatDuration } from "@/lib/match";
@@ -284,6 +285,8 @@ export default function MePage() {
             </Link>
           </div>
         </section>
+
+        <MyPanels />
 
         <section className="rounded-[20px] border border-line bg-white p-4">
           <div className="flex items-center justify-between gap-2">

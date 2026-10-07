@@ -27,7 +27,8 @@ export type PilotFirmId = "curion" | "fieldwork" | "clc" | "tasteocracy" | "nich
 export type StepKey = VaultFieldDef["key"] | "firstName" | "lastName";
 
 export interface PilotFirm {
-  id: PilotFirmId;
+  /** Pilot firm id, or any firm id from FIRMS in signup mode. */
+  id: string;
   name: string;
   /** Typical screener order (best known / sensible default; see AUTOFILL.md). */
   order: StepKey[];
@@ -147,6 +148,37 @@ export function pilotFirmFor(study: Pick<Study, "firm" | "firmDomain" | "applyUr
   if (/nichols/.test(hay)) return PILOT_FIRMS.nichols;
   if (/\bclc\b|theclc|clc-research|consumerlearningcenter/.test(hay)) return PILOT_FIRMS.clc;
   return null;
+}
+
+/** Common panel-signup order, used when we don't know a firm's own order. */
+const DEFAULT_SIGNUP_ORDER: StepKey[] = [
+  ...CONTACT,
+  "dob",
+  "age",
+  "gender",
+  "ethnicity",
+  "employment",
+  "jobTitle",
+  "education",
+  "incomeBand",
+  "maritalStatus",
+  "hasKids",
+  "housing",
+];
+
+/**
+ * Firm for the signup-mode helper on /setup. Pilot firms keep their known
+ * order; anyone else gets the common order (and says so).
+ */
+export function signupFirm(firmId: string, name: string): PilotFirm {
+  const pilot = (PILOT_FIRMS as Record<string, PilotFirm | undefined>)[firmId];
+  if (pilot) return pilot;
+  return {
+    id: firmId,
+    name,
+    order: DEFAULT_SIGNUP_ORDER,
+    tip: `We don’t know ${name}’s exact order, so this follows the usual one.`,
+  };
 }
 
 /** Never offered, even if something like it ends up in storage. */

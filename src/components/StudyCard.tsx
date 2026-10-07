@@ -6,7 +6,9 @@ import type { Study } from "@/lib/types";
 import { applyCtaLabel } from "@/lib/enrich";
 import { HeadlineTag } from "@/components/HeadlineTag";
 import { AccessTag, MemberLine } from "@/components/LoginSteps";
-import { loginAccess, primaryLabel, primaryUrl } from "@/lib/firmAccess";
+import { joinedPrimaryLabel, loginAccess, primaryLabel, primaryUrl } from "@/lib/firmAccess";
+import { useJoinedFirms } from "@/hooks/useJoinedFirms";
+import { markJoinPending } from "@/lib/joinedFirms";
 import { postedAgo } from "@/lib/expiry";
 import { useNow } from "@/hooks/useNow";
 import {
@@ -63,8 +65,17 @@ export function StudyCard({
   const blurb = snippet(study, 220);
   const fullPay = payDetail(study);
   const login = loginAccess(study);
-  const cta = login ? primaryLabel(login) : applyCtaLabel(study);
-  const ctaHref = login ? primaryUrl(login) : study.applyUrl;
+  const { isJoined } = useJoinedFirms();
+  const member = !!login && isJoined(login.firmId);
+  const cta = login
+    ? member
+      ? joinedPrimaryLabel(login)
+      : primaryLabel(login)
+    : applyCtaLabel(study);
+  const ctaHref = login ? (member ? login.memberUrl : primaryUrl(login)) : study.applyUrl;
+  const joinTap = () => {
+    if (login?.firmId && login.joinUrl) markJoinPending(login.firmId);
+  };
   const now = useNow();
   const posted = now != null ? postedAgo(study.publishedAt, now) : null;
   const fresh = isNewMatch || isFresh(study);
@@ -216,7 +227,7 @@ export function StudyCard({
             <div className="mt-3 flex flex-wrap gap-1.5">
               <Tag tone={typeTone(study)}>{typeLabel(study)}</Tag>
               <Tag tone={remote ? "bay" : "slate"}>{modalityLabel(study)}</Tag>
-              <AccessTag access={login} />
+              <AccessTag access={login} member={member} />
               {fullPay && <Tag tone="cash">{fullPay}</Tag>}
               {hourly && <Tag tone="cash">{hourly}</Tag>}
             </div>
@@ -233,7 +244,10 @@ export function StudyCard({
                 href={ctaHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => onApply?.()}
+                onClick={() => {
+                  if (login && !member) joinTap();
+                  onApply?.();
+                }}
                 className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-[14px] bg-bridge px-4 text-sm font-bold text-white transition hover:bg-bridge-dark active:scale-[0.99]"
               >
                 {cta}
@@ -251,10 +265,18 @@ export function StudyCard({
             </div>
             {login ? (
               <>
-                <MemberLine access={login} onOpen={() => onApply?.()} className="mt-1" />
-                <p className="text-xs text-muted">
-                  Use your own free account. {login.caveat ?? ""}
-                </p>
+                <MemberLine
+                  access={login}
+                  joined={member}
+                  onJoinTap={joinTap}
+                  onOpen={() => onApply?.()}
+                  className="mt-1"
+                />
+                {!member && (
+                  <p className="text-xs text-muted">
+                    Use your own free account. {login.caveat ?? ""}
+                  </p>
+                )}
               </>
             ) : (
               study.firmDomain &&

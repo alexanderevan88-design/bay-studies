@@ -69,7 +69,23 @@ export function CopyCode({ code, compact = false }: { code: string; compact?: bo
 }
 
 /** "Direct link" vs "Join panel first" (expanded cards + detail page only). */
-export function AccessTag({ access }: { access: LoginAccess | null }) {
+export function AccessTag({
+  access,
+  member = false,
+}: {
+  access: LoginAccess | null;
+  member?: boolean;
+}) {
+  if (access && member) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-cash-tint px-2.5 py-0.5 text-xs font-semibold text-cash">
+        <svg aria-hidden viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <path d="M3.5 8.5l3 3 6-7" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        You&apos;re a member
+      </span>
+    );
+  }
   return access ? (
     <span className="inline-flex items-center gap-1 rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-semibold text-ink">
       <svg aria-hidden viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2">
@@ -92,12 +108,35 @@ export function AccessTag({ access }: { access: LoginAccess | null }) {
 export function MemberLine({
   access,
   onOpen,
+  joined = false,
+  onJoinTap,
   className = "",
 }: {
   access: LoginAccess;
   onOpen?: () => void;
+  /** Marked joined on this device: show "Not a member yet? Join" instead. */
+  joined?: boolean;
+  onJoinTap?: () => void;
   className?: string;
 }) {
+  if (joined) {
+    return (
+      <div className={className}>
+        <LoginThenLine access={access} className="mt-1" />
+        {access.joinUrl && (
+          <a
+            href={access.joinUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => onJoinTap?.()}
+            className="-mt-1 inline-flex min-h-11 items-center text-[13px] text-muted underline underline-offset-2"
+          >
+            Not a member yet? Join {access.buttonFirm}
+          </a>
+        )}
+      </div>
+    );
+  }
   return (
     <div className={className}>
       {access.joinUrl && (
