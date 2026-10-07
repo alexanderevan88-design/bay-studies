@@ -142,10 +142,7 @@ export function modalityLabel(study: Study): string {
 
 /** Short place for the card line. */
 export function placeLabel(study: Study): string {
-  if (study.modality === "remote") {
-    if (/in-home/i.test(study.location)) return "From home · ships to you";
-    return "From home · online";
-  }
+  if (study.modality === "remote") return "From home";
   return study.location.replace(/\s*\/\s*Peninsula$/i, "").trim() || "Bay Area";
 }
 
@@ -277,19 +274,44 @@ export function firmInitial(study: Study): string {
   return (m ? m[0] : "?").toUpperCase();
 }
 
+/** Solid circle colors (white letter, all AA with white). */
 const AVATAR_TONES = [
-  "bg-sage-100 text-sage-800",
-  "bg-amber-100 text-amber-900",
-  "bg-sky-100 text-sky-900",
-  "bg-rose-100 text-rose-900",
-  "bg-stone-200 text-stone-800",
-  "bg-emerald-100 text-emerald-900",
+  "bg-[#C8401A]", // bridge orange
+  "bg-[#2D6A87]", // bay blue
+  "bg-[#17643F]", // cash green
+  "bg-[#5B3F8C]", // dusk purple
+  "bg-[#8A5A0B]", // poppy brown
+  "bg-[#4C575B]", // slate
 ];
 
+const KNOWN_FIRM_TONES: Record<string, number> = {
+  curion: 0,
+  "focus group (sago)": 1,
+  fieldwork: 2,
+  "user interviews": 3,
+};
+
 export function firmTone(study: Study): string {
+  const key = study.firm.toLowerCase();
+  if (key in KNOWN_FIRM_TONES) return AVATAR_TONES[KNOWN_FIRM_TONES[key]];
   let h = 0;
-  for (const ch of study.firm.toLowerCase()) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
   return AVATAR_TONES[h % AVATAR_TONES.length];
+}
+
+/** Added to the feed in the last 3 days (uses publishedAt; false if unknown). */
+export function isFresh(study: Study, now = Date.now()): boolean {
+  if (!study.publishedAt) return false;
+  const t = Date.parse(study.publishedAt);
+  if (Number.isNaN(t)) return false;
+  return now - t >= 0 && now - t <= 3 * 24 * 60 * 60 * 1000;
+}
+
+/** Tag tone key for a study type (used by cards + detail). */
+export function typeTone(study: Study): "poppy" | "dusk" | "slate" {
+  if (study.type === "product-taste") return "poppy";
+  if (study.type === "focus-group") return "dusk";
+  return "slate";
 }
 
 /** Button text for the sticky Apply bar on the study page. */

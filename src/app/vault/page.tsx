@@ -59,28 +59,28 @@ export default function VaultPage() {
 
   return (
     <AppShell>
-      <header className="px-5 py-5">
+      <header className="px-5 pb-4 pt-3">
         <div className="flex items-center justify-between gap-3">
           <Logo size="sm" />
           <Link
             href="/me"
-            className="inline-flex min-h-11 items-center rounded-lg px-2 text-sm font-medium text-sage-700 hover:underline"
+            className="inline-flex min-h-11 items-center rounded-lg px-2 text-sm font-medium text-sage-600 hover:underline"
           >
             ← Me
           </Link>
         </div>
-        <h1 className="mt-4 font-serif text-3xl font-semibold text-sage-900">
-          Profile vault
+        <p className="mt-5 text-[13px] font-semibold text-muted">Profile vault</p>
+        <h1 className="mt-0.5 font-display text-[30px] font-extrabold leading-[1.1] tracking-tight text-ink">
+          Type it once, paste it into every quiz.
         </h1>
-        <p className="mt-1 text-sm leading-relaxed text-stone-600">
-          Answer the usual screener questions once, then reuse them when you
-          apply to firm studies. Your answers stay on this device, and nothing
-          goes to a firm until you confirm it.
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          It stays on your phone. Save the usual screener answers here, then
+          copy them when you apply. Nothing goes to a firm until you paste it.
         </p>
       </header>
 
       <div className="space-y-3 px-5 pb-10">
-        <section className="rounded-2xl border border-sage-200 bg-gradient-to-br from-sage-50 via-white to-amber-50/40 p-4">
+        <section className="rounded-[20px] border border-line bg-bay-tint p-4">
           <p className="text-sm leading-relaxed text-stone-700">
             <span className="font-semibold text-sage-900">
               The studies feed is free for everyone.
@@ -95,8 +95,8 @@ export default function VaultPage() {
         </section>
 
         {empty ? (
-          <section className="rounded-2xl border border-dashed border-sage-300 bg-white px-4 py-6 text-center">
-            <p className="font-serif text-lg font-semibold text-sage-900">
+          <section className="rounded-[20px] border-[1.5px] border-dashed border-line bg-white px-4 py-6 text-center">
+            <p className="font-display text-lg font-semibold text-sage-900">
               Your vault is empty
             </p>
             <p className="mx-auto mt-1 max-w-xs text-sm text-stone-600">
@@ -120,7 +120,7 @@ export default function VaultPage() {
             </div>
           </section>
         ) : (
-          <section className="rounded-2xl border border-sage-100 bg-white p-4">
+          <section className="rounded-[20px] border border-line bg-white p-4">
             <div className="flex items-center justify-between gap-3">
               <p className="text-sm font-medium text-stone-800">
                 {progress.filled} of {progress.total} details saved
@@ -161,7 +161,7 @@ export default function VaultPage() {
           </p>
         </section>
 
-        <section className="rounded-2xl border border-sage-100 bg-white p-4">
+        <section className="rounded-[20px] border border-line bg-white p-4">
           <div className="flex items-center justify-between gap-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
               Fill this screener
@@ -280,7 +280,7 @@ function SectionCard({
   const done = progress.filled === progress.total;
 
   return (
-    <section className="rounded-2xl border border-sage-100 bg-white">
+    <section className="rounded-[20px] border border-line bg-white">
       <button
         type="button"
         onClick={onToggle}
@@ -414,7 +414,7 @@ function SectionCard({
               Save {section.title.toLowerCase()}
             </button>
             {saved && (
-              <span className="text-sm font-medium text-sage-700">
+              <span className="text-sm font-medium text-sage-600">
                 Saved on this device
               </span>
             )}

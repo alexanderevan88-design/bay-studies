@@ -29,11 +29,11 @@ export default function AlertsPage() {
       <header className="px-5 py-5">
         <Link
           href="/me"
-          className="inline-flex min-h-11 items-center text-sm font-medium text-sage-700"
+          className="inline-flex min-h-11 items-center text-sm font-medium text-sage-600"
         >
           ← Me
         </Link>
-        <h1 className="mt-3 font-serif text-3xl font-semibold text-sage-900">
+        <h1 className="mt-3 font-display text-3xl font-semibold text-sage-900">
           Alerts
         </h1>
         <p className="mt-1 text-sm leading-relaxed text-stone-600">
@@ -48,7 +48,7 @@ export default function AlertsPage() {
 
       <div className="space-y-3 px-5 pb-10">
         <section className="rounded-2xl border border-sage-200 bg-gradient-to-br from-sage-50 via-white to-cream p-4">
-          <p className="text-xs font-bold uppercase tracking-wide text-sage-700">
+          <p className="text-xs font-bold uppercase tracking-wide text-sage-600">
             When alerts fire
           </p>
           <ol className="mt-2 list-decimal space-y-1.5 pl-4 text-sm leading-relaxed text-stone-700">
@@ -117,7 +117,7 @@ export default function AlertsPage() {
           }
         />
 
-        <div className="rounded-2xl border border-sage-100 bg-white p-4">
+        <div className="rounded-[20px] border border-line bg-white p-4">
           <p className="text-sm font-semibold text-stone-800">Email digest</p>
           <p className="mt-1 text-xs text-stone-500">
             Preference only — no outbound email in this demo.
@@ -146,7 +146,7 @@ export default function AlertsPage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-sage-100 bg-white p-4">
+        <div className="rounded-[20px] border border-line bg-white p-4">
           <p className="text-sm font-semibold text-stone-800">Quiet hours</p>
           <p className="mt-1 text-xs text-stone-500">
             Saved locally. Demo does not suppress toasts yet — for laptop day
@@ -174,7 +174,7 @@ export default function AlertsPage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-sage-100 bg-white p-4">
+        <div className="rounded-[20px] border border-line bg-white p-4">
           <div className="flex items-center justify-between gap-2">
             <div>
               <p className="text-sm font-semibold text-stone-800">
@@ -273,7 +273,7 @@ export default function AlertsPage() {
         </div>
 
         <div className="rounded-2xl border border-dashed border-sage-200 bg-white p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-sage-700">
+          <p className="text-xs font-semibold uppercase tracking-wide text-sage-600">
             Demo match toast
           </p>
           <p className="mt-2 text-sm font-semibold text-stone-800">
@@ -299,7 +299,7 @@ function Row({
   right: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-[3.25rem] w-full items-center justify-between gap-3 rounded-2xl border border-sage-100 bg-white px-4 py-3">
+    <div className="flex min-h-[3.25rem] w-full items-center justify-between gap-3 rounded-[20px] border border-line bg-white px-4 py-3">
       <div>
         <p className="text-sm font-semibold text-stone-800">{title}</p>
         {subtitle && (

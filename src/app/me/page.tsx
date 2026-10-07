@@ -89,13 +89,14 @@ export default function MePage() {
 
   return (
     <AppShell>
-      <header className="px-5 py-5">
+      <header className="px-5 pb-4 pt-3">
         <Logo size="sm" />
-        <h1 className="mt-4 font-serif text-3xl font-semibold text-sage-900">
-          Me
+        <p className="mt-5 text-[13px] font-semibold text-muted">Me</p>
+        <h1 className="mt-0.5 font-display text-[30px] font-extrabold leading-[1.1] tracking-tight text-ink">
+          Your Bay Studies
         </h1>
-        <p className="mt-1 text-sm text-stone-500">
-          Profile stays on this device. Edit anytime — no account required.
+        <p className="mt-1.5 text-sm text-muted">
+          Everything here stays on this phone. Edit anytime, no account needed.
         </p>
       </header>
 
@@ -141,7 +142,7 @@ export default function MePage() {
           </div>
         )}
 
-        <section className="rounded-2xl border border-sage-100 bg-white p-4">
+        <section className="rounded-[20px] border border-line bg-white p-4">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
@@ -233,10 +234,10 @@ export default function MePage() {
         <VaultCard {...vaultProgress(profile, vault)} />
 
         <section className="overflow-hidden rounded-2xl border border-sage-200 bg-gradient-to-br from-sage-50 via-white to-amber-50/40 p-4 shadow-sm">
-          <p className="text-xs font-bold uppercase tracking-wide text-sage-700">
+          <p className="text-xs font-bold uppercase tracking-wide text-sage-600">
             Laptop day
           </p>
-          <h2 className="mt-1 font-serif text-lg font-semibold text-sage-900">
+          <h2 className="mt-1 font-display text-lg font-semibold text-sage-900">
             Deploy + Mailgun
           </h2>
           <p className="mt-1.5 text-sm leading-relaxed text-stone-600">
@@ -284,7 +285,7 @@ export default function MePage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-sage-100 bg-white p-4">
+        <section className="rounded-[20px] border border-line bg-white p-4">
           <div className="flex items-center justify-between gap-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
               Saved
@@ -320,7 +321,7 @@ export default function MePage() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-sage-100 bg-white p-4">
+        <section className="rounded-[20px] border border-line bg-white p-4">
           <div className="flex items-center justify-between gap-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
               Applied
@@ -356,7 +357,7 @@ export default function MePage() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-sage-100 bg-white p-4">
+        <section className="rounded-[20px] border border-line bg-white p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
             Activity
           </p>
@@ -385,7 +386,7 @@ export default function MePage() {
         </section>
 
         <section className="rounded-2xl border border-sage-100 bg-sage-50/80 p-4">
-          <h2 className="font-serif text-lg font-semibold text-sage-900">
+          <h2 className="font-display text-lg font-semibold text-sage-900">
             How we verify sources
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-stone-600">
@@ -436,7 +437,7 @@ export default function MePage() {
 function VaultCard({ filled, total }: { filled: number; total: number }) {
   const empty = filled === 0;
   return (
-    <section className="rounded-2xl border border-sage-100 bg-white p-4">
+    <section className="rounded-[20px] border border-line bg-white p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">

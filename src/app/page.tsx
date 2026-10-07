@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/Logo";
+import { BridgeInFog } from "@/components/BridgeInFog";
 import { TrustLine } from "@/components/TrustLine";
 import { useProfile } from "@/hooks/useProfile";
 import { METRO_LABELS, type Metro } from "@/lib/types";
@@ -24,7 +25,7 @@ export default function WelcomePage() {
 
   if (!ready || !hydrated) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-cream">
+      <main className="flex min-h-dvh items-center justify-center bg-fog">
         <div className="h-8 w-8 animate-pulse rounded-full bg-sage-200" />
       </main>
     );
@@ -47,38 +48,41 @@ export default function WelcomePage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-lg flex-col bg-cream px-5 pb-10 pt-10">
+    <main className="mx-auto flex min-h-dvh max-w-lg flex-col bg-fog px-5 pb-10 pt-8">
       <Logo size="lg" />
+      <div className="mt-8 rounded-[22px] border border-line bg-white px-5 py-5 shadow-card">
+        <BridgeInFog />
+      </div>
 
       {returning ? (
-        <div className="mt-10">
-          <p className="text-xs font-bold uppercase tracking-wide text-sage-700">
+        <div className="mt-8">
+          <p className="text-[13px] font-semibold text-muted">
             Welcome back
           </p>
-          <h1 className="mt-2 font-serif text-3xl font-semibold leading-[1.15] tracking-tight text-sage-900 text-balance">
-            All open studies are ready to browse
+          <h1 className="mt-1 font-display text-[32px] font-extrabold leading-[1.1] tracking-tight text-ink text-balance">
+            Fresh paid studies around the Bay
           </h1>
-          <p className="mt-3 text-base text-stone-600">
-            See every approved study, or jump to the ones that fit your
-            profile.
+          <p className="mt-3 text-base text-muted">
+            Browse everything that&apos;s open, or jump to the ones that fit
+            you.
           </p>
         </div>
       ) : (
-        <div className="mt-10">
-          <p className="text-xs font-bold uppercase tracking-wide text-sage-700">
-            Bay Area paid studies
+        <div className="mt-8">
+          <p className="text-[13px] font-semibold text-muted">
+            Paid studies around the Bay
           </p>
-          <h1 className="mt-2 font-serif text-4xl font-semibold leading-[1.15] tracking-tight text-sage-900 text-balance">
+          <h1 className="mt-1 font-display text-[40px] font-extrabold leading-[1.05] tracking-tight text-ink text-balance">
             Real studies.
             <br />
             Real pay.
             <br />
-            <span className="text-sage-600">No scam board junk.</span>
+            <span className="text-bridge-link">Never a fee.</span>
           </h1>
-          <p className="mt-4 text-base text-stone-600">
-            See every human-approved study right away. Add your details later
-            if you want better matches. You apply on the firm&apos;s site. No
-            fee. Ever.
+          <p className="mt-4 text-base leading-relaxed text-muted">
+            Taste tests, focus groups and try-at-home products from real Bay
+            Area firms. Browse everything now, add details later if you want
+            better picks. You sign up on the firm&apos;s site and they pay you.
           </p>
         </div>
       )}
@@ -87,14 +91,14 @@ export default function WelcomePage() {
         <button
           type="button"
           onClick={browseAll}
-          className="min-h-12 w-full rounded-xl bg-sage-700 px-4 py-3.5 text-base font-semibold text-white transition hover:bg-sage-800"
+          className="min-h-12 w-full rounded-[14px] bg-bridge px-4 py-3.5 text-base font-bold text-white transition hover:bg-bridge-dark"
         >
           Browse all studies
         </button>
         <button
           type="button"
           onClick={seeMatches}
-          className="min-h-12 w-full rounded-xl border border-sage-300 bg-white px-4 py-3.5 text-base font-semibold text-sage-900 transition hover:bg-sage-50"
+          className="min-h-12 w-full rounded-[14px] border border-line bg-white px-4 py-3.5 text-base font-semibold text-ink transition hover:bg-bridge-tint"
         >
           {returning ? "See matches for you" : "Get better matches"}
         </button>

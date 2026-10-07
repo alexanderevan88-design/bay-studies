@@ -6,8 +6,8 @@
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#5F6F52",
-  "theme_color": "#5F6F52",
+  "background_color": "#F4F1EA",
+  "theme_color": "#C8401A",
   "lang": "en-US",
   "categories": ["lifestyle", "business"],
   "icons": [

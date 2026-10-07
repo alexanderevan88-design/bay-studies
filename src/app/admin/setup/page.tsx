@@ -156,7 +156,7 @@ export default function AdminSetupPage() {
           <div className="flex min-w-0 items-start gap-3">
             <Link
               href="/admin/ingest"
-              className="mt-0.5 shrink-0 rounded-lg px-2 py-1.5 text-sm font-medium text-sage-700 hover:bg-sage-50"
+              className="mt-0.5 shrink-0 rounded-lg px-2 py-1.5 text-sm font-medium text-sage-600 hover:bg-sage-50"
             >
               ← Ingest
             </Link>
@@ -238,7 +238,7 @@ export default function AdminSetupPage() {
           <button
             type="button"
             onClick={() => void refreshEnv()}
-            className="mt-3 min-h-[44px] rounded-lg px-2 text-xs font-medium text-sage-700 hover:bg-sage-50 hover:underline sm:min-h-0"
+            className="mt-3 min-h-[44px] rounded-lg px-2 text-xs font-medium text-sage-600 hover:bg-sage-50 hover:underline sm:min-h-0"
           >
             Refresh env status
           </button>
@@ -312,13 +312,13 @@ export default function AdminSetupPage() {
           <p className="font-semibold text-stone-800">Quick links</p>
           <ul className="mt-2 space-y-2">
             <li className="leading-relaxed">
-              <Link href="/admin/firms" className="text-sage-700 underline">
+              <Link href="/admin/firms" className="text-sage-600 underline">
                 /admin/firms
               </Link>{" "}
               — firm join URLs + stretch panels (Salesforce / PlaytestCloud / …)
             </li>
             <li className="leading-relaxed">
-              <Link href="/admin/ingest" className="text-sage-700 underline">
+              <Link href="/admin/ingest" className="text-sage-600 underline">
                 /admin/ingest
               </Link>{" "}
               — review live inbox / Approve

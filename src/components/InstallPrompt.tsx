@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { BridgeMark } from "./Logo";
 
 const STORAGE_KEY = "bay-studies-install-dismissed";
 const VISITS_KEY = "bay-studies-visits";
@@ -143,12 +144,12 @@ export function InstallPrompt() {
       role="status"
       className="pointer-events-auto fixed inset-x-0 bottom-[4.75rem] z-30 mx-auto max-w-lg px-3"
     >
-      <div className="flex items-start gap-3 rounded-2xl border border-sage-200 bg-white/95 px-4 py-3 shadow-lg shadow-sage-900/10 backdrop-blur">
+      <div className="flex items-start gap-3 rounded-[20px] border border-line bg-white/95 px-4 py-3 shadow-lg shadow-sage-900/10 backdrop-blur">
         <span
-          className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sage-600 text-xs font-bold tracking-tight text-white"
+          className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-bridge text-white"
           aria-hidden
         >
-          BS
+          <BridgeMark />
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-sage-900">
@@ -174,7 +175,7 @@ export function InstallPrompt() {
               <button
                 type="button"
                 onClick={install}
-                className="inline-flex min-h-11 items-center rounded-full bg-sage-600 px-4 text-sm font-semibold text-white transition hover:bg-sage-700"
+                className="inline-flex min-h-11 items-center rounded-full bg-bridge px-4 text-sm font-bold text-white transition hover:bg-bridge-dark"
               >
                 Install
               </button>

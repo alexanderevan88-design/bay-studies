@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Source_Serif_4 } from "next/font/google";
+import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { ProfileProvider } from "@/hooks/useProfile";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import "./globals.css";
@@ -10,10 +10,10 @@ const sans = DM_Sans({
   weight: ["400", "500", "600", "700"],
 });
 
-const serif = Source_Serif_4({
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
-  variable: "--font-serif",
-  weight: ["400", "600", "700"],
+  variable: "--font-display",
+  weight: ["500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#5F6F52",
+  themeColor: "#C8401A",
 };
 
 export default function RootLayout({
@@ -53,7 +53,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${sans.variable} ${serif.variable} font-sans antialiased`}
+        className={`${sans.variable} ${display.variable} font-sans antialiased`}
       >
         <ProfileProvider>{children}</ProfileProvider>
         <ServiceWorkerRegister />

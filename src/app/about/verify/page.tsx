@@ -15,7 +15,7 @@ export default function VerifySourcesPage() {
           <Logo size="sm" />
           <Link
             href="/me"
-            className="inline-flex min-h-11 items-center text-sm font-medium text-sage-700 hover:underline"
+            className="inline-flex min-h-11 items-center text-sm font-medium text-sage-600 hover:underline"
           >
             ← Me
           </Link>
@@ -23,7 +23,7 @@ export default function VerifySourcesPage() {
         <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-sage-600">
           Trust · Bay Area
         </p>
-        <h1 className="font-serif text-3xl font-semibold text-sage-900">
+        <h1 className="font-display text-3xl font-semibold text-sage-900">
           How we verify &amp; source
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-stone-600">
@@ -37,7 +37,7 @@ export default function VerifySourcesPage() {
 
       <div className="space-y-3 px-5 py-5 pb-10">
         <section className="rounded-2xl border border-sage-200 bg-sage-50/80 p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-sage-700">
+          <p className="text-xs font-semibold uppercase tracking-wide text-sage-600">
             Soft launch — honest scope
           </p>
           <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-stone-700">
@@ -65,7 +65,7 @@ export default function VerifySourcesPage() {
           </ul>
         </section>
 
-        <section className="rounded-2xl border border-sage-100 bg-white p-4 shadow-sm">
+        <section className="rounded-[20px] border border-line bg-white p-4 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wide text-stone-400">
             Firms we list
           </p>
@@ -88,14 +88,14 @@ export default function VerifySourcesPage() {
           {TRUST_CHECKLIST.map((item, i) => (
             <li
               key={item.id}
-              className="rounded-2xl border border-sage-100 bg-white p-4 shadow-sm"
+              className="rounded-[20px] border border-line bg-white p-4 shadow-sm"
             >
               <div className="flex items-start gap-3">
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sage-100 text-xs font-bold text-sage-800">
                   {i + 1}
                 </span>
                 <div>
-                  <h2 className="font-serif text-lg font-semibold text-sage-900">
+                  <h2 className="font-display text-lg font-semibold text-sage-900">
                     {item.title}
                   </h2>
                   <p className="mt-1.5 text-sm leading-relaxed text-stone-600">

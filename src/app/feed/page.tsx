@@ -7,6 +7,7 @@ import { AppShell } from "@/components/AppShell";
 import { Logo } from "@/components/Logo";
 import { NotifyToast } from "@/components/NotifyToast";
 import { StudyCard } from "@/components/StudyCard";
+import { BridgeInFog } from "@/components/BridgeInFog";
 import { useFeedStudies } from "@/hooks/useFeedStudies";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useProfile } from "@/hooks/useProfile";
@@ -30,7 +31,7 @@ export default function FeedPage() {
       fallback={
         <AppShell>
           <div className="flex justify-center py-20">
-            <div className="h-8 w-8 animate-pulse rounded-full bg-sage-200" />
+            <div className="h-8 w-8 animate-pulse rounded-full bg-line" />
           </div>
         </AppShell>
       }
@@ -165,13 +166,19 @@ function FeedInner() {
     return (
       <AppShell>
         <div className="flex justify-center py-20">
-          <div className="h-8 w-8 animate-pulse rounded-full bg-sage-200" />
+          <div className="h-8 w-8 animate-pulse rounded-full bg-line" />
         </div>
       </AppShell>
     );
   }
 
   const openCount = baseCards.filter(({ study }) => !study.expired).length;
+  const filterCounts = Object.fromEntries(
+    FILTERS.map((f) => [
+      f.id,
+      ranked.allCards.filter(({ study }) => passesFilter(study, f.id)).length,
+    ])
+  ) as Record<FeedFilter, number>;
   const placeName = profile.metro ? METRO_LABELS[profile.metro] : "the Bay";
 
   function setFilter(next: FeedFilter) {
@@ -193,7 +200,7 @@ function FeedInner() {
         <NotifyToast notification={toast} onDismiss={dismissToast} />
       )}
 
-      <header className="sticky top-0 z-30 border-b border-sage-100/80 bg-cream/95 backdrop-blur">
+      <header className="sticky top-0 z-30 border-b border-line bg-fog/95 backdrop-blur">
         <div className="flex h-14 items-center justify-between gap-3 px-4 sm:px-5">
           <Link
             href="/"
@@ -205,7 +212,7 @@ function FeedInner() {
           <Link
             href="/alerts"
             aria-label={unread > 0 ? `Alerts, ${unread} new` : "Alerts"}
-            className="relative inline-flex h-11 w-11 items-center justify-center rounded-full text-sage-800 hover:bg-sage-50"
+            className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl text-ink hover:bg-white/70"
           >
             <svg
               className="h-6 w-6"
@@ -222,7 +229,7 @@ function FeedInner() {
               />
             </svg>
             {unread > 0 && (
-              <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-rose-500 ring-2 ring-cream" />
+              <span className="absolute right-2.5 top-2.5 h-2.5 w-2.5 rounded-full bg-bridge ring-2 ring-fog" />
             )}
           </Link>
         </div>
@@ -231,11 +238,11 @@ function FeedInner() {
       <div className="overflow-x-hidden px-4 pt-4 sm:px-5">
         {tab === "feed" ? (
           <>
-            <p className="text-xs font-semibold uppercase tracking-wide text-sage-600">
+            <p className="text-[13px] font-semibold text-muted">
               {weekdayPt()} around {placeName}
             </p>
             <div className="mt-0.5 flex items-end justify-between gap-3">
-              <h1 className="font-serif text-2xl font-semibold leading-tight text-sage-900">
+              <h1 className="font-display text-[30px] font-extrabold leading-[1.1] tracking-tight text-ink">
                 {forYouLocked
                   ? "For you"
                   : `${openCount} paid stud${openCount === 1 ? "y" : "ies"} open`}
@@ -252,17 +259,25 @@ function FeedInner() {
                     seeAllMatches(ids);
                     markAllRead();
                   }}
-                  className="inline-flex min-h-11 shrink-0 items-center text-sm font-medium text-sage-700 underline"
+                  className="inline-flex min-h-11 shrink-0 items-center text-sm font-medium text-sage-600 underline"
                 >
                   Clear {unread} new
                 </button>
               )}
             </div>
-            <p className="mt-1 text-sm leading-relaxed text-stone-600">
-              Real firms only. No fee, ever. You get paid by the firm.{" "}
+            <p className="mt-1.5 text-[13.5px] leading-relaxed text-muted">
+              <svg
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                className="mr-1.5 inline h-[13px] w-[13px] -translate-y-px text-cash"
+                aria-hidden
+              >
+                <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zm3.03 4.72l-3.5 3.5a.75.75 0 01-1.06 0l-1.5-1.5a.75.75 0 111.06-1.06l.97.97 2.97-2.97a.75.75 0 111.06 1.06z" />
+              </svg>
+              Real firms only. Never a fee. You get paid by the firm.{" "}
               <Link
                 href="/about/verify"
-                className="inline-flex min-h-11 items-center font-semibold text-sage-800 underline decoration-sage-300 underline-offset-2"
+                className="inline-flex min-h-11 items-center font-semibold text-bridge-link underline decoration-bridge/30 underline-offset-2"
               >
                 How we pick
               </Link>
@@ -277,6 +292,7 @@ function FeedInner() {
                 <FilterChip
                   key={f.id}
                   label={f.label}
+                  count={f.id === "week" ? undefined : filterCounts[f.id]}
                   active={browse === "all" && filter === f.id}
                   onClick={() => setFilter(f.id)}
                 />
@@ -292,8 +308,11 @@ function FeedInner() {
           </>
         ) : (
           <>
-            <h1 className="font-serif text-2xl font-semibold text-sage-900">
+            <p className="text-[13px] font-semibold text-muted">
               {tab === "saved" ? "Saved" : "Applied"}
+            </p>
+            <h1 className="mt-0.5 font-display text-[30px] font-extrabold leading-[1.1] tracking-tight text-ink">
+              {tab === "saved" ? "Your shortlist" : "Studies you tried"}
             </h1>
             <div
               role="group"
@@ -333,6 +352,7 @@ function FeedInner() {
                 ranked.softFilteredEmpty
               }
               publishedEmpty={published.length === 0}
+              total={ranked.allCards.length}
             />
           )
         ) : (
@@ -446,57 +466,94 @@ function FilterChip({
   label,
   active,
   onClick,
+  count,
 }: {
   label: string;
   active: boolean;
   onClick: () => void;
+  count?: number;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`inline-flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-full px-4 text-sm font-semibold transition ${
+      className={`inline-flex min-h-11 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4 text-sm font-semibold transition ${
         active
-          ? "bg-sage-700 text-white"
-          : "border border-sage-200 bg-white text-sage-800 hover:bg-sage-50"
+          ? "bg-bridge text-white"
+          : "border border-line bg-white text-ink hover:bg-bridge-tint"
       }`}
     >
       {label}
+      {typeof count === "number" && (
+        <span className={`text-xs font-semibold ${active ? "text-white/90" : "text-muted"}`}>
+          {count}
+        </span>
+      )}
     </button>
   );
 }
 
 function FilterEmpty({ onReset }: { onReset: () => void }) {
   return (
-    <div className="rounded-2xl border border-dashed border-sage-200 bg-white px-6 py-10 text-center">
-      <p className="font-serif text-xl text-sage-900">Nothing here right now</p>
-      <p className="mt-2 text-sm leading-relaxed text-stone-500">
-        No open studies match this filter. New ones usually show up midweek.
-      </p>
+    <FogEmpty
+      title="Nothing in this filter"
+      body="Nothing open matches right now. New studies usually show up midweek."
+    >
       <button
         type="button"
         onClick={onReset}
-        className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-sage-700 px-4 text-sm font-semibold text-white"
+        className={PRIMARY_BTN}
       >
         Show all studies
       </button>
+    </FogEmpty>
+  );
+}
+
+const PRIMARY_BTN =
+  "inline-flex min-h-12 items-center rounded-[14px] bg-bridge px-5 text-base font-bold text-white transition hover:bg-bridge-dark";
+const SECONDARY_BTN =
+  "inline-flex min-h-12 items-center rounded-[14px] border border-line bg-white px-5 text-base font-semibold text-ink transition hover:bg-bridge-tint";
+
+function FogEmpty({
+  title,
+  body,
+  children,
+  footnote,
+}: {
+  title: string;
+  body: string;
+  children?: React.ReactNode;
+  footnote?: string;
+}) {
+  return (
+    <div className="rounded-[22px] border-[1.5px] border-dashed border-line bg-white px-5 py-8 text-center">
+      <BridgeInFog />
+      <p className="mt-3.5 font-display text-[21px] font-bold text-ink">{title}</p>
+      <p className="mx-auto mt-1.5 max-w-xs text-[14.5px] leading-relaxed text-muted">
+        {body}
+      </p>
+      {children && (
+        <div className="mt-5 flex flex-wrap justify-center gap-2">{children}</div>
+      )}
+      {footnote && <p className="mt-4 text-xs text-muted">{footnote}</p>}
     </div>
   );
 }
 
 function IncompleteProfileCard({ onboarded }: { onboarded: boolean }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-sage-200 bg-sage-50/70 px-4 py-3">
+    <div className="flex items-center gap-3 rounded-[20px] border border-line bg-bay-tint px-4 py-3">
       <p className="min-w-0 flex-1 text-sm leading-snug text-stone-700">
-        <span className="font-semibold text-sage-900">Optional:</span>{" "}
+        <span className="font-semibold text-bay">Optional:</span>{" "}
         {onboarded
           ? "fill in a few gaps for better picks."
           : "add your age and ZIP and we’ll point out the best fits."}
       </p>
       <Link
         href="/onboarding/about"
-        className="inline-flex min-h-11 shrink-0 items-center rounded-xl bg-sage-700 px-3.5 text-sm font-semibold text-white hover:bg-sage-800"
+        className="inline-flex min-h-11 shrink-0 items-center rounded-[14px] bg-bay px-3.5 text-sm font-bold text-white hover:opacity-90"
       >
         {onboarded ? "Update" : "Add details"}
       </Link>
@@ -506,11 +563,11 @@ function IncompleteProfileCard({ onboarded }: { onboarded: boolean }) {
 
 function ForYouGate() {
   return (
-    <div className="rounded-2xl border border-sage-200 bg-white px-5 py-8 text-center shadow-sm">
-      <p className="text-xs font-bold uppercase tracking-wide text-sage-700">
+    <div className="rounded-[22px] border border-line bg-white px-5 py-8 text-center shadow-card">
+      <p className="text-xs font-bold uppercase tracking-wide text-sage-600">
         For you
       </p>
-      <p className="mt-2 font-serif text-xl text-sage-900">
+      <p className="mt-2 font-display text-xl text-sage-900">
         Add your details to see personal matches
       </p>
       <p className="mt-2 text-sm leading-relaxed text-stone-600">
@@ -542,6 +599,7 @@ function EmptyState({
   listEmpty,
   prefsMiss,
   publishedEmpty,
+  total,
 }: {
   tab: FeedTab;
   browse: BrowseView;
@@ -550,155 +608,77 @@ function EmptyState({
   prefsMiss: boolean;
   /** True when server published store has no approved email studies yet. */
   publishedEmpty: boolean;
+  total: number;
 }) {
+  const browseLabel =
+    total > 0 ? `Browse ${total} stud${total === 1 ? "y" : "ies"}` : "Browse studies";
+
   if (tab === "saved") {
     return (
-      <div className="rounded-2xl border border-dashed border-sage-200 bg-white px-6 py-12 text-center">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-rose-50 text-rose-600">
-          <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
-          </svg>
-        </div>
-        <p className="mt-4 font-serif text-xl text-sage-900">
-          Nothing saved yet
-        </p>
-        <p className="mt-2 text-sm text-stone-500">
-          Tap the heart on anything that looks fun and we’ll keep it here.
-        </p>
-        <Link
-          href="/feed"
-          className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-sage-700 px-4 py-2.5 text-sm font-semibold text-white"
-        >
-          Browse all studies
+      <FogEmpty
+        title="Nothing saved yet"
+        body="Tap the heart on anything that looks fun. We’ll keep it here so you don’t lose it in the fog."
+      >
+        <Link href="/feed" className={PRIMARY_BTN}>
+          {browseLabel}
         </Link>
-      </div>
+      </FogEmpty>
     );
   }
 
   if (tab === "applied") {
     return (
-      <div className="rounded-2xl border border-dashed border-sage-200 bg-white px-6 py-12 text-center">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sky-50 text-sky-700">
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.8}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </div>
-        <p className="mt-4 font-serif text-xl text-sage-900">
-          No applications yet
-        </p>
-        <p className="mt-2 text-sm text-stone-500">
-          When you open a firm screener, we mark it Applied so you can track
-          what you&apos;ve already tapped.
-        </p>
-        <Link
-          href="/feed"
-          className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-sage-700 px-4 py-2.5 text-sm font-semibold text-white"
-        >
-          Browse all studies
+      <FogEmpty
+        title="Nothing tried yet"
+        body="When you open a firm’s sign-up page from here, we mark it so you remember what you’ve already tapped."
+      >
+        <Link href="/feed" className={PRIMARY_BTN}>
+          {browseLabel}
         </Link>
-      </div>
+      </FogEmpty>
     );
   }
 
   if (prefsMiss) {
     return (
-      <div className="rounded-2xl border border-dashed border-sage-200 bg-white px-6 py-12 text-center">
-        <p className="font-serif text-xl text-sage-900">
-          Nothing in For you right now
-        </p>
-        <p className="mt-2 text-sm leading-relaxed text-stone-500">
-          Your preferences filtered these out. All studies are still on the
-          All tab.
-        </p>
-        <div className="mt-5 flex flex-wrap justify-center gap-2">
-          <Link
-            href="/feed"
-            className="inline-flex min-h-11 items-center rounded-xl bg-sage-700 px-4 py-2.5 text-sm font-semibold text-white"
-          >
-            See all studies
-          </Link>
-          <Link
-            href="/onboarding/preferences"
-            className="inline-flex min-h-11 items-center rounded-xl border border-sage-200 bg-white px-4 py-2.5 text-sm font-semibold text-sage-800"
-          >
-            Tweak preferences
-          </Link>
-        </div>
-      </div>
+      <FogEmpty
+        title="Nothing for you just yet"
+        body="Your preferences filtered these out. Every study is still under All."
+      >
+        <Link href="/feed" className={PRIMARY_BTN}>
+          See all studies
+        </Link>
+        <Link href="/onboarding/preferences" className={SECONDARY_BTN}>
+          Tweak preferences
+        </Link>
+      </FogEmpty>
     );
   }
 
-  const quietPublished = publishedEmpty && !hasAnyStudies;
+  const hiddenAll = listEmpty && hasAnyStudies;
+  void publishedEmpty;
 
   return (
-    <div className="rounded-2xl border border-dashed border-sage-200 bg-white px-6 py-12 text-center">
-      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sage-50 text-sage-700">
-        <svg
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={1.8}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M4 6h16M4 12h16M4 18h10"
-          />
-        </svg>
-      </div>
-      <p className="mt-4 font-serif text-xl text-sage-900">
-        {quietPublished
-          ? "No studies yet"
-          : listEmpty && hasAnyStudies
-            ? "No studies left in this list"
-            : "No studies right now"}
-      </p>
-      <p className="mt-2 text-sm leading-relaxed text-stone-500">
-        {quietPublished
-          ? `We’re onboarding ${SEED_FIRM_COUNT} verified Bay Area firms. New invites need a human Approve before they show up here.`
-          : listEmpty && hasAnyStudies
-            ? "You’ve hidden the current studies. New approved studies will show up here."
-            : browse === "foryou"
-              ? "Nothing to rank yet. Check All, or come back after the next Approve."
-              : `We watch ${SEED_FIRM_COUNT} verified Bay Area firms. New domains need a human Approve.`}
-      </p>
-      <div className="mt-5 flex flex-wrap justify-center gap-2">
-        {browse === "foryou" && (
-          <Link
-            href="/feed"
-            className="inline-flex min-h-11 items-center rounded-xl bg-sage-700 px-4 py-2.5 text-sm font-semibold text-white"
-          >
-            See all studies
-          </Link>
-        )}
-        <Link
-          href="/alerts"
-          className="inline-flex min-h-11 items-center rounded-xl border border-sage-200 bg-white px-4 py-2.5 text-sm font-semibold text-sage-800"
-        >
-          Check Alerts
+    <FogEmpty
+      title={hiddenAll ? "You’ve cleared the list" : "Quiet day around the Bay"}
+      body={
+        hiddenAll
+          ? "You hid everything that’s open. New studies will show up here as they come in."
+          : "New studies usually show up midweek. We’ll ping you."
+      }
+      footnote={`${SEED_FIRM_COUNT} verified Bay Area firms · Never a fee`}
+    >
+      {browse === "foryou" && (
+        <Link href="/feed" className={PRIMARY_BTN}>
+          See all studies
         </Link>
-        <Link
-          href="/about/verify"
-          className="inline-flex min-h-11 items-center rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm font-medium text-stone-600"
-        >
-          How we verify
-        </Link>
-      </div>
-      <p className="mt-4 text-xs text-stone-400">
-        {SEED_FIRM_COUNT} verified Bay Area firms · Human Approve · No fee.
-        Ever.
-      </p>
-    </div>
+      )}
+      <Link href="/alerts" className={browse === "foryou" ? SECONDARY_BTN : PRIMARY_BTN}>
+        Turn on alerts
+      </Link>
+      <Link href="/about/verify" className={SECONDARY_BTN}>
+        How we pick
+      </Link>
+    </FogEmpty>
   );
 }

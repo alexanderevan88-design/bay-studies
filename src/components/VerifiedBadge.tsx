@@ -13,7 +13,7 @@ export function VerifiedBadge({
       <svg
         viewBox="0 0 16 16"
         fill="currentColor"
-        className="h-3.5 w-3.5 text-sage-600"
+        className="h-3.5 w-3.5 text-cash"
         aria-hidden
       >
         <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zm3.03 4.72l-3.5 3.5a.75.75 0 01-1.06 0l-1.5-1.5a.75.75 0 111.06-1.06l.97.97 2.97-2.97a.75.75 0 111.06 1.06z" />
@@ -22,7 +22,7 @@ export function VerifiedBadge({
     </>
   );
 
-  const classes = `inline-flex items-center gap-1 rounded-full bg-sage-50 px-2 py-0.5 text-xs font-medium text-sage-800 ring-1 ring-sage-200 ${className}`;
+  const classes = `inline-flex items-center gap-1 rounded-full bg-cash-tint px-2.5 py-0.5 text-xs font-semibold text-cash ${className}`;
 
   if (href) {
     return (
@@ -32,7 +32,7 @@ export function VerifiedBadge({
         title="Allowlisted Bay Area firm — how we verify"
       >
         <span
-          className={`${classes} transition group-hover:bg-sage-100 group-hover:ring-sage-300`}
+          className={`${classes} transition group-hover:brightness-95`}
         >
           {inner}
         </span>

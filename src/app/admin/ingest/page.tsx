@@ -608,7 +608,7 @@ export default function AdminIngestPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/feed"
-              className="text-sm font-medium text-sage-700 hover:underline"
+              className="text-sm font-medium text-sage-600 hover:underline"
             >
               ← Feed
             </Link>
@@ -632,7 +632,7 @@ export default function AdminIngestPage() {
                 Soft-launch · auto-publish ≥{AUTO_PUBLISH_CONFIDENCE_THRESHOLD}%
                 · new domains always review
                 {inboxSource === "live" ? (
-                  <span className="ml-1 font-medium text-sage-700">
+                  <span className="ml-1 font-medium text-sage-600">
                     · live inbox ({rows.length})
                   </span>
                 ) : inboxSource === "fixtures" ? (

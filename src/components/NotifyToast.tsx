@@ -15,12 +15,12 @@ export function NotifyToast({
       role="status"
       className="pointer-events-auto fixed left-3 right-3 top-3 z-50 mx-auto max-w-md"
     >
-      <div className="flex items-start gap-3 rounded-2xl border border-sage-200 bg-white px-4 py-3 shadow-lg shadow-sage-900/10">
+      <div className="flex items-start gap-3 rounded-[20px] border border-line bg-white px-4 py-3 shadow-lg shadow-sage-900/10">
         <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sm font-bold text-sage-800">
           $
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-bold uppercase tracking-wide text-sage-700">
+          <p className="text-xs font-bold uppercase tracking-wide text-sage-600">
             New match
           </p>
           <p className="mt-0.5 text-sm font-semibold text-sage-900">

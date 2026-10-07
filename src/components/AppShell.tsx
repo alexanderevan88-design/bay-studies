@@ -11,9 +11,9 @@ export function AppShell({
   showNav?: boolean;
 }) {
   return (
-    <div className="min-h-dvh bg-cream">
+    <div className="min-h-dvh bg-fog">
       <div
-        className={`mx-auto min-h-dvh max-w-lg bg-cream ${
+        className={`mx-auto min-h-dvh max-w-lg bg-fog ${
           showNav ? "pb-24" : ""
         }`}
       >

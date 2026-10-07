@@ -16,7 +16,7 @@ export default function PrivacyPage() {
           <Logo size="sm" />
           <Link
             href="/me"
-            className="inline-flex min-h-11 items-center text-sm font-medium text-sage-700 hover:underline"
+            className="inline-flex min-h-11 items-center text-sm font-medium text-sage-600 hover:underline"
           >
             ← Me
           </Link>
@@ -24,7 +24,7 @@ export default function PrivacyPage() {
         <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-sage-600">
           About
         </p>
-        <h1 className="font-serif text-3xl font-semibold text-sage-900">
+        <h1 className="font-display text-3xl font-semibold text-sage-900">
           Privacy &amp; about
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-stone-600">
@@ -34,8 +34,8 @@ export default function PrivacyPage() {
       </header>
 
       <div className="space-y-3 px-5 py-5 pb-10">
-        <section className="rounded-2xl border border-sage-100 bg-white p-4 shadow-sm">
-          <h2 className="font-serif text-lg font-semibold text-sage-900">
+        <section className="rounded-[20px] border border-line bg-white p-4 shadow-sm">
+          <h2 className="font-display text-lg font-semibold text-sage-900">
             What we store today
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-stone-600">
@@ -59,8 +59,8 @@ export default function PrivacyPage() {
           </ul>
         </section>
 
-        <section className="rounded-2xl border border-sage-100 bg-white p-4 shadow-sm">
-          <h2 className="font-serif text-lg font-semibold text-sage-900">
+        <section className="rounded-[20px] border border-line bg-white p-4 shadow-sm">
+          <h2 className="font-display text-lg font-semibold text-sage-900">
             What we don&apos;t do
           </h2>
           <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-stone-600">
@@ -73,8 +73,8 @@ export default function PrivacyPage() {
           </ul>
         </section>
 
-        <section className="rounded-2xl border border-sage-100 bg-white p-4 shadow-sm">
-          <h2 className="font-serif text-lg font-semibold text-sage-900">
+        <section className="rounded-[20px] border border-line bg-white p-4 shadow-sm">
+          <h2 className="font-display text-lg font-semibold text-sage-900">
             Inbound firm email (admin)
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-stone-600">
@@ -85,8 +85,8 @@ export default function PrivacyPage() {
           </p>
         </section>
 
-        <section className="rounded-2xl border border-sage-100 bg-white p-4 shadow-sm">
-          <h2 className="font-serif text-lg font-semibold text-sage-900">
+        <section className="rounded-[20px] border border-line bg-white p-4 shadow-sm">
+          <h2 className="font-display text-lg font-semibold text-sage-900">
             Your controls
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-stone-600">

@@ -99,25 +99,25 @@ export function FillScreenerHelper({ profile, firmName, embedded = false }: Prop
     <section
       className={
         embedded
-          ? "mt-4 border-t border-sage-100 pt-4"
-          : "mt-5 rounded-2xl border border-sage-100 bg-white p-4"
+          ? "mt-4 rounded-2xl bg-bay-tint p-3.5"
+          : "mt-5 rounded-2xl bg-bay-tint p-4"
       }
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-sage-900">
+          <p className="text-sm font-bold text-bay">
             Fill this screener
           </p>
-          <p className="mt-1 text-xs leading-relaxed text-stone-500">
-            Copy your saved answers, then paste into {firmName}&apos;s form.
-            We never autofill or submit for you.
+          <p className="mt-1 text-xs leading-relaxed text-stone-600">
+            Type it once, paste it into every quiz. It stays on your phone,
+            and you paste into {firmName}&apos;s form yourself.
           </p>
         </div>
         {!open && (
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="shrink-0 inline-flex min-h-11 items-center rounded-xl bg-sage-700 px-3.5 text-sm font-semibold text-white hover:bg-sage-800"
+            className="shrink-0 inline-flex min-h-11 items-center rounded-[14px] bg-bay px-4 text-sm font-bold text-white hover:opacity-90"
           >
             Open
           </button>
@@ -125,7 +125,7 @@ export function FillScreenerHelper({ profile, firmName, embedded = false }: Prop
       </div>
 
       {open && (
-        <div className="mt-4 space-y-4 border-t border-stone-100 pt-4">
+        <div className="mt-4 space-y-4 border-t border-bay/20 pt-4">
           {empty ? (
             <div className="rounded-xl border border-dashed border-sage-300 bg-sage-50/50 px-4 py-5 text-center">
               <p className="font-medium text-sage-900">Your vault is empty</p>
@@ -154,7 +154,7 @@ export function FillScreenerHelper({ profile, firmName, embedded = false }: Prop
                           type="checkbox"
                           checked={checked[i]}
                           onChange={() => toggleCheck(i)}
-                          className="mt-0.5 h-5 w-5 shrink-0 rounded border-stone-300 text-sage-700 focus:ring-sage-600"
+                          className="mt-0.5 h-5 w-5 shrink-0 rounded border-stone-300 text-sage-600 focus:ring-sage-600"
                         />
                         <span>{item}</span>
                       </label>
@@ -293,9 +293,9 @@ function CopyChip({
       type="button"
       onClick={onCopy}
       title={`Copy ${label}: ${value}`}
-      className="inline-flex max-w-full flex-col items-start rounded-xl border border-sage-200 bg-sage-50 px-3 py-2 text-left transition hover:bg-sage-100"
+      className="inline-flex max-w-full flex-col items-start rounded-xl border border-bay/25 bg-white px-3 py-2 text-left transition hover:bg-white/70"
     >
-      <span className="text-xs font-semibold uppercase tracking-wide text-sage-700">
+      <span className="text-xs font-semibold uppercase tracking-wide text-bay">
         {copied ? "Copied" : label}
       </span>
       <span className="max-w-[14rem] truncate text-sm font-medium text-stone-900">

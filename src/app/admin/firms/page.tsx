@@ -102,7 +102,7 @@ export default function AdminFirmsPage() {
           <div className="flex min-w-0 items-start gap-3">
             <Link
               href="/admin/setup"
-              className="mt-0.5 shrink-0 rounded-lg px-2 py-1.5 text-sm font-medium text-sage-700 hover:bg-sage-50"
+              className="mt-0.5 shrink-0 rounded-lg px-2 py-1.5 text-sm font-medium text-sage-600 hover:bg-sage-50"
             >
               ← Setup
             </Link>
@@ -144,7 +144,7 @@ export default function AdminFirmsPage() {
           <p className="text-sm leading-relaxed text-stone-600">
             Sign up for each allowlisted firm using a dedicated ingest address
             so invites land in{" "}
-            <Link href="/admin/ingest" className="text-sage-700 underline">
+            <Link href="/admin/ingest" className="text-sage-600 underline">
               /admin/ingest
             </Link>
             . Replace{" "}
@@ -152,7 +152,7 @@ export default function AdminFirmsPage() {
               YOUR_DOMAIN
             </code>{" "}
             after Mailgun + DNS are live (see{" "}
-            <Link href="/admin/setup" className="text-sage-700 underline">
+            <Link href="/admin/setup" className="text-sage-600 underline">
               /admin/setup
             </Link>
             ).
@@ -214,19 +214,19 @@ export default function AdminFirmsPage() {
           <p className="font-semibold text-stone-800">Related</p>
           <ul className="mt-2 space-y-2">
             <li className="leading-relaxed">
-              <Link href="/admin/setup" className="text-sage-700 underline">
+              <Link href="/admin/setup" className="text-sage-600 underline">
                 /admin/setup
               </Link>{" "}
               — domain, Mailgun, webhook secret
             </li>
             <li className="leading-relaxed">
-              <Link href="/admin/ingest" className="text-sage-700 underline">
+              <Link href="/admin/ingest" className="text-sage-600 underline">
                 /admin/ingest
               </Link>{" "}
               — live inbox / Approve
             </li>
             <li className="leading-relaxed">
-              <Link href="/about/verify" className="text-sage-700 underline">
+              <Link href="/about/verify" className="text-sage-600 underline">
                 /about/verify
               </Link>{" "}
               — how we verify sources
@@ -314,7 +314,7 @@ function FirmChecklistCard({
               </dd>
             </div>
             <div className="rounded-lg border border-dashed border-sage-300 bg-sage-50 px-3 py-2.5">
-              <dt className="font-semibold uppercase tracking-wide text-sage-700/70">
+              <dt className="font-semibold uppercase tracking-wide text-sage-600/70">
                 Suggested ingest email
               </dt>
               <dd className="mt-1 break-all font-mono text-[11px] leading-relaxed text-sage-900 sm:text-xs">

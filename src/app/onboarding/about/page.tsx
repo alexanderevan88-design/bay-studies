@@ -56,7 +56,7 @@ export default function AboutPage() {
 
   if (!ready || !hydrated) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-cream">
+      <main className="flex min-h-dvh items-center justify-center bg-fog">
         <div className="h-8 w-8 animate-pulse rounded-full bg-sage-200" />
       </main>
     );
@@ -87,11 +87,11 @@ export default function AboutPage() {
   const canNext = Boolean(age || dob) && zip.length >= 5;
 
   return (
-    <main className="mx-auto min-h-dvh max-w-lg bg-cream px-5 pb-10 pt-6">
+    <main className="mx-auto min-h-dvh max-w-lg bg-fog px-5 pb-10 pt-6">
       <div className="flex items-center justify-between">
         <Link
           href={profile.onboarded ? "/me" : "/"}
-          className="text-sm font-medium text-sage-700"
+          className="text-sm font-medium text-sage-600"
         >
           ← Back
         </Link>
@@ -100,7 +100,7 @@ export default function AboutPage() {
         </span>
       </div>
 
-      <h1 className="mt-6 font-serif text-3xl font-semibold text-sage-900">
+      <h1 className="mt-6 font-display text-3xl font-semibold text-sage-900">
         About you
       </h1>
       <p className="mt-2 text-stone-600">

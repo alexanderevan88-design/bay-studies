@@ -22,6 +22,7 @@ import {
   firmName,
   firmTone,
   hourlyRate,
+  isFresh,
   lengthLabel,
   modalityLabel,
   payBadge,
@@ -70,10 +71,10 @@ export default function StudyDetailPage() {
     return (
       <AppShell>
         <div className="px-5 py-16 text-center">
-          <p className="font-serif text-xl text-sage-900">Study not found</p>
+          <p className="font-display text-xl text-sage-900">Study not found</p>
           <Link
             href="/feed"
-            className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-sage-700"
+            className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-sage-600"
           >
             ← Back to feed
           </Link>
@@ -100,20 +101,20 @@ export default function StudyDetailPage() {
 
   return (
     <AppShell showNav={false}>
-      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-sage-100/80 bg-cream/95 px-2 backdrop-blur">
+      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-line bg-fog/95 px-2 backdrop-blur">
         <button
           type="button"
           onClick={() => {
             if (window.history.length > 1) router.back();
             else router.push("/feed");
           }}
-          className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-sage-800 hover:bg-sage-50"
+          className="inline-flex min-h-11 items-center rounded-xl px-3 text-[15px] font-semibold text-ink hover:bg-white/70"
         >
           ← Back
         </button>
         <Link
           href="/feed"
-          className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-sage-800 hover:bg-sage-50"
+          className="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-bridge-link hover:bg-white/70"
         >
           All studies
         </Link>
@@ -123,15 +124,15 @@ export default function StudyDetailPage() {
         <div className="flex items-center gap-2.5">
           <span
             aria-hidden
-            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-bold ${firmTone(study)}`}
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-bold text-white ${firmTone(study)}`}
           >
             {firmInitial(study)}
           </span>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-sage-900">
+            <p className="truncate text-[15px] font-semibold text-ink">
               {firmLabel}
             </p>
-            <p className="text-xs text-stone-500">{study.firmDomain}</p>
+            <p className="text-xs text-muted">{study.firmDomain}</p>
           </div>
           {study.verified && (
             <div className="ml-auto shrink-0">
@@ -140,23 +141,29 @@ export default function StudyDetailPage() {
           )}
         </div>
 
-        <h1 className="mt-3 break-words font-serif text-2xl font-semibold leading-snug text-stone-900">
+        <h1 className="mt-3.5 break-words font-display text-[26px] font-bold leading-[1.15] tracking-tight text-ink">
           {title}
         </h1>
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <span
-            className={`inline-flex items-center rounded-lg px-2.5 py-1 text-xl font-bold tracking-tight ${
+            className={`inline-flex items-center rounded-xl px-3 py-0.5 font-display tracking-tight ${
               pay.known
-                ? "bg-emerald-50 text-emerald-800 ring-1 ring-inset ring-emerald-200"
-                : "bg-stone-100 text-stone-600"
+                ? "bg-cash-tint text-[28px] font-extrabold text-cash"
+                : "bg-stone-100 py-1.5 text-lg font-bold text-muted"
             }`}
           >
             {pay.text}
           </span>
-          {hourly && <span className="text-sm text-stone-500">{hourly}</span>}
-          {neu && (
-            <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-violet-800">
+          {(length || hourly) && (
+            <span className="text-sm text-muted">
+              {length && <b className="font-semibold text-ink">{length}</b>}
+              {length && hourly ? " · " : ""}
+              {hourly}
+            </span>
+          )}
+          {(neu || isFresh(study)) && (
+            <span className="rounded-md bg-poppy px-1.5 py-px text-xs font-extrabold uppercase tracking-wide text-poppy-deep">
               New
             </span>
           )}
@@ -166,7 +173,7 @@ export default function StudyDetailPage() {
             </span>
           )}
           {applied && (
-            <span className="rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-medium text-sky-800">
+            <span className="rounded-full bg-bay-tint px-2.5 py-0.5 text-xs font-semibold text-bay">
               Applied
             </span>
           )}
@@ -193,8 +200,8 @@ export default function StudyDetailPage() {
           />
         </dl>
 
-        <section className="mt-4 rounded-2xl border border-sage-200 bg-white p-4">
-          <h2 className="font-serif text-lg font-semibold text-sage-900">
+        <section className="mt-4 rounded-[20px] border border-line bg-white p-4 shadow-card">
+          <h2 className="font-display text-lg font-bold text-ink">
             How to sign up
           </h2>
           <ol className="mt-3 space-y-3 text-sm leading-relaxed text-stone-700">
@@ -275,13 +282,13 @@ export default function StudyDetailPage() {
           </section>
         )}
 
-        <section className="mt-5 rounded-2xl border border-sage-100 bg-white p-4">
+        <section className="mt-5 rounded-[20px] border border-line bg-white p-4">
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xs font-semibold uppercase tracking-wide text-stone-500">
               Is it a fit?
             </h2>
             {profile.onboarded && (
-              <span className="rounded-full bg-sage-100 px-2.5 py-0.5 text-xs font-semibold text-sage-800">
+              <span className="rounded-full bg-cash-tint px-2.5 py-0.5 text-xs font-semibold text-cash">
                 {match}% match
               </span>
             )}
@@ -324,7 +331,7 @@ export default function StudyDetailPage() {
         <p className="mt-4 text-xs leading-relaxed text-stone-500">
           {study.verified ? (
             <>
-              <span className="font-medium text-sage-800">Verified firm</span>
+              <span className="font-semibold text-cash">Verified firm</span>
               {" · "}
               Allowlisted Bay Area source
               {isSeedStudy(study.id)
@@ -355,17 +362,17 @@ export default function StudyDetailPage() {
         </button>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-sage-100 bg-white/95 backdrop-blur safe-bottom">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur safe-bottom">
         <div className="mx-auto flex max-w-lg items-center gap-2 px-4 pt-2.5">
           <button
             type="button"
             onClick={() => toggleSaved(study.id)}
             aria-pressed={saved}
             aria-label={saved ? "Unsave study" : "Save study"}
-            className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border transition active:scale-95 ${
+            className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] border transition active:scale-95 ${
               saved
-                ? "border-rose-200 bg-rose-50 text-rose-600"
-                : "border-sage-200 bg-white text-stone-500"
+                ? "border-bridge/30 bg-bridge-tint text-bridge"
+                : "border-line bg-white text-stone-500"
             }`}
           >
             <svg
@@ -388,10 +395,10 @@ export default function StudyDetailPage() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => markApplied(study.id)}
-            className={`flex min-h-12 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl px-4 text-base font-semibold transition ${
+            className={`flex min-h-12 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-[14px] px-4 text-base font-bold transition ${
               study.expired
                 ? "border border-rose-300 bg-white text-rose-900 hover:bg-rose-50"
-                : "bg-sage-700 text-white hover:bg-sage-800"
+                : "bg-bridge text-white hover:bg-bridge-dark"
             }`}
           >
             <span className="truncate">{ctaText}</span>
@@ -400,7 +407,7 @@ export default function StudyDetailPage() {
             </span>
           </a>
         </div>
-        <p className="mx-auto max-w-lg truncate px-4 pb-1 pt-1 text-center text-xs text-stone-500">
+        <p className="mx-auto max-w-lg truncate px-4 pb-1 pt-1 text-center text-xs text-muted">
           Opens {study.firmDomain} · we mark it Applied for you
         </p>
       </div>
@@ -419,14 +426,14 @@ function FactTile({
 }) {
   return (
     <div
-      className={`rounded-xl border border-sage-100 bg-white px-3 py-2.5 ${
+      className={`rounded-[14px] border border-line bg-white px-3 py-2.5 ${
         wide ? "col-span-2" : ""
       }`}
     >
-      <dt className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+      <dt className="text-xs font-semibold text-muted">
         {label}
       </dt>
-      <dd className="mt-0.5 break-words text-sm leading-snug text-stone-800">
+      <dd className="mt-0.5 break-words text-[14.5px] font-semibold leading-snug text-ink">
         {value}
       </dd>
     </div>
@@ -438,7 +445,7 @@ function Step({ n, children }: { n: number; children: React.ReactNode }) {
     <li className="flex gap-3">
       <span
         aria-hidden
-        className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-100 text-xs font-bold text-sage-800"
+        className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-bridge-tint text-xs font-bold text-bridge-dark"
       >
         {n}
       </span>
@@ -451,7 +458,7 @@ function CodeChip({ code }: { code: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <span className="mt-1.5 flex items-center gap-2">
-      <code className="rounded-lg bg-stone-100 px-2.5 py-1.5 font-mono text-sm font-semibold text-stone-900">
+      <code className="rounded-lg border border-dashed border-line bg-fog px-2.5 py-1.5 font-mono text-sm font-semibold text-ink">
         {code}
       </code>
       <button
@@ -465,7 +472,7 @@ function CodeChip({ code }: { code: string }) {
             /* clipboard unavailable */
           }
         }}
-        className="inline-flex min-h-11 items-center rounded-lg px-2.5 text-sm font-semibold text-sage-800 underline"
+        className="inline-flex min-h-11 items-center rounded-lg px-2.5 text-sm font-semibold text-bridge-link underline"
       >
         {copied ? "Copied" : "Copy"}
       </button>

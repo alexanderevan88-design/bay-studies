@@ -15,7 +15,7 @@ export function BottomNav() {
 
 function NavShell({ children }: { children?: React.ReactNode }) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-sage-100 bg-white/95 backdrop-blur safe-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-line bg-white/95 backdrop-blur safe-bottom">
       <div className="mx-auto flex max-w-lg items-stretch justify-around px-2 pt-2 pb-2">
         {children ?? (
           <>
@@ -50,7 +50,7 @@ function BottomNavInner() {
     <NavShell>
       <TabLink
         href="/feed"
-        label="Feed"
+        label="Studies"
         active={feedActive}
         icon="feed"
         badge={unread > 0 ? unread : undefined}
@@ -82,16 +82,21 @@ function TabLink({
   return (
     <Link
       href={href}
-      className={`relative flex min-h-[44px] min-w-[4.5rem] flex-col items-center justify-center gap-0.5 rounded-lg px-3 py-2 text-xs font-medium transition ${
-        active ? "text-sage-800" : "text-stone-500 hover:text-sage-800"
+      aria-current={active ? "page" : undefined}
+      className={`relative flex min-h-[44px] min-w-[5.25rem] flex-col items-center justify-center gap-0.5 rounded-xl px-3 py-1 text-xs font-semibold transition ${
+        active ? "text-bridge-link" : "text-stone-500 hover:text-ink"
       }`}
     >
-      <span className="relative">
+      <span
+        className={`relative flex h-7 w-[52px] items-center justify-center rounded-full transition-colors ${
+          active ? "bg-bridge-tint" : ""
+        }`}
+      >
         {icon === "feed" && <FeedIcon active={active} />}
         {icon === "saved" && <SavedIcon active={active} />}
         {icon === "me" && <MeIcon active={active} />}
         {badge != null && badge > 0 && (
-          <span className="absolute -right-2.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-rose-500 px-1 text-xs font-bold leading-none text-white">
+          <span className="absolute -right-2.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-bridge px-1 text-xs font-bold leading-none text-white">
             {badge > 9 ? "9+" : badge}
           </span>
         )}
@@ -104,7 +109,7 @@ function TabLink({
 function FeedIcon({ active }: { active: boolean }) {
   return (
     <svg
-      className={`h-5 w-5 ${active ? "text-sage-700" : ""}`}
+      className={`h-5 w-5 ${active ? "text-sage-600" : ""}`}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -123,7 +128,7 @@ function FeedIcon({ active }: { active: boolean }) {
 function SavedIcon({ active }: { active: boolean }) {
   return (
     <svg
-      className={`h-5 w-5 ${active ? "text-sage-700" : ""}`}
+      className={`h-5 w-5 ${active ? "text-sage-600" : ""}`}
       fill={active ? "currentColor" : "none"}
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -142,7 +147,7 @@ function SavedIcon({ active }: { active: boolean }) {
 function MeIcon({ active }: { active: boolean }) {
   return (
     <svg
-      className={`h-5 w-5 ${active ? "text-sage-700" : ""}`}
+      className={`h-5 w-5 ${active ? "text-sage-600" : ""}`}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
