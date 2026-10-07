@@ -201,7 +201,7 @@ export default function StudyDetailPage() {
               {firmLabel}
             </p>
             <p className="truncate text-xs text-muted">{study.firmDomain}</p>
-            {posted && <p className="truncate text-xs text-muted">{posted}</p>}
+
           </div>
           {study.verified && (
             <div className="ml-auto shrink-0">
@@ -224,10 +224,10 @@ export default function StudyDetailPage() {
           >
             {pay.text}
           </span>
-          {(length || hourly) && (
+          {(posted || hourly) && (
             <span className="text-sm text-muted">
-              {length && <b className="font-semibold text-ink">{length}</b>}
-              {length && hourly ? " · " : ""}
+              {posted}
+              {posted && hourly ? " · " : ""}
               {hourly}
             </span>
           )}

@@ -56,6 +56,8 @@ export function StudyCard({
   const pay = payBadge(study);
   const length = lengthLabel(study);
   const hourly = hourlyRate(study);
+  // Place already says "From home", so drop the "· at home" suffix here.
+  const cardLength = length?.replace(/\s*·\s*at home$/, "") ?? null;
   const when = shortWhen(study) ?? "Dates on screener";
   const place = placeLabel(study);
   const blurb = snippet(study, 220);
@@ -109,12 +111,6 @@ export function StudyCard({
               ) : (
                 <span className="truncate font-medium text-muted">Unverified source</span>
               )}
-              {posted && (
-                <span className="shrink-0 whitespace-nowrap text-muted">
-                  <span aria-hidden>· </span>
-                  {posted}
-                </span>
-              )}
             </span>
           </span>
         </span>
@@ -129,13 +125,7 @@ export function StudyCard({
           >
             {pay.text}
           </span>
-          {(length || hourly) && (
-            <span className="text-[13px] text-muted">
-              {length && <b className="font-semibold text-ink">{length}</b>}
-              {length && hourly ? " · " : ""}
-              {hourly}
-            </span>
-          )}
+          {posted && <span className="text-[13px] text-muted">{posted}</span>}
           {study.expired && <Tag tone="rose">Link expired</Tag>}
           {applied && <Tag tone="bay">Applied</Tag>}
         </span>
@@ -144,20 +134,29 @@ export function StudyCard({
           {title}
         </span>
 
-        <span className="mt-2 flex items-center gap-3 text-[13.5px] text-ink">
-          <span className="flex min-w-0 items-center gap-1.5">
-            {remote ? <HomeIcon /> : <PinIcon />}
-            <span className="truncate">{place}</span>
-          </span>
-          <span className="flex shrink-0 items-center gap-1.5">
-            <CalIcon />
-            {when}
+        <span className="mt-2 flex items-start gap-2 text-[13.5px] text-ink">
+          <span className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1">
+            <span className="flex min-w-0 max-w-full items-center gap-1.5">
+              {remote ? <HomeIcon /> : <PinIcon />}
+              <span className="truncate">{place}</span>
+            </span>
+            <span className="flex shrink-0 items-center gap-1.5">
+              <CalIcon />
+              {when}
+            </span>
+            {cardLength && (
+              <span className="flex shrink-0 items-center gap-1.5">
+                <ClockIcon />
+                <span className="sr-only">Length: </span>
+                {cardLength}
+              </span>
+            )}
           </span>
           <svg
             aria-hidden
             viewBox="0 0 20 20"
             fill="currentColor"
-            className={`ml-auto h-4 w-4 shrink-0 text-muted transition-transform duration-200 motion-reduce:transition-none ${
+            className={`mt-0.5 h-4 w-4 shrink-0 text-muted transition-transform duration-200 motion-reduce:transition-none ${
               open ? "rotate-180" : ""
             }`}
           >
@@ -219,6 +218,7 @@ export function StudyCard({
               <Tag tone={remote ? "bay" : "slate"}>{modalityLabel(study)}</Tag>
               <AccessTag access={login} />
               {fullPay && <Tag tone="cash">{fullPay}</Tag>}
+              {hourly && <Tag tone="cash">{hourly}</Tag>}
             </div>
 
             {study.portalNote && !login && (
@@ -326,6 +326,15 @@ function CalIcon() {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px] shrink-0 text-muted" aria-hidden>
       <rect x="3.5" y="5" width="17" height="15" rx="3" />
       <path d="M3.5 10h17M8 3v4M16 3v4" />
+    </svg>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px] shrink-0 text-muted" aria-hidden>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7.5V12l3 2" strokeLinecap="round" />
     </svg>
   );
 }
