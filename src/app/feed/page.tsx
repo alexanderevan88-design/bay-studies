@@ -1,5 +1,6 @@
 "use client";
 
+import { isFreshToday, type ClosedStudy } from "@/lib/expiry";
 import Link from "next/link";
 import { Suspense, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -44,7 +45,7 @@ export default function FeedPage() {
 function FeedInner() {
   const { profile, ready, toggleSaved, markApplied } = useProfile();
   const router = useRouter();
-  const { studies, published, ready: studiesReady } = useFeedStudies();
+  const { studies, published, closed, ready: studiesReady } = useFeedStudies();
   const {
     toast,
     unread,
@@ -142,6 +143,12 @@ function FeedInner() {
     );
     return [...applied, ...extras];
   }, [ranked.allCards, studies, profile]);
+
+  /** Saved studies whose dates have passed: shown greyed in Saved, never in the feed. */
+  const closedSaved = useMemo(
+    () => closed.filter((c) => profile.savedStudyIds.includes(c.id)),
+    [closed, profile.savedStudyIds]
+  );
 
   const forYouLocked = browse === "foryou" && !profile.onboarded;
   const baseCards =
@@ -337,7 +344,7 @@ function FeedInner() {
       <div className="space-y-3 overflow-x-hidden px-4 pb-6 pt-3 sm:px-5">
         {tab === "feed" && forYouLocked && <ForYouGate />}
 
-        {tab === "feed" && forYouLocked ? null : cards.length === 0 ? (
+        {tab === "feed" && forYouLocked ? null : cards.length === 0 && tab === "saved" && closedSaved.length > 0 ? null : cards.length === 0 ? (
           tab === "feed" && filter !== "all" && baseCards.length > 0 ? (
             <FilterEmpty onReset={() => setFilter("all")} />
           ) : (
@@ -381,8 +388,62 @@ function FeedInner() {
             );
           })
         )}
+
+        {tab === "saved" && closedSaved.length > 0 && (
+          <section aria-label="Closed studies" className="space-y-2 pt-2">
+            <h2 className="px-1 text-xs font-bold uppercase tracking-wide text-muted">
+              Closed · dates have passed
+            </h2>
+            {closedSaved.map((c) => (
+              <ClosedSavedCard
+                key={c.id}
+                study={c}
+                onRemove={() => toggleSaved(c.id)}
+              />
+            ))}
+          </section>
+        )}
       </div>
     </AppShell>
+  );
+}
+
+function ClosedSavedCard({
+  study,
+  onRemove,
+}: {
+  study: ClosedStudy;
+  onRemove: () => void;
+}) {
+  const closedOn = study.closedAt
+    ? new Date(Date.parse(study.closedAt) - 1).toLocaleDateString("en-US", {
+        timeZone: "America/Los_Angeles",
+        month: "short",
+        day: "numeric",
+      })
+    : null;
+  return (
+    <article className="flex items-center gap-3 rounded-[20px] border border-line bg-white/70 px-3.5 py-3">
+      <Link href={`/studies/${encodeURIComponent(study.id)}`} className="min-w-0 flex-1 py-1">
+        <span className="flex items-center gap-1.5">
+          <span className="shrink-0 rounded-md bg-stone-100 px-1.5 py-px text-xs font-extrabold uppercase tracking-wide text-muted">
+            Closed
+          </span>
+          <span className="truncate text-sm font-semibold text-muted">{study.firm}</span>
+        </span>
+        <span className="mt-0.5 block truncate text-[15px] font-semibold text-ink/70 line-through decoration-ink/30">
+          {study.title}
+        </span>
+        {closedOn && <span className="block text-xs text-muted">Closed after {closedOn}</span>}
+      </Link>
+      <button
+        type="button"
+        onClick={onRemove}
+        className="inline-flex min-h-11 shrink-0 items-center rounded-xl px-3 text-sm font-semibold text-bridge-link hover:bg-fog"
+      >
+        Remove
+      </button>
+    </article>
   );
 }
 
@@ -446,6 +507,10 @@ function sortCards(
   isNewMatch: (id: string, matched: boolean) => boolean
 ) {
   return [...list].sort((a, b) => {
+    // Posted today (PT) goes first, unless its link is dead.
+    const aToday = isFreshToday(a.study) && !a.study.expired ? 1 : 0;
+    const bToday = isFreshToday(b.study) && !b.study.expired ? 1 : 0;
+    if (bToday !== aToday) return bToday - aToday;
     const aNew = isNewMatch(a.study.id, a.matched) ? 1 : 0;
     const bNew = isNewMatch(b.study.id, b.matched) ? 1 : 0;
     if (bNew !== aNew) return bNew - aNew;

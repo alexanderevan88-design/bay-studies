@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useId, useState } from "react";
 import type { Study } from "@/lib/types";
 import { applyCtaLabel } from "@/lib/enrich";
+import { HeadlineTag } from "@/components/HeadlineTag";
 import {
   cleanTitle,
   firmInitial,
@@ -89,11 +90,7 @@ export function StudyCard({
               <span className="truncate text-sm font-semibold text-ink">
                 {firmName(study)}
               </span>
-              {fresh && (
-                <span className="shrink-0 rounded-md bg-poppy px-1.5 py-px text-xs font-extrabold uppercase tracking-wide text-poppy-deep">
-                  New
-                </span>
-              )}
+              <HeadlineTag study={study} isNew={fresh} />
             </span>
             {study.verified ? (
               <span className="flex items-center gap-1 text-xs font-semibold text-cash">

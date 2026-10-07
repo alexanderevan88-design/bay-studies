@@ -1,4 +1,5 @@
 import type { Study } from "./types";
+import type { ClosedStudy } from "./expiry";
 import {
   loadPublishedStudies,
   removePublishedStudy,
@@ -28,15 +29,37 @@ export type PublishedApiMeta = {
 };
 
 export async function fetchPublishedStudies(opts?: {
-  /** Admin ingest: bypass the CDN and the server memory window. */
+  /** Admin ingest: bypass the CDN and the server memory window. Includes date-closed studies. */
   fresh?: boolean;
 }): Promise<Study[]> {
+  return (await fetchPublishedFeed(opts)).studies;
+}
+
+const CLOSED_KEY = "bay-studies-closed-v1";
+
+function loadClosedStubs(): ClosedStudy[] {
+  try {
+    const raw = typeof localStorage !== "undefined" ? localStorage.getItem(CLOSED_KEY) : null;
+    const parsed = raw ? (JSON.parse(raw) as ClosedStudy[]) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Public feed + the stub list of studies that closed by date (for Saved and
+ * the "This study has closed" page). Admin (fresh) gets every study.
+ */
+export async function fetchPublishedFeed(opts?: {
+  fresh?: boolean;
+}): Promise<{ studies: Study[]; closed: ClosedStudy[] }> {
   try {
     const fresh = opts?.fresh === true;
     // Public feed must NOT send no-cache/no-store or the Vercel CDN will
     // bypass s-maxage and every friend view will invoke the function.
     const res = await fetch(
-      "/api/published",
+      fresh ? "/api/published?include=closed" : "/api/published",
       fresh
         ? {
             cache: "no-store",
@@ -47,15 +70,22 @@ export async function fetchPublishedStudies(opts?: {
     const data = (await res.json()) as {
       ok?: boolean;
       studies?: Study[];
+      closed?: ClosedStudy[];
     };
     if (res.ok && data.ok && Array.isArray(data.studies)) {
       savePublishedStudies(data.studies);
-      return data.studies;
+      const closed = Array.isArray(data.closed) ? data.closed : [];
+      try {
+        localStorage.setItem(CLOSED_KEY, JSON.stringify(closed));
+      } catch {
+        /* storage full / private mode */
+      }
+      return { studies: data.studies, closed };
     }
   } catch {
     /* fall through */
   }
-  return loadPublishedStudies();
+  return { studies: loadPublishedStudies(), closed: loadClosedStubs() };
 }
 
 export async function apiUpsertPublished(

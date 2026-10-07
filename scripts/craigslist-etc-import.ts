@@ -146,7 +146,7 @@ async function loadPublishedFeed(postHost?: string): Promise<{
   if (!hosts.includes(prod)) hosts.push(prod);
   for (const host of hosts) {
     try {
-      const res = await fetch(`${host}/api/published`, {
+      const res = await fetch(`${host}/api/published?include=closed`, {
         headers: { "Cache-Control": "no-cache", Pragma: "no-cache" },
       });
       const json = (await res.json()) as { ok?: boolean; studies?: Study[] };

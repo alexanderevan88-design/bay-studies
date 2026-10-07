@@ -5,12 +5,29 @@ import { mergeStudies } from "@/data/studies";
 import {
   apiRemovePublished,
   apiUpsertPublished,
-  fetchPublishedStudies,
+  fetchPublishedFeed,
 } from "@/lib/publishedApi";
 import type { Study } from "@/lib/types";
+import { splitByExpiry, toClosedStub, type ClosedStudy } from "@/lib/expiry";
+
+/**
+ * Re-apply date expiry on the client too: covers a stale CDN/local cache and
+ * POST/DELETE responses (which return every study, closed ones included).
+ */
+function splitLive(
+  list: Study[],
+  serverClosed: ClosedStudy[] = []
+): { live: Study[]; closed: ClosedStudy[] } {
+  const { live, closed } = splitByExpiry(list);
+  const byId = new Map<string, ClosedStudy>();
+  for (const c of serverClosed) byId.set(c.id, c);
+  for (const c of closed) byId.set(c.id, toClosedStub(c));
+  return { live, closed: Array.from(byId.values()) };
+}
 
 /**
  * Public feed from GET /api/published (human-approved studies only).
+ * Date-expired studies are split out into `closed` (see docs/EXPIRY.md).
  * Seed placeholders are not mixed in on production. In local dev, seeds
  * show only while the published list is empty. Re-reads on focus / custom event.
  * The fetch honors Cache-Control (about 45s on the CDN). Admin ingest uses
@@ -19,14 +36,21 @@ import type { Study } from "@/lib/types";
 export function useFeedStudies() {
   const [studies, setStudies] = useState<Study[]>(() => mergeStudies([]));
   const [published, setPublished] = useState<Study[]>([]);
+  const [closed, setClosed] = useState<ClosedStudy[]>([]);
   const [ready, setReady] = useState(false);
 
-  const refresh = useCallback(async () => {
-    const pub = await fetchPublishedStudies();
-    setPublished(pub);
-    setStudies(mergeStudies(pub));
-    setReady(true);
+  const apply = useCallback((list: Study[], serverClosed?: ClosedStudy[]) => {
+    const { live, closed: shut } = splitLive(list, serverClosed);
+    setPublished(live);
+    setClosed(shut);
+    setStudies(mergeStudies(live));
   }, []);
+
+  const refresh = useCallback(async () => {
+    const { studies: pub, closed: serverClosed } = await fetchPublishedFeed();
+    apply(pub, serverClosed);
+    setReady(true);
+  }, [apply]);
 
   useEffect(() => {
     void refresh();
@@ -46,25 +70,39 @@ export function useFeedStudies() {
 
   const publish = useCallback(async (study: Study) => {
     const { studies: next } = await apiUpsertPublished(study);
-    setPublished(next);
-    setStudies(mergeStudies(next));
+    apply(next);
     window.dispatchEvent(new Event("bay-studies-feed-updated"));
     return study;
-  }, []);
+  }, [apply]);
 
   const unpublish = useCallback(async (id: string) => {
     const next = await apiRemovePublished(id);
-    setPublished(next);
-    setStudies(mergeStudies(next));
+    apply(next);
     window.dispatchEvent(new Event("bay-studies-feed-updated"));
-  }, []);
+  }, [apply]);
 
   const getById = useCallback(
     (id: string) => studies.find((s) => s.id === id),
     [studies]
   );
 
-  return { studies, published, ready, refresh, publish, unpublish, getById };
+  /** Study that closed by date (still in the data file, hidden from the feed). */
+  const getClosedById = useCallback(
+    (id: string) => closed.find((s) => s.id === id),
+    [closed]
+  );
+
+  return {
+    studies,
+    published,
+    closed,
+    ready,
+    refresh,
+    publish,
+    unpublish,
+    getById,
+    getClosedById,
+  };
 }
 
 export function notifyFeedUpdated() {

@@ -88,6 +88,12 @@ Public `GET /api/published` is layered so friend traffic stays cheap even on Hob
 
 ---
 
+### Automatic expiry
+
+Studies hide themselves once their dates pass (read-time date math, no
+redeploy, nothing deleted). Rules and the `expiresAt` override: see
+[EXPIRY.md](./EXPIRY.md).
+
 ## 2. Environment variables
 
 Copy from `.env.example`. In Vercel: **Project → Settings → Environment Variables** (Production + Preview as you prefer).

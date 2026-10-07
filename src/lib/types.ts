@@ -87,6 +87,8 @@ export interface Study {
   expired?: boolean;
   linkCheckedAt?: string;
   linkStatus?: number | null;
+  /** Optional manual expiry: "YYYY-MM-DD" (end of that day PT) or ISO timestamp. Wins over date parsing. See docs/EXPIRY.md. */
+  expiresAt?: string;
   /** Week 3: when approved into feed */
   publishedAt?: string;
 }

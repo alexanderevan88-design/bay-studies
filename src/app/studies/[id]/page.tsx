@@ -34,12 +34,15 @@ import { bumpOpen } from "@/lib/analytics";
 import { FillScreenerHelper } from "@/components/FillScreenerHelper";
 import { CopyNextHelper } from "@/components/CopyNextHelper";
 import { pilotFirmFor } from "@/lib/copyNext";
+import { HeadlineTag } from "@/components/HeadlineTag";
+import { closesLabel, isClosingSoon } from "@/lib/expiry";
 
 export default function StudyDetailPage() {
   const params = useParams();
   const id = String(params.id ?? "");
-  const { getById, ready: studiesReady } = useFeedStudies();
+  const { getById, getClosedById, ready: studiesReady } = useFeedStudies();
   const study = getById(id);
+  const closedStudy = study ? undefined : getClosedById(id);
   const { profile, ready, toggleSaved, dismissStudy, markApplied } =
     useProfile();
   const { seeMatch, isNewMatch } = useNotifications();
@@ -64,6 +67,61 @@ export default function StudyDetailPage() {
       <AppShell>
         <div className="flex justify-center py-20">
           <div className="h-8 w-8 animate-pulse rounded-full bg-sage-200" />
+        </div>
+      </AppShell>
+    );
+  }
+
+  if (!study && closedStudy) {
+    const saved = profile.savedStudyIds.includes(closedStudy.id);
+    const closedOn = closedStudy.closedAt
+      ? new Date(Date.parse(closedStudy.closedAt) - 1).toLocaleDateString("en-US", {
+          timeZone: "America/Los_Angeles",
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+        })
+      : null;
+    return (
+      <AppShell showNav={false}>
+        <header className="sticky top-0 z-30 flex h-14 items-center border-b border-line bg-fog/95 px-2 backdrop-blur">
+          <Link
+            href="/feed"
+            className="inline-flex min-h-11 items-center rounded-xl px-3 text-[15px] font-semibold text-ink hover:bg-white/70"
+          >
+            ← All studies
+          </Link>
+        </header>
+        <div className="px-5 pb-16 pt-10">
+          <div className="rounded-[20px] border border-line bg-white p-6 text-center shadow-card">
+            <span className="inline-flex items-center rounded-md bg-stone-100 px-2 py-0.5 text-xs font-extrabold uppercase tracking-wide text-muted">
+              Closed
+            </span>
+            <h1 className="mt-3 font-display text-[26px] font-bold leading-tight tracking-tight text-ink">
+              This study has closed
+            </h1>
+            <p className="mt-2 text-[15px] leading-relaxed text-muted">
+              <b className="font-semibold text-ink">{closedStudy.title}</b>
+              {closedStudy.firm ? <> from {closedStudy.firm}</> : null}
+              {closedOn ? <> stopped taking sign-ups after {closedOn}.</> : <> is no longer taking sign-ups.</>}{" "}
+              We hide studies once their dates pass so nobody signs up for one that&apos;s over.
+            </p>
+            <Link
+              href="/feed"
+              className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-bridge px-4 text-[15px] font-bold text-white hover:bg-bridge-dark"
+            >
+              See open studies
+            </Link>
+            {saved && (
+              <button
+                type="button"
+                onClick={() => toggleSaved(closedStudy.id)}
+                className="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-xl px-4 text-sm font-semibold text-bridge-link hover:bg-fog"
+              >
+                Remove from Saved
+              </button>
+            )}
+          </div>
         </div>
       </AppShell>
     );
@@ -165,11 +223,7 @@ export default function StudyDetailPage() {
               {hourly}
             </span>
           )}
-          {(neu || isFresh(study)) && (
-            <span className="rounded-md bg-poppy px-1.5 py-px text-xs font-extrabold uppercase tracking-wide text-poppy-deep">
-              New
-            </span>
-          )}
+          <HeadlineTag study={study} isNew={neu || isFresh(study)} />
           {study.expired && (
             <span className="rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-semibold text-rose-800">
               Link expired
@@ -181,6 +235,11 @@ export default function StudyDetailPage() {
             </span>
           )}
         </div>
+        {isClosingSoon(study) && (
+          <p className="mt-1.5 text-sm font-semibold text-bridge-dark">
+            Closing soon: last day listed here is {closesLabel(study)}.
+          </p>
+        )}
         {fullPay && (
           <p className="mt-1.5 text-sm text-stone-600">Pay: {fullPay}</p>
         )}

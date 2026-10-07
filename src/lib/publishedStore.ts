@@ -368,6 +368,12 @@ export async function upsertPublished(study: Study): Promise<Study[]> {
   const clean = sanitizeStudyForPublic({ ...study, applyUrl });
   const list = await readPublished({ fresh: true });
   const idx = list.findIndex((s) => s.id === clean.id);
+  // Expiry's 10-day fallback counts from publishedAt, so every published
+  // study must carry one (keep the original on re-approve if none was sent).
+  if (!clean.publishedAt) {
+    clean.publishedAt =
+      (idx >= 0 ? list[idx].publishedAt : undefined) ?? new Date().toISOString();
+  }
   if (idx >= 0) {
     list[idx] = clean;
   } else {

@@ -8,6 +8,7 @@ import {
   upsertPublished,
 } from "@/lib/publishedStore";
 import type { Study } from "@/lib/types";
+import { splitByExpiry, studyExpiry, toClosedStub } from "@/lib/expiry";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +40,8 @@ const PRIVATE_NO_STORE = { "Cache-Control": "private, no-store" };
  * (1d) → file / bundled published-fallback.json with 5m backoff when Blob is
  * suspended. See docs/DEPLOY.md § Published feed cache.
  *
- * GET  → public { ok, studies, count, path, source, blobStatus }
+ * GET  → public { ok, studies (live only), count, liveCount, closedCount, closed[] stubs, path, source, blobStatus }
+ *        ?include=closed → studies includes date-expired ones too (docs/EXPIRY.md)
  * POST / PATCH / DELETE → require ADMIN_SECRET (cookie / Bearer / X-Admin-Secret / query)
  *   when configured; open when unset (local/dev).
  */
@@ -63,13 +65,32 @@ function storeFields() {
 export async function GET(request: Request) {
   const fresh = requestWantsFresh(request);
   try {
-    const { studies, source } = await readPublishedDetailed({ fresh });
+    const { studies: all, source } = await readPublishedDetailed({ fresh });
     const meta = publishedStoreMeta();
+    // Date-based expiry happens here at read time (nothing is deleted).
+    // ?include=closed (admin ingest, import scripts) returns every study.
+    const includeClosed = new URL(request.url).searchParams.get("include") === "closed";
+    const { live, closed } = splitByExpiry(all);
+    const studies = includeClosed ? all : live;
+    // Kept beside (not inside) the studies so admin re-saves never persist it.
+    const expiry: Record<string, { closesAt: string | null; basis: string; guessed: boolean }> = {};
+    for (const s of studies) {
+      const e = studyExpiry(s);
+      expiry[s.id] = {
+        closesAt: e.closesAt != null ? new Date(e.closesAt).toISOString() : null,
+        basis: e.basis,
+        guessed: e.guessed,
+      };
+    }
     return NextResponse.json(
       {
         ok: true,
         count: studies.length,
+        liveCount: live.length,
+        closedCount: closed.length,
+        closed: closed.map(toClosedStub),
         studies,
+        expiry,
         path: meta.path,
         source,
         blobStatus: meta.blobStatus,
