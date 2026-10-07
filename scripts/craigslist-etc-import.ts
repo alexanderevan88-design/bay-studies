@@ -11,17 +11,23 @@
  * Bay metros only. Skips clinical (HIV, vaccine, C.diff) and noise
  * (dentist Endo Focus, teachers). Out-of-area (Jamestown, Sacramento, …)
  * is skipped unless --include-out-of-area.
+ *
+ * Also skips (warns in the report) when the apply URL is already on a
+ * different published study, or normalized title + pay is already on the feed.
  */
 import { promises as fs } from "fs";
 import path from "path";
 import {
   isClinicalText,
+  listingToDraft,
   listingToInboxItem,
   scrapeBayEtc,
   type CraigslistListing,
   type CraigslistSkip,
 } from "../src/lib/craigslist";
+import { craigslistFeedSkipReason } from "../src/lib/nearDuplicate";
 import type { InboxItem } from "../src/lib/inboxStore";
+import type { Study } from "../src/lib/types";
 
 function arg(flag: string): string | undefined {
   const i = process.argv.indexOf(flag);
@@ -129,6 +135,80 @@ async function loadEnriched(file: string, includeOutOfArea: boolean): Promise<{
   return { kept, skipped };
 }
 
+
+async function loadPublishedFeed(postHost?: string): Promise<{
+  studies: Study[];
+  source: string;
+}> {
+  const hosts: string[] = [];
+  if (postHost) hosts.push(postHost.replace(/\/$/, ""));
+  const prod = "https://bay-studies.vercel.app";
+  if (!hosts.includes(prod)) hosts.push(prod);
+  for (const host of hosts) {
+    try {
+      const res = await fetch(`${host}/api/published`, {
+        headers: { "Cache-Control": "no-cache", Pragma: "no-cache" },
+      });
+      const json = (await res.json()) as { ok?: boolean; studies?: Study[] };
+      if (res.ok && json.ok && Array.isArray(json.studies)) {
+        return { studies: json.studies, source: host };
+      }
+    } catch (err) {
+      console.error(
+        `[cl-import] published feed ${host} failed: ${
+          err instanceof Error ? err.message : String(err)
+        }`
+      );
+    }
+  }
+  for (const file of ["data/published.json", "data/published-fallback.json"]) {
+    try {
+      const raw = JSON.parse(
+        await fs.readFile(path.join(process.cwd(), file), "utf8")
+      ) as Study[];
+      if (Array.isArray(raw) && raw.length > 0) {
+        return { studies: raw, source: file };
+      }
+    } catch {
+      /* try the next snapshot */
+    }
+  }
+  return { studies: [], source: "none" };
+}
+
+function skipAlreadyOnFeed(
+  listings: CraigslistListing[],
+  studies: Study[]
+): { kept: CraigslistListing[]; skipped: CraigslistSkip[] } {
+  if (studies.length === 0) return { kept: listings, skipped: [] };
+  const kept: CraigslistListing[] = [];
+  const skipped: CraigslistSkip[] = [];
+  for (const listing of listings) {
+    const draft = listingToDraft(listing);
+    const reason = craigslistFeedSkipReason(
+      {
+        id: `pub-cl-${listing.postingId}`,
+        title: draft.title ?? listing.title,
+        pay: draft.pay,
+        payLabel: draft.payLabel,
+        metro: draft.metro,
+        applyUrl: draft.applyUrl || listing.url,
+      },
+      studies
+    );
+    if (reason) {
+      skipped.push({
+        postingId: listing.postingId,
+        title: listing.title,
+        reason,
+      });
+      continue;
+    }
+    kept.push(listing);
+  }
+  return { kept, skipped };
+}
+
 async function main() {
   const dry = has("--dry-run") || (!has("--write-inbox") && !has("--post"));
   const includeOutOfArea = has("--include-out-of-area");
@@ -137,10 +217,24 @@ async function main() {
     ? await loadEnriched(enriched, includeOutOfArea)
     : await scrapeBayEtc({ includeOutOfArea });
 
-  const items = scraped.kept.map((listing) => listingToInboxItem(listing));
+  const post = arg("--post");
+  const feed = await loadPublishedFeed(post);
+  if (feed.studies.length === 0) {
+    console.error(
+      "[cl-import] no published feed loaded — apply-URL / title+pay skip not applied"
+    );
+  } else {
+    console.error(
+      `[cl-import] comparing to ${feed.studies.length} published studies (${feed.source})`
+    );
+  }
+  const againstFeed = skipAlreadyOnFeed(scraped.kept, feed.studies);
+  const skipped = [...scraped.skipped, ...againstFeed.skipped];
+  const items = againstFeed.kept.map((listing) => listingToInboxItem(listing));
   const report = {
     dryRun: dry && !has("--write-inbox") && !has("--post"),
-    kept: scraped.kept.map((l) => ({
+    publishedFeed: { source: feed.source, count: feed.studies.length },
+    kept: againstFeed.kept.map((l) => ({
       id: `cl-${l.postingId}`,
       title: l.title,
       url: l.url,
@@ -148,7 +242,7 @@ async function main() {
       pay: l.pay ?? null,
       location: l.location,
     })),
-    skipped: scraped.skipped,
+    skipped,
     published: false,
   };
 
@@ -164,7 +258,6 @@ async function main() {
     console.log(`inbox ${file} now ${n} items (upserted ${items.length})`);
   }
 
-  const post = arg("--post");
   if (post) {
     const secret = process.env.ADMIN_SECRET?.trim();
     const headers: Record<string, string> = { "Content-Type": "application/json" };

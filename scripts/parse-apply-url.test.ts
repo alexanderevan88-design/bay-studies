@@ -248,6 +248,36 @@ import { normalizePublicApplyUrl } from "../src/lib/sanitizePublicStudy";
   );
 }
 
+{
+  const dirty =
+    "https://survey.sago.com/Survey/CSLaunch.aspx?scrid=150129&seguid=847fae1e-82d4-4c34-9ed2-6bb8ca4faa45&rid=3738017";
+  assert.equal(
+    normalizePublicApplyUrl(dirty),
+    "https://survey.sago.com/Survey/CSLaunch.aspx?scrid=150129",
+    "Sago CSLaunch keeps scrid and drops rid/seguid"
+  );
+}
+
+{
+  const dirty =
+    "https://survey.sago.com/Survey/CSLaunch.aspx?scrid=150129&recipient=jake%40example.com&invite=abc&invite_id=99&respondent=1&resp=2";
+  assert.equal(
+    normalizePublicApplyUrl(dirty),
+    "https://survey.sago.com/Survey/CSLaunch.aspx?scrid=150129",
+    "Sago-style invite/respondent personal params are stripped"
+  );
+}
+
+{
+  const ra =
+    "https://survey.metrixmatrix.com/SE/?st=tV6aAl7DSRd1VVaA33cNMZ78Z3luCjlalwqpRB7u%2Brc%3D";
+  assert.equal(
+    normalizePublicApplyUrl(ra),
+    ra,
+    "Research America st= study token is left alone"
+  );
+}
+
 console.log("normalize-apply-url: ok");
 
 import { sanitizeStudyForPublic } from "../src/lib/sanitizePublicStudy";
@@ -287,3 +317,147 @@ import type { Study } from "../src/lib/types";
 }
 
 console.log("sanitize-card-urls: ok");
+
+import { findSourceByFromEmail } from "../src/data/sources";
+
+{
+  assert.equal(
+    findSourceByFromEmail("Hugh Bowen <hughbowenresearch@gmail.com>")?.id,
+    "bowen-research",
+    "exact recruiter Gmail matches before domain"
+  );
+  assert.equal(
+    findSourceByFromEmail("HUGHBOWENRESEARCH@GMAIL.COM")?.id,
+    "bowen-research",
+    "fromEmails compare lowercase"
+  );
+  assert.equal(
+    findSourceByFromEmail("Hugh <hugh@bowenresearch.com>")?.id,
+    "bowen-research",
+    "bowenresearch.com still matches fromDomains"
+  );
+  assert.equal(
+    findSourceByFromEmail("Evan <baystudies4788@gmail.com>"),
+    undefined,
+    "other gmail.com senders stay off the allowlist"
+  );
+  assert.equal(
+    findSourceByFromEmail("someone@googlemail.com"),
+    undefined,
+    "googlemail.com is not a blanket allowlist"
+  );
+  assert.equal(
+    findSourceByFromEmail("Research <studies@withgoogle.com>")?.id,
+    "google-ux",
+    "non-gmail domains still match fromDomains"
+  );
+}
+
+{
+  const draft = parseEmail(
+    email({
+      from: "Hugh Bowen <hughbowenresearch@gmail.com>",
+      subject: "Paid session — $50 / 60 min",
+      text: "Compensation: $50\nDuration: 60 minutes\nhttps://www.bowenresearch.com/sign-up.php\n",
+    })
+  );
+  assert.equal(draft.fromAllowed, true, "bowen gmail from is allowlisted");
+  assert.equal(draft.matchedSourceId, "bowen-research");
+  assert.equal(draft.firm, "Bowen Research");
+  assert.equal(draft.type, "game-playtest", "default type when body has no type hint");
+  assert.equal(
+    draft.applyUrl,
+    "https://www.bowenresearch.com/sign-up.php",
+    "bowenresearch.com signup is an apply host"
+  );
+}
+
+{
+  const draft = parseEmail(
+    email({
+      from: "Random Recruiter <paidstudies@gmail.com>",
+      subject: "Paid session — $50 / 60 min",
+      text: "Compensation: $50\nDuration: 60 minutes\nhttps://www.bowenresearch.com/sign-up.php\n",
+    })
+  );
+  assert.equal(draft.fromAllowed, false, "gmail.com domain is not allowlisted");
+  assert.equal(draft.matchedSourceId, undefined);
+}
+
+console.log("bowen-allowlist: ok");
+
+{
+  assert.equal(
+    findSourceByFromEmail("Claudia Paige <claudia@satelliteresearch.net>")?.id,
+    "satellite-research",
+    "Satellite Research matches Claudia's address and domain"
+  );
+  assert.equal(
+    findSourceByFromEmail("invite@satelliteresearch.net")?.id,
+    "satellite-research"
+  );
+  const draft = parseEmail(
+    email({
+      from: "Claudia Paige <claudia@satelliteresearch.net>",
+      subject: "Paid session — $100 / 90 min",
+      text: "Compensation: $100\nDuration: 90 minutes\nhttps://satelliteresearch.net/join/\n",
+    })
+  );
+  assert.equal(draft.fromAllowed, true);
+  assert.equal(draft.matchedSourceId, "satellite-research");
+  assert.equal(draft.firm, "Satellite Research");
+  assert.equal(draft.type, "focus-group");
+  assert.equal(draft.applyUrl, "https://satelliteresearch.net/join/");
+}
+
+console.log("satellite-allowlist: ok");
+
+{
+  const cases: [string, string][] = [
+    ["Debbie McAfee <deborah.e.mcafee@gmail.com>", "alphabuzz"],
+    ["Debbie McAfee <debm@alphabuzzgroup.com>", "alphabuzz"],
+    ["Debbie McAfee <debbiem@alphabuzzgroup.com>", "alphabuzz"],
+    ["Amplify <participate@amplifyresearch.com>", "amplify-research"],
+    ["Hagen <smithd@hagensinclair.com>", "hagen-sinclair"],
+    ["Wilkins <websend@wilkinssurvey.com>", "wilkins-survey"],
+    ["Jen <jsteele@steele-recruiting.com>", "steele-recruiting"],
+    ["VuPoint <Survey180438-26550900@vupointinvite.com>", "vupoint-mdc"],
+    ["MDC <VuPointSF-15781584@mdcinvite.com>", "vupoint-mdc"],
+    ["Deb Tysall <deb@intactqualitativeresearch.com>", "intact-qualitative"],
+    ["C2 <surveys@c2research.com>", "c2-research"],
+    ["Delve <delve_cpm@delve.com>", "focus-pointe-delve"],
+    ["FPG <noreply@focuspointeglobal.com>", "focus-pointe-delve"],
+    ["IQ <nicerecruiting@gmail.com>", "iq-research-sf"],
+    ["Richard Ngo <emailrich.ngo@gmail.com>", "iq-research-sf"],
+    ["Deb Tysall <deb@iqrsf.com>", "iq-research-sf"],
+    ["Sokol <sokol@yourcontacthub.com>", "your-contact-hub"],
+    ["BlueSky <jreid@blueskymr.com>", "bluesky-mr"],
+    ["Lisa <lisa@lcaresearch.com>", "lca-research"],
+    ["Nelson <confirmations@nelsonrecruiting.com>", "nelson-recruiting"],
+    ["Justin <justin@chatterinc.com>", "chatter-inc"],
+    ["dscout <support@dscout.com>", "dscout"],
+    ["QAR <confirmationteam@qar.com>", "qar"],
+    ["Heidi <heidi@researchbayarea.com>", "bay-area-research"],
+    ["Lowell Smith <lowellvs@gmail.com>", "bowen-research"],
+  ];
+  for (const [from, id] of cases) {
+    assert.equal(findSourceByFromEmail(from)?.id, id, from);
+  }
+  assert.equal(
+    findSourceByFromEmail("Friend <kikknowledge@gmail.com>"),
+    undefined,
+    "personal gmail forwards stay off the allowlist"
+  );
+  assert.equal(
+    findSourceByFromEmail("Lisa <lisagerritsen98@gmail.com>"),
+    undefined,
+    "unrelated personal gmail is not LCA"
+  );
+  assert.notEqual(
+    findSourceByFromEmail("QAR <confirmationteam@qar.com>")?.id,
+    "le-opinions",
+    "qar.com is not an L&E alias"
+  );
+}
+
+console.log("forgotten-firms-allowlist: ok");

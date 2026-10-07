@@ -160,6 +160,12 @@ export type DraftStatus = "pending" | "approved" | "rejected";
 export interface Source {
   id: string;
   name: string;
+  /**
+   * Exact From addresses, lowercase. Matched before fromDomains.
+   * Use for a recruiter on a shared host (gmail.com). Never list gmail.com
+   * itself in fromDomains — that would allow every Gmail sender.
+   */
+  fromEmails?: string[];
   /** Domains allowed on the From header (lowercase, no @). */
   fromDomains: string[];
   /** Domains allowed on apply / screener links. */

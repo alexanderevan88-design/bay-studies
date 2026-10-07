@@ -31,6 +31,7 @@ import {
   mergeEnrichIntoDraft,
   type EnrichFields,
 } from "@/lib/enrich";
+import { findLiveNearDuplicate, type NearDuplicateHit } from "@/lib/nearDuplicate";
 import { onStudyApproved } from "@/lib/notify";
 import {
   clearAllDemoData,
@@ -95,6 +96,11 @@ export default function AdminIngestPage() {
     falseRejects: 0,
   });
   const autoRanRef = useRef(false);
+  /** Set after Approve finds a live near-duplicate; second click publishes. */
+  const [dupHold, setDupHold] = useState<{
+    emailId: string;
+    hit: NearDuplicateHit;
+  } | null>(null);
   // Refs so rebuild/loadInbox stay stable. Putting liveEmails in those
   // callbacks and then listing loadInbox in an effect re-fetches forever:
   // setLiveEmails(new array) → new rebuild → new loadInbox → effect again.
@@ -209,6 +215,7 @@ export default function AdminIngestPage() {
         const current = prev[emailId] ?? draftToEnrich(baseDraft);
         return { ...prev, [emailId]: { ...current, ...patch } };
       });
+      setDupHold((prev) => (prev?.emailId === emailId ? null : prev));
     },
     []
   );
@@ -221,7 +228,7 @@ export default function AdminIngestPage() {
   const publishRow = useCallback(
     async (
       emailId: string,
-      opts: { viaAuto: boolean; trustDomain: boolean }
+      opts: { viaAuto: boolean; trustDomain: boolean; confirmDuplicate?: boolean }
     ): Promise<boolean> => {
       const row = rows.find((r) => r.email.id === emailId);
       if (!row) return false;
@@ -255,7 +262,28 @@ export default function AdminIngestPage() {
         return false;
       }
       const study = draftToStudy(merged, emailId);
-      const publishedList = await apiUpsertPublished(study);
+      if (!opts.confirmDuplicate) {
+        const live = await fetchPublishedStudies({ fresh: true });
+        setPublished(live);
+        setPublishedCount(live.length);
+        const hit = findLiveNearDuplicate(study, live);
+        if (hit) {
+          if (opts.viaAuto) {
+            flash(
+              `Auto-publish skipped “${study.title}” — looks like “${hit.title}” already on the feed. Use Approve anyway.`
+            );
+            return false;
+          }
+          setDupHold({ emailId, hit });
+          flash(
+            `Looks like “${hit.title}” is already on the feed. Approve anyway to publish.`
+          );
+          return false;
+        }
+      }
+      setDupHold((prev) => (prev?.emailId === emailId ? null : prev));
+      const upserted = await apiUpsertPublished(study);
+      const publishedList = upserted.studies;
       setIngestState({
         emailId,
         status: "approved",
@@ -273,15 +301,21 @@ export default function AdminIngestPage() {
       notifyFeedUpdated();
       rebuild(undefined, publishedList);
       const how = opts.viaAuto ? "Auto-published" : "Approved";
+      const blobNote =
+        upserted.blobStatus === "suspended"
+          ? " Blob suspended — feed uses fallback until you unsuspend Storage in Vercel."
+          : upserted.warning
+            ? " " + upserted.warning
+            : "";
       if (matched && notification) {
         flash(
-          `${how} → ${study.id}. Match! Toast queued: “${notification.title}”. Open /feed.`
+          `${how} → ${study.id}. Match! Toast queued: “${notification.title}”. Open /feed.${blobNote}`
         );
       } else {
         flash(
           `${how} → ${study.id}. ${
             matched ? "" : "No profile match (or not onboarded)."
-          } Check /feed.`
+          } Check /feed.${blobNote}`
         );
       }
       return true;
@@ -289,8 +323,12 @@ export default function AdminIngestPage() {
     [rows, rebuild, getEnrich]
   );
 
-  const approve = (emailId: string) => {
-    void publishRow(emailId, { viaAuto: false, trustDomain: true });
+  const approve = (emailId: string, confirmDuplicate = false) => {
+    void publishRow(emailId, {
+      viaAuto: false,
+      trustDomain: true,
+      confirmDuplicate,
+    });
   };
 
   const autoPublish = (emailId: string) => {
@@ -539,6 +577,21 @@ export default function AdminIngestPage() {
   const selectedEnrich = selected ? getEnrich(selected) : null;
   const tipStyle = selected ? isTipStyleDraft(selected.draft) : false;
   const enrichDisabled = selected?.status === "approved";
+  const previewDup = useMemo(() => {
+    if (!selected || !selectedEnrich) return null;
+    const merged = mergeEnrichIntoDraft(selected.draft, selectedEnrich);
+    return findLiveNearDuplicate(
+      draftToStudy(merged, selected.email.id),
+      published
+    );
+  }, [selected, selectedEnrich, published]);
+  const dupHit =
+    dupHold && selected && dupHold.emailId === selected.email.id
+      ? dupHold.hit
+      : previewDup;
+  const dupNeedsConfirm = Boolean(
+    dupHold && selected && dupHold.emailId === selected.email.id
+  );
 
   if (!ready) {
     return (
@@ -856,10 +909,16 @@ export default function AdminIngestPage() {
                     <button
                       type="button"
                       disabled={selected.status === "approved"}
-                      onClick={() => approve(selected.email.id)}
-                      className="rounded-xl bg-sage-700 px-4 py-2 text-sm font-semibold text-white hover:bg-sage-800 disabled:cursor-not-allowed disabled:opacity-50"
+                      onClick={() =>
+                        approve(selected.email.id, dupNeedsConfirm)
+                      }
+                      className={
+                        dupNeedsConfirm
+                          ? "rounded-xl bg-amber-700 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-800 disabled:cursor-not-allowed disabled:opacity-50"
+                          : "rounded-xl bg-sage-700 px-4 py-2 text-sm font-semibold text-white hover:bg-sage-800 disabled:cursor-not-allowed disabled:opacity-50"
+                      }
                     >
-                      Approve → feed
+                      {dupNeedsConfirm ? "Approve anyway" : "Approve → feed"}
                     </button>
                     <button
                       type="button"
@@ -897,6 +956,40 @@ export default function AdminIngestPage() {
                     </button>
                   </div>
                 </div>
+                {dupHit && (
+                  <div className="mt-3 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-950">
+                    <strong>Possible duplicate on the live feed.</strong>{" "}
+                    “{dupHit.title}”{" "}
+                    <span className="font-mono">({dupHit.id})</span> — {dupHit.why}.
+                    Existing cards stay up.{" "}
+                    {dupNeedsConfirm ? (
+                      <>
+                        Not published yet.{" "}
+                        <button
+                          type="button"
+                          onClick={() => approve(selected.email.id, true)}
+                          className="font-semibold underline"
+                        >
+                          Approve anyway
+                        </button>{" "}
+                        if this is a different study, or{" "}
+                        <button
+                          type="button"
+                          onClick={() => setDupHold(null)}
+                          className="font-semibold underline"
+                        >
+                          cancel
+                        </button>
+                        .
+                      </>
+                    ) : (
+                      <>
+                        <em>Approve → feed</em> will ask you to confirm before
+                        publishing.
+                      </>
+                    )}
+                  </div>
+                )}
                 {selected.isNewDomain && (
                   <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-950">
                     <strong>New From domain.</strong> Manual{" "}

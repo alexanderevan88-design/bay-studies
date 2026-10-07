@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { verifyAdminRequest } from "@/lib/adminAuth";
 import {
   patchPublished,
-  publishedPath,
-  readPublished,
+  publishedStoreMeta,
+  readPublishedDetailed,
   removePublished,
   upsertPublished,
 } from "@/lib/publishedStore";
@@ -35,7 +35,11 @@ const PRIVATE_NO_STORE = { "Cache-Control": "private, no-store" };
  * Server-side published studies (Approve → feed).
  * Survives browser localStorage clears. Same Blob/tmp/file pattern as inbox.
  *
- * GET  → public { ok, studies, count, path }
+ * Cache layers: instance memory (45s) → Vercel CDN (s-maxage=45) → Blob CDN
+ * (1d) → file / bundled published-fallback.json with 5m backoff when Blob is
+ * suspended. See docs/DEPLOY.md § Published feed cache.
+ *
+ * GET  → public { ok, studies, count, path, source, blobStatus }
  * POST / PATCH / DELETE → require ADMIN_SECRET (cookie / Bearer / X-Admin-Secret / query)
  *   when configured; open when unset (local/dev).
  */
@@ -46,16 +50,30 @@ function unauthorized(auth: ReturnType<typeof verifyAdminRequest>) {
   );
 }
 
+function storeFields() {
+  const meta = publishedStoreMeta();
+  return {
+    path: meta.path,
+    source: meta.source,
+    blobStatus: meta.blobStatus,
+    ...(meta.blobError ? { blobError: meta.blobError } : {}),
+  };
+}
+
 export async function GET(request: Request) {
   const fresh = requestWantsFresh(request);
   try {
-    const studies = await readPublished({ fresh });
+    const { studies, source } = await readPublishedDetailed({ fresh });
+    const meta = publishedStoreMeta();
     return NextResponse.json(
       {
         ok: true,
         count: studies.length,
         studies,
-        path: publishedPath(),
+        path: meta.path,
+        source,
+        blobStatus: meta.blobStatus,
+        ...(meta.blobError ? { blobError: meta.blobError } : {}),
       },
       { headers: fresh ? PRIVATE_NO_STORE : publicCacheHeaders() }
     );
@@ -82,13 +100,23 @@ export async function POST(request: Request) {
       );
     }
     const studies = await upsertPublished(body.study);
+    // upsert already wrote; re-read meta after writePublished inside upsert.
+    // Force a no-op write meta surface by reading publishedStoreMeta after.
+    const meta = storeFields();
+    const warning =
+      meta.blobStatus === "suspended"
+        ? "Blob store suspended — saved to file/fallback. Unsuspend or upgrade Blob in Vercel Storage so Approve survives cold starts without a redeploy."
+        : meta.blobStatus === "error"
+          ? "Blob write failed — saved to file/fallback."
+          : undefined;
     return NextResponse.json(
       {
         ok: true,
         study: body.study,
         count: studies.length,
         studies,
-        path: publishedPath(),
+        ...meta,
+        ...(warning ? { warning } : {}),
       },
       { headers: PRIVATE_NO_STORE }
     );
@@ -118,12 +146,13 @@ export async function PATCH(request: Request) {
       );
     }
     const studies = await patchPublished(body.id, body.patch);
+    const meta = storeFields();
     return NextResponse.json(
       {
         ok: true,
         count: studies.length,
         studies,
-        path: publishedPath(),
+        ...meta,
       },
       { headers: PRIVATE_NO_STORE }
     );
@@ -150,12 +179,13 @@ export async function DELETE(request: Request) {
       );
     }
     const studies = await removePublished(id);
+    const meta = storeFields();
     return NextResponse.json(
       {
         ok: true,
         count: studies.length,
         studies,
-        path: publishedPath(),
+        ...meta,
       },
       { headers: PRIVATE_NO_STORE }
     );

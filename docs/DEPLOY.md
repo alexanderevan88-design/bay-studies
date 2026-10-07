@@ -55,6 +55,26 @@ vercel --prod
 
 5. Confirm: after deploy, inbound mail should survive cold starts. `inboxPath()` reports `blob:inbox/bay-studies-inbox.json` when the token is present.
 
+### Published feed cache (Blob + fallback)
+
+Public `GET /api/published` is layered so friend traffic stays cheap even on Hobby:
+
+| Layer | What | TTL / behavior |
+|------|------|----------------|
+| **Instance memory** | Warm serverless process | ~45s — no Blob ops |
+| **Vercel CDN** | `s-maxage=45, stale-while-revalidate=30` on the route | Friend hits rarely invoke the function |
+| **Vercel Blob CDN** | `get("inbox/bay-studies-published.json")` with `cacheControlMaxAge=1d` | Origin miss ~daily when healthy |
+| **File + bundled fallback** | `/tmp` (ephemeral) then `data/published-fallback.json` | Used when Blob is down; **5 minute** probe backoff |
+
+**Approve / patch / remove** still try Blob first. On success or failure they also write the file store and best-effort sync `data/published-fallback.json` (works on laptop/CI; read-only on Vercel). Responses include `source` and `blobStatus` (`ok` / `suspended` / `error` / `disabled`).
+
+**If Storage shows the store as Suspended** (`limits-exceeded-suspended`):
+
+1. Production keeps serving the feed from memory → CDN → bundled fallback (no 500s).
+2. New Approves on Vercel alone may not survive cold starts until Blob works again **or** you redeploy with an updated `data/published-fallback.json`.
+3. In the Vercel dashboard: **Project → Storage → bay-studies-inbox** — unsuspend / clear the limit, or upgrade the Blob plan if Hobby ops are exhausted. Exact billing/upsell copy is in the Vercel UI (do not guess limits here).
+4. Confirm with: `npx vercel blob list-stores` (Status should leave Suspended) and `curl -s https://YOUR_DOMAIN/api/published | jq .blobStatus`.
+
 **When you outgrow a single JSON blob**
 
 ```

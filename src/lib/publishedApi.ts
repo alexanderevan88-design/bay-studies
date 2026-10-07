@@ -20,6 +20,13 @@ const mutatingInit = {
   credentials: "same-origin" as RequestCredentials,
 };
 
+export type PublishedApiMeta = {
+  studies: Study[];
+  warning?: string;
+  blobStatus?: string;
+  source?: string;
+};
+
 export async function fetchPublishedStudies(opts?: {
   /** Admin ingest: bypass the CDN and the server memory window. */
   fresh?: boolean;
@@ -51,7 +58,9 @@ export async function fetchPublishedStudies(opts?: {
   return loadPublishedStudies();
 }
 
-export async function apiUpsertPublished(study: Study): Promise<Study[]> {
+export async function apiUpsertPublished(
+  study: Study
+): Promise<PublishedApiMeta> {
   try {
     const res = await fetch("/api/published", {
       method: "POST",
@@ -62,15 +71,23 @@ export async function apiUpsertPublished(study: Study): Promise<Study[]> {
     const data = (await res.json()) as {
       ok?: boolean;
       studies?: Study[];
+      warning?: string;
+      blobStatus?: string;
+      source?: string;
     };
     if (res.ok && data.ok && Array.isArray(data.studies)) {
       savePublishedStudies(data.studies);
-      return data.studies;
+      return {
+        studies: data.studies,
+        warning: data.warning,
+        blobStatus: data.blobStatus,
+        source: data.source,
+      };
     }
   } catch {
     /* fall through to local cache */
   }
-  return upsertPublishedStudy(study);
+  return { studies: upsertPublishedStudy(study) };
 }
 
 export async function apiRemovePublished(id: string): Promise<Study[]> {

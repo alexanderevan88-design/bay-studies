@@ -10,7 +10,8 @@
     "dev:send-email": "npx --yes tsx scripts/dev-send-email.ts",
     "test:inbound": "bash scripts/test-inbound.sh",
     "test:parse": "npx --yes tsx scripts/parse-apply-url.test.ts",
-    "cl:import": "npx --yes tsx scripts/craigslist-etc-import.ts"
+    "cl:import": "npx --yes tsx scripts/craigslist-etc-import.ts",
+    "test:near-dup": "npx --yes tsx scripts/near-duplicate.test.ts"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",

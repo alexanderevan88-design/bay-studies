@@ -45,7 +45,7 @@ export function useFeedStudies() {
   }, [refresh]);
 
   const publish = useCallback(async (study: Study) => {
-    const next = await apiUpsertPublished(study);
+    const { studies: next } = await apiUpsertPublished(study);
     setPublished(next);
     setStudies(mergeStudies(next));
     window.dispatchEvent(new Event("bay-studies-feed-updated"));

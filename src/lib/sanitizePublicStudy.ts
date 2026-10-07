@@ -48,7 +48,7 @@ export function sanitizePublicStudyText(
 }
 
 const PERSONAL_PARAM =
-  /(?:^|_)(?:participant(?:_?id|_?screener_?key|_?key)?|screener_?key|panelist(?:_?id)?|pid|uid|user_?id|access_?token|auth_?token|session(?:_?id)?|signature|sig|refcode|as-refcode|upn|token|email|ref)$/i;
+  /(?:^|_)(?:participant(?:_?id|_?screener_?key|_?key)?|screener_?key|panelist(?:_?id)?|pid|uid|user_?id|access_?token|auth_?token|session(?:_?id)?|signature|sig|refcode|as-refcode|upn|token|email|ref|rid|seguid|recipient|invite|inviteid|invite_id|respondent|resp)$/i;
 
 function isPersonalParam(key: string): boolean {
   const k = key.toLowerCase().replace(/\[\]$/, "");
