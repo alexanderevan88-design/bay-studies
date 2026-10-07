@@ -299,3 +299,28 @@ export function headlineTag(study: Study, isNew: boolean, now = Date.now()): Hea
   if (isFreshToday(study, now)) return "fresh-today";
   return isNew ? "new" : null;
 }
+
+/**
+ * "Posted 2h ago" / "Posted yesterday" / "Posted 3 days ago", by Pacific
+ * calendar day. Compute on the client with a ticking `now` so cached pages
+ * never show a stale age.
+ */
+export function postedAgo(publishedAt: string | undefined, now = Date.now()): string | null {
+  const t = publishedAt ? Date.parse(publishedAt) : NaN;
+  if (Number.isNaN(t)) return null;
+  const diff = Math.max(0, now - t);
+  const a = ptParts(t);
+  const b = ptParts(now);
+  const days = Math.round((ptMidnight(b.y, b.m, b.d) - ptMidnight(a.y, a.m, a.d)) / DAY);
+  if (days <= 0) {
+    const mins = Math.floor(diff / 60000);
+    if (mins < 10) return "Posted just now";
+    if (mins < 60) return `Posted ${mins}m ago`;
+    return `Posted ${Math.floor(mins / 60)}h ago`;
+  }
+  if (days === 1) return "Posted yesterday";
+  if (days < 7) return `Posted ${days} days ago`;
+  const weeks = Math.floor(days / 7);
+  if (days < 30) return `Posted ${weeks} week${weeks === 1 ? "" : "s"} ago`;
+  return `Posted ${new Date(t).toLocaleDateString("en-US", { timeZone: TZ, month: "short", day: "numeric" })}`;
+}

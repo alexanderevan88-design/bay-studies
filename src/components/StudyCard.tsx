@@ -5,6 +5,10 @@ import { useId, useState } from "react";
 import type { Study } from "@/lib/types";
 import { applyCtaLabel } from "@/lib/enrich";
 import { HeadlineTag } from "@/components/HeadlineTag";
+import { AccessTag, MemberLine } from "@/components/LoginSteps";
+import { loginAccess, primaryLabel, primaryUrl } from "@/lib/firmAccess";
+import { postedAgo } from "@/lib/expiry";
+import { useNow } from "@/hooks/useNow";
 import {
   cleanTitle,
   firmInitial,
@@ -56,7 +60,11 @@ export function StudyCard({
   const place = placeLabel(study);
   const blurb = snippet(study, 220);
   const fullPay = payDetail(study);
-  const cta = applyCtaLabel(study);
+  const login = loginAccess(study);
+  const cta = login ? primaryLabel(login) : applyCtaLabel(study);
+  const ctaHref = login ? primaryUrl(login) : study.applyUrl;
+  const now = useNow();
+  const posted = now != null ? postedAgo(study.publishedAt, now) : null;
   const fresh = isNewMatch || isFresh(study);
   const remote = study.modality === "remote";
 
@@ -92,16 +100,22 @@ export function StudyCard({
               </span>
               <HeadlineTag study={study} isNew={fresh} />
             </span>
-            {study.verified ? (
-              <span className="flex items-center gap-1 text-xs font-semibold text-cash">
-                <CheckIcon />
-                Verified firm
-              </span>
-            ) : (
-              <span className="block text-xs font-medium text-muted">
-                Unverified source
-              </span>
-            )}
+            <span className="flex min-w-0 items-center gap-1 text-xs">
+              {study.verified ? (
+                <span className="flex shrink-0 items-center gap-1 font-semibold text-cash">
+                  <CheckIcon />
+                  Verified firm
+                </span>
+              ) : (
+                <span className="truncate font-medium text-muted">Unverified source</span>
+              )}
+              {posted && (
+                <span className="shrink-0 whitespace-nowrap text-muted">
+                  <span aria-hidden>· </span>
+                  {posted}
+                </span>
+              )}
+            </span>
           </span>
         </span>
 
@@ -203,10 +217,11 @@ export function StudyCard({
             <div className="mt-3 flex flex-wrap gap-1.5">
               <Tag tone={typeTone(study)}>{typeLabel(study)}</Tag>
               <Tag tone={remote ? "bay" : "slate"}>{modalityLabel(study)}</Tag>
+              <AccessTag access={login} />
               {fullPay && <Tag tone="cash">{fullPay}</Tag>}
             </div>
 
-            {study.portalNote && (
+            {study.portalNote && !login && (
               <p className="mt-3 flex gap-1.5 text-[13px] leading-relaxed text-muted">
                 <InfoIcon />
                 <span>{study.portalNote}</span>
@@ -215,7 +230,7 @@ export function StudyCard({
 
             <div className="mt-3 flex gap-2">
               <a
-                href={study.applyUrl}
+                href={ctaHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => onApply?.()}
@@ -234,10 +249,20 @@ export function StudyCard({
                 <span aria-hidden>›</span>
               </Link>
             </div>
-            {study.firmDomain && !study.portalNote && (
-              <p className="mt-2 text-xs text-muted">
-                Opens {study.firmDomain}. You may need a free account there.
-              </p>
+            {login ? (
+              <>
+                <MemberLine access={login} onOpen={() => onApply?.()} className="mt-1" />
+                <p className="text-xs text-muted">
+                  Use your own free account. {login.caveat ?? ""}
+                </p>
+              </>
+            ) : (
+              study.firmDomain &&
+              !study.portalNote && (
+                <p className="mt-2 text-xs text-muted">
+                  Opens {study.firmDomain}. You may need a free account there.
+                </p>
+              )
             )}
           </div>
         </div>

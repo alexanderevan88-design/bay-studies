@@ -82,7 +82,7 @@ function FeedInner() {
         matched: isProfileMatch(s, profile),
       }));
 
-    const allCards = sortCards(list, publishedIds, profile.onboarded, isNewMatch);
+    const allCards = sortCards(list, publishedIds, "newest", isNewMatch);
 
     // For you only: soft-filter by study type and modality.
     // Human-approved publications stay visible. Pay is not a filter.
@@ -94,12 +94,7 @@ function FeedInner() {
         passesSoftPrefs(study, profile, publishedIds)
       );
       softFilteredEmpty = filtered.length === 0 && list.length > 0;
-      forYouCards = sortCards(
-        filtered,
-        publishedIds,
-        true,
-        isNewMatch
-      );
+      forYouCards = sortCards(filtered, publishedIds, "match", isNewMatch);
     }
 
     return {
@@ -500,30 +495,38 @@ function passesSoftPrefs(
   return true;
 }
 
+/**
+ * Default ("All") order: Fresh today first, then newest posted first.
+ * Dead links (failed link check) sink to the bottom.
+ * "For you" keeps match % ordering after Fresh today and new matches.
+ */
 function sortCards(
   list: RankedCard[],
   publishedIds: Set<string>,
-  useMatch: boolean,
+  mode: "newest" | "match",
   isNewMatch: (id: string, matched: boolean) => boolean
 ) {
+  const time = (s: Study) => {
+    const t = s.publishedAt ? Date.parse(s.publishedAt) : 0;
+    return Number.isNaN(t) ? 0 : t;
+  };
   return [...list].sort((a, b) => {
-    // Posted today (PT) goes first, unless its link is dead.
     const aToday = isFreshToday(a.study) && !a.study.expired ? 1 : 0;
     const bToday = isFreshToday(b.study) && !b.study.expired ? 1 : 0;
     if (bToday !== aToday) return bToday - aToday;
-    const aNew = isNewMatch(a.study.id, a.matched) ? 1 : 0;
-    const bNew = isNewMatch(b.study.id, b.matched) ? 1 : 0;
-    if (bNew !== aNew) return bNew - aNew;
     if (Boolean(a.study.expired) !== Boolean(b.study.expired)) {
       return a.study.expired ? 1 : -1;
     }
-    if (useMatch && a.match !== b.match) return b.match - a.match;
+    if (mode === "match") {
+      const aNew = isNewMatch(a.study.id, a.matched) ? 1 : 0;
+      const bNew = isNewMatch(b.study.id, b.matched) ? 1 : 0;
+      if (bNew !== aNew) return bNew - aNew;
+      if (a.match !== b.match) return b.match - a.match;
+    }
     const aPublished = publishedIds.has(a.study.id) ? 1 : 0;
     const bPublished = publishedIds.has(b.study.id) ? 1 : 0;
     if (bPublished !== aPublished) return bPublished - aPublished;
-    const aTime = a.study.publishedAt ? Date.parse(a.study.publishedAt) : 0;
-    const bTime = b.study.publishedAt ? Date.parse(b.study.publishedAt) : 0;
-    return (Number.isNaN(bTime) ? 0 : bTime) - (Number.isNaN(aTime) ? 0 : aTime);
+    return time(b.study) - time(a.study);
   });
 }
 

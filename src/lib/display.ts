@@ -96,20 +96,39 @@ export function payDetail(study: Study): string | null {
   return label;
 }
 
-/** Session length, e.g. "30 min", "1 hr", "2 × 45 min", "4 weeks". */
+/**
+ * Plain-English length.
+ *  - Multi-day / multi-week: "Runs 4 weeks · at home" (or "Runs 2 days").
+ *  - Sessions: "30-min session", "2-hr session", "2 × 45-min sessions".
+ */
 export function lengthLabel(study: Study): string | null {
   const dl = study.durationLabel?.trim();
+  const home = study.modality === "remote";
   if (dl) {
-    const two = dl.match(/^two (\d+)-minute sessions$/i);
-    if (two) return `2 × ${two[1]} min`;
-    if (/^\d+\s*(?:days?|weeks?)$/i.test(dl)) return dl;
-    if (/a\.m\.|p\.m\.|am|pm/i.test(dl) && study.durationMinutes > 0) {
-      return minutesLabel(study.durationMinutes);
+    const two = dl.match(/^(two|2|three|3)\s+(\d+)[-\s]?minute sessions$/i);
+    if (two) {
+      const n = /^(two|2)$/i.test(two[1]) ? 2 : 3;
+      return `${n} × ${two[2]}-min sessions`;
     }
+    const span = dl.match(/^(\d+)\s*(days?|weeks?|months?)$/i);
+    if (span) {
+      const n = Number(span[1]);
+      const unit = span[2].toLowerCase().replace(/s$/, "");
+      return `Runs ${n} ${unit}${n === 1 ? "" : "s"}${home ? " · at home" : ""}`;
+    }
+    if (/a\.m\.|p\.m\.|am|pm/i.test(dl) && study.durationMinutes > 0) {
+      return sessionLabel(study.durationMinutes);
+    }
+    const mins = dl.match(/^(\d+)\s*(?:min|mins|minutes?)$/i);
+    if (mins) return sessionLabel(Number(mins[1]));
     return dl;
   }
-  if (study.durationMinutes > 0) return minutesLabel(study.durationMinutes);
+  if (study.durationMinutes > 0) return sessionLabel(study.durationMinutes);
   return null;
+}
+
+function sessionLabel(min: number): string {
+  return `${minutesLabel(min).replace(" ", "-")} session`;
 }
 
 function minutesLabel(min: number): string {

@@ -35,7 +35,10 @@ import { FillScreenerHelper } from "@/components/FillScreenerHelper";
 import { CopyNextHelper } from "@/components/CopyNextHelper";
 import { pilotFirmFor } from "@/lib/copyNext";
 import { HeadlineTag } from "@/components/HeadlineTag";
-import { closesLabel, isClosingSoon } from "@/lib/expiry";
+import { AccessTag, CopyCode } from "@/components/LoginSteps";
+import { loginAccess, memberLabel, primaryLabel, primaryUrl } from "@/lib/firmAccess";
+import { useNow } from "@/hooks/useNow";
+import { closesLabel, isClosingSoon, postedAgo } from "@/lib/expiry";
 
 export default function StudyDetailPage() {
   const params = useParams();
@@ -47,6 +50,7 @@ export default function StudyDetailPage() {
     useProfile();
   const { seeMatch, isNewMatch } = useNotifications();
   const router = useRouter();
+  const now = useNow();
 
   useEffect(() => {
     if (study && isProfileMatch(study, profile)) {
@@ -157,7 +161,10 @@ export default function StudyDetailPage() {
   const hourly = hourlyRate(study);
   const about = cleanDescription(study);
   const firmLabel = firmName(study);
-  const ctaText = applyButtonText(study);
+  const login = loginAccess(study);
+  const ctaText = login ? primaryLabel(login) : applyButtonText(study);
+  const ctaHref = login ? primaryUrl(login) : study.applyUrl;
+  const posted = now != null ? postedAgo(study.publishedAt, now) : null;
   const pilot = pilotFirmFor(study);
 
   return (
@@ -193,7 +200,8 @@ export default function StudyDetailPage() {
             <p className="truncate text-[15px] font-semibold text-ink">
               {firmLabel}
             </p>
-            <p className="text-xs text-muted">{study.firmDomain}</p>
+            <p className="truncate text-xs text-muted">{study.firmDomain}</p>
+            {posted && <p className="truncate text-xs text-muted">{posted}</p>}
           </div>
           {study.verified && (
             <div className="ml-auto shrink-0">
@@ -224,6 +232,7 @@ export default function StudyDetailPage() {
             </span>
           )}
           <HeadlineTag study={study} isNew={neu || isFresh(study)} />
+          <AccessTag access={login} />
           {study.expired && (
             <span className="rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-semibold text-rose-800">
               Link expired
@@ -267,29 +276,82 @@ export default function StudyDetailPage() {
             How to sign up
           </h2>
           <ol className="mt-3 space-y-3 text-sm leading-relaxed text-stone-700">
-            <Step n={1}>
-              {study.portalNote ? (
-                <>
-                  Tap <strong className="font-semibold">{ctaText}</strong>{" "}
-                  below. {study.portalNote}
-                </>
-              ) : (
-                <>
-                  Tap <strong className="font-semibold">{ctaText}</strong>{" "}
-                  below. It opens {study.firmDomain} in a new tab.
-                </>
-              )}
-            </Step>
-            <Step n={2}>
-              {code ? (
-                <>
-                  Look for this study by its code:
-                  <CodeChip code={code} />
-                </>
-              ) : (
-                <>Find this study by its title and answer the short screener quiz.</>
-              )}
-            </Step>
+            {login ? (
+              <>
+                <Step n={1}>
+                  {login.joinUrl ? (
+                    <>
+                      Tap <strong className="font-semibold">{ctaText}</strong> below
+                      to make your own free account, or{" "}
+                      <a
+                        href={login.memberUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => markApplied(study.id)}
+                        className="font-semibold text-bridge-link underline"
+                      >
+                        {login.memberIsLogin ? "log in" : `visit ${login.firm}`}
+                      </a>{" "}
+                      if you already have one. This link can&apos;t open the study
+                      itself.
+                    </>
+                  ) : (
+                    <>
+                      Tap <strong className="font-semibold">{ctaText}</strong> below
+                      and join or log in with your own free account. This link
+                      can&apos;t open the study itself.
+                    </>
+                  )}
+                </Step>
+                <Step n={2}>
+                  {login.searchable && login.code ? (
+                    <>
+                      Then search this code in {login.where}:
+                      <CodeChip code={login.code} />
+                    </>
+                  ) : (
+                    <>
+                      Then look for{" "}
+                      <strong className="font-semibold">“{login.lookFor}”</strong> in{" "}
+                      {login.where}.
+                      {login.caveat ? ` ${login.caveat}` : ""}
+                      {login.code && (
+                        <>
+                          {" "}Reference code:
+                          <CodeChip code={login.code} />
+                        </>
+                      )}
+                    </>
+                  )}
+                </Step>
+              </>
+            ) : (
+              <>
+                <Step n={1}>
+                  {study.portalNote ? (
+                    <>
+                      Tap <strong className="font-semibold">{ctaText}</strong>{" "}
+                      below. {study.portalNote}
+                    </>
+                  ) : (
+                    <>
+                      Tap <strong className="font-semibold">{ctaText}</strong>{" "}
+                      below. It opens {study.firmDomain} in a new tab.
+                    </>
+                  )}
+                </Step>
+                <Step n={2}>
+                  {code ? (
+                    <>
+                      Look for this study by its code:
+                      <CodeChip code={code} />
+                    </>
+                  ) : (
+                    <>Find this study by its title and answer the short screener quiz.</>
+                  )}
+                </Step>
+              </>
+            )}
             <Step n={3}>
               If you qualify, the firm books you and pays you directly. No fee,
               ever.
@@ -457,7 +519,7 @@ export default function StudyDetailPage() {
             </svg>
           </button>
           <a
-            href={study.applyUrl}
+            href={ctaHref}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => markApplied(study.id)}
@@ -473,9 +535,34 @@ export default function StudyDetailPage() {
             </span>
           </a>
         </div>
-        <p className="mx-auto max-w-lg truncate px-4 pb-1 pt-1 text-center text-xs text-muted">
-          Opens {study.firmDomain} · we mark it Applied for you
-        </p>
+        {login ? (
+          <div className="mx-auto flex max-w-lg flex-wrap items-center justify-between gap-x-3 px-4 pb-0.5 text-xs">
+            {login.joinUrl ? (
+              <a
+                href={login.memberUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => markApplied(study.id)}
+                className="inline-flex min-h-11 items-center whitespace-nowrap font-semibold text-bridge-link underline underline-offset-2"
+              >
+                {memberLabel(login)}
+              </a>
+            ) : (
+              <span className="truncate text-muted">Use your own free account</span>
+            )}
+            {login.searchable && login.code ? (
+              <span className="flex shrink-0 items-center gap-1 text-muted">
+                then search <CopyCode code={login.code} compact />
+              </span>
+            ) : (
+              <span className="shrink-0 text-muted">then find the study</span>
+            )}
+          </div>
+        ) : (
+          <p className="mx-auto max-w-lg truncate px-4 pb-1 pt-1 text-center text-xs text-muted">
+            Opens {study.firmDomain} · we mark it Applied for you
+          </p>
+        )}
       </div>
     </AppShell>
   );

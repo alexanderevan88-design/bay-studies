@@ -253,8 +253,8 @@ import { normalizePublicApplyUrl } from "../src/lib/sanitizePublicStudy";
     "https://survey.sago.com/Survey/CSLaunch.aspx?scrid=150129&seguid=847fae1e-82d4-4c34-9ed2-6bb8ca4faa45&rid=3738017";
   assert.equal(
     normalizePublicApplyUrl(dirty),
-    "https://survey.sago.com/Survey/CSLaunch.aspx?scrid=150129",
-    "Sago CSLaunch keeps scrid and drops rid/seguid"
+    "https://www.focusgroup.com/Account/Join",
+    "Sago CSLaunch invite (personal rid/seguid) becomes the public Focus Group join page"
   );
 }
 
@@ -263,9 +263,22 @@ import { normalizePublicApplyUrl } from "../src/lib/sanitizePublicStudy";
     "https://survey.sago.com/Survey/CSLaunch.aspx?scrid=150129&recipient=jake%40example.com&invite=abc&invite_id=99&respondent=1&resp=2";
   assert.equal(
     normalizePublicApplyUrl(dirty),
-    "https://survey.sago.com/Survey/CSLaunch.aspx?scrid=150129",
-    "Sago-style invite/respondent personal params are stripped"
+    "https://www.focusgroup.com/Account/Join",
+    "Sago-style invite links never keep personal params"
   );
+}
+
+{
+  for (const link of [
+    "https://survey.sago.com/Survey/CSLaunch.aspx?scrid=150300",
+    "https://csurvey.sago.com/myese.aspx?ESEID=1&RespondentID=2",
+  ]) {
+    assert.equal(
+      normalizePublicApplyUrl(link),
+      "https://www.focusgroup.com/Account/Join",
+      `bare / redirected Sago links go to the public join page (${link})`
+    );
+  }
 }
 
 {

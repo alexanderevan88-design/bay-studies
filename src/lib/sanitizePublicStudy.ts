@@ -176,6 +176,14 @@ function firmHomepage(firmDomain: string): string | undefined {
   return `https://${host}/`;
 }
 
+/** Public Focus Group (by Sago) join + login page. Not tied to anyone's account. */
+export const SAGO_PUBLIC_JOIN = "https://www.focusgroup.com/Account/Join";
+
+function isSagoInviteHost(hostname: string): boolean {
+  const h = hostname.toLowerCase();
+  return h === "sago.com" || h.endsWith(".sago.com");
+}
+
 export type ApplyUrlOptions = { firmDomain?: string };
 
 /**
@@ -200,6 +208,12 @@ export function normalizePublicApplyUrl(
 
   const project = userInterviewsProjectApply(url);
   if (project) return project;
+
+  // Sago / Focus Group screeners are per-member invites: they only open with
+  // the member's own rid + seguid (stripped above as personal), and the bare
+  // scrid link returns "Unknown Link". Send friends to the public join/login
+  // page instead; the study page tells them what to look for.
+  if (isSagoInviteHost(url.hostname)) return SAGO_PUBLIC_JOIN;
 
   const parsed = url.toString();
   stripPersonalParams(url);
