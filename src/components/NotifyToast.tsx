@@ -20,7 +20,7 @@ export function NotifyToast({
           $
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-bold uppercase tracking-wide text-sage-700">
+          <p className="text-xs font-bold uppercase tracking-wide text-sage-700">
             New match
           </p>
           <p className="mt-0.5 text-sm font-semibold text-sage-900">
@@ -33,11 +33,11 @@ export function NotifyToast({
             <Link
               href={`/studies/${notification.studyId}`}
               onClick={onDismiss}
-              className="inline-flex min-h-9 items-center text-xs font-semibold text-sage-800 underline"
+              className="inline-flex min-h-11 items-center text-xs font-semibold text-sage-800 underline"
             >
               Open study
             </Link>
-            <span className="text-[11px] text-stone-500">Demo match toast</span>
+            <span className="text-xs text-stone-500">Demo match toast</span>
           </div>
         </div>
         <button

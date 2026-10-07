@@ -1,12 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Logo } from "@/components/Logo";
 import { useFeedStudies } from "@/hooks/useFeedStudies";
 import { useProfile } from "@/hooks/useProfile";
 import { formatDuration } from "@/lib/match";
+import {
+  clearVault,
+  loadVault,
+  vaultProgress,
+  type VaultData,
+} from "@/lib/vault";
 import {
   EMPLOYMENT_LABELS,
   GENDER_LABELS,
@@ -19,6 +25,11 @@ export default function MePage() {
   const { profile, ready, reset } = useProfile();
   const { studies, ready: studiesReady } = useFeedStudies();
   const [copied, setCopied] = useState<"phone" | "email" | null>(null);
+  const [vault, setVault] = useState<VaultData>({ fields: {} });
+
+  useEffect(() => {
+    setVault(loadVault());
+  }, []);
 
   const savedStudies = useMemo(
     () =>
@@ -107,7 +118,7 @@ export default function MePage() {
                   <li key={m.label}>
                     <Link
                       href={m.href}
-                      className="inline-flex min-h-9 items-center rounded-full border border-amber-300/80 bg-white/80 px-2.5 text-xs font-semibold text-amber-950"
+                      className="inline-flex min-h-11 items-center rounded-full border border-amber-300/80 bg-white/80 px-2.5 text-xs font-semibold text-amber-950"
                     >
                       + {m.label}
                     </Link>
@@ -184,7 +195,7 @@ export default function MePage() {
             {contactGaps && (
               <Link
                 href="/onboarding/about"
-                className="inline-flex min-h-9 items-center text-xs font-semibold text-sage-800 underline"
+                className="inline-flex min-h-11 items-center text-xs font-semibold text-sage-800 underline"
               >
                 Add missing phone or email →
               </Link>
@@ -219,6 +230,8 @@ export default function MePage() {
           </div>
         </section>
 
+        <VaultCard {...vaultProgress(profile, vault)} />
+
         <section className="overflow-hidden rounded-2xl border border-sage-200 bg-gradient-to-br from-sage-50 via-white to-amber-50/40 p-4 shadow-sm">
           <p className="text-xs font-bold uppercase tracking-wide text-sage-700">
             Laptop day
@@ -229,7 +242,7 @@ export default function MePage() {
           <p className="mt-1.5 text-sm leading-relaxed text-stone-600">
             Short path to a public ingest address so firm invites hit the app.
             Skip for local demo — fixtures +{" "}
-            <code className="rounded bg-white/80 px-1 text-[11px]">
+            <code className="rounded bg-white/80 px-1 text-xs">
               /api/inbound/dev
             </code>{" "}
             work offline.
@@ -238,14 +251,14 @@ export default function MePage() {
             <li>Deploy (Vercel preferred) and note your HTTPS URL.</li>
             <li>
               Create Mailgun + receiving domain; set{" "}
-              <code className="break-all rounded bg-white/80 px-1 text-[11px]">
+              <code className="break-all rounded bg-white/80 px-1 text-xs">
                 INBOUND_WEBHOOK_SECRET
               </code>
               .
             </li>
             <li>
               Point a Receiving route at{" "}
-              <code className="break-all rounded bg-white/80 px-1 text-[11px]">
+              <code className="break-all rounded bg-white/80 px-1 text-xs">
                 /api/inbound?secret=…
               </code>
               .
@@ -278,7 +291,7 @@ export default function MePage() {
             </p>
             <Link
               href="/feed?tab=saved"
-              className="inline-flex min-h-9 items-center text-xs font-semibold text-sage-800 hover:underline"
+              className="inline-flex min-h-11 items-center text-xs font-semibold text-sage-800 hover:underline"
             >
               View all
             </Link>
@@ -314,7 +327,7 @@ export default function MePage() {
             </p>
             <Link
               href="/feed?tab=applied"
-              className="inline-flex min-h-9 items-center text-xs font-semibold text-sage-800 hover:underline"
+              className="inline-flex min-h-11 items-center text-xs font-semibold text-sage-800 hover:underline"
             >
               View all
             </Link>
@@ -352,19 +365,19 @@ export default function MePage() {
               <p className="text-lg font-semibold text-rose-800">
                 {profile.savedStudyIds.length}
               </p>
-              <p className="text-[11px] font-medium text-rose-800/80">Saved</p>
+              <p className="text-xs font-medium text-rose-800/80">Saved</p>
             </li>
             <li className="rounded-xl bg-sky-50 px-2 py-3">
               <p className="text-lg font-semibold text-sky-800">
                 {profile.appliedStudyIds.length}
               </p>
-              <p className="text-[11px] font-medium text-sky-800/80">Applied</p>
+              <p className="text-xs font-medium text-sky-800/80">Applied</p>
             </li>
             <li className="rounded-xl bg-stone-100 px-2 py-3">
               <p className="text-lg font-semibold text-stone-800">
                 {profile.dismissedStudyIds.length}
               </p>
-              <p className="text-[11px] font-medium text-stone-600">
+              <p className="text-xs font-medium text-stone-600">
                 Dismissed
               </p>
             </li>
@@ -404,9 +417,10 @@ export default function MePage() {
           onClick={() => {
             if (
               typeof window !== "undefined" &&
-              window.confirm("Clear local profile and start over?")
+              window.confirm("Clear local profile and vault, and start over?")
             ) {
               reset();
+              clearVault();
               window.location.href = "/";
             }
           }}
@@ -416,6 +430,39 @@ export default function MePage() {
         </button>
       </div>
     </AppShell>
+  );
+}
+
+function VaultCard({ filled, total }: { filled: number; total: number }) {
+  const empty = filled === 0;
+  return (
+    <section className="rounded-2xl border border-sage-100 bg-white p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+            Profile vault
+          </p>
+          <p className="mt-1 font-medium text-stone-900">
+            {empty
+              ? "Save time on firm applications"
+              : `${filled} of ${total} screener details saved`}
+          </p>
+          <p className="mt-1 text-sm text-stone-500">
+            {empty
+              ? "Answer the usual screener questions once. Nothing goes to a firm until you confirm it."
+              : "Stays on this device. You confirm before anything is shared."}
+          </p>
+        </div>
+        <Link
+          href="/vault"
+          className={`inline-flex min-h-11 shrink-0 items-center rounded-lg px-3 text-sm font-semibold ${
+            empty ? "bg-sage-700 text-white" : "bg-sage-50 text-sage-800"
+          }`}
+        >
+          {empty ? "Add details" : "Open vault"}
+        </Link>
+      </div>
+    </section>
   );
 }
 
@@ -438,7 +485,7 @@ function ContactRow({
         </span>
         <Link
           href="/onboarding/about"
-          className="inline-flex min-h-9 items-center text-xs font-semibold text-sage-800 underline"
+          className="inline-flex min-h-11 items-center text-xs font-semibold text-sage-800 underline"
         >
           Add
         </Link>
@@ -454,7 +501,7 @@ function ContactRow({
       <button
         type="button"
         onClick={onCopy}
-        className="inline-flex min-h-9 shrink-0 items-center rounded-lg border border-sage-200 bg-white px-2.5 text-xs font-semibold text-sage-800"
+        className="inline-flex min-h-11 shrink-0 items-center rounded-lg border border-sage-200 bg-white px-2.5 text-xs font-semibold text-sage-800"
       >
         {copied ? "Copied" : "Copy"}
       </button>
@@ -485,7 +532,7 @@ function StudyRow({
           </p>
         </div>
         <span
-          className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+          className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold ${
             badge === "Applied"
               ? "bg-sky-50 text-sky-800"
               : "bg-rose-50 text-rose-700"

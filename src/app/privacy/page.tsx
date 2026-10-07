@@ -16,7 +16,7 @@ export default function PrivacyPage() {
           <Logo size="sm" />
           <Link
             href="/me"
-            className="text-sm font-medium text-sage-700 hover:underline"
+            className="inline-flex min-h-11 items-center text-sm font-medium text-sage-700 hover:underline"
           >
             ← Me
           </Link>
@@ -51,6 +51,11 @@ export default function PrivacyPage() {
             <li>Demographics you enter (age, metro, ZIP, optional phone/email)</li>
             <li>Study preferences (format, min pay, types, travel)</li>
             <li>Saved, applied, and dismissed study IDs</li>
+            <li>
+              Optional profile vault answers (screener basics you choose to
+              save) — sensitive ones like date of birth are always confirmed
+              before use
+            </li>
           </ul>
         </section>
 
@@ -60,7 +65,7 @@ export default function PrivacyPage() {
           </h2>
           <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-stone-600">
             <li>We never charge a fee to apply — finish on the firm&apos;s site.</li>
-            <li>We don&apos;t sell your screener answers (we never collect them).</li>
+            <li>We never sell your data — not your profile, not your vault.</li>
             <li>
               We don&apos;t invent live hosting URLs or email you until you
               deploy Mailgun / a public host yourself.
@@ -86,14 +91,14 @@ export default function PrivacyPage() {
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-stone-600">
             Clear local profile from{" "}
-            <Link href="/me" className="font-semibold text-sage-800 underline">
+            <Link href="/me" className="inline-flex min-h-11 items-center font-semibold text-sage-800 underline">
               Me
             </Link>
             , tweak Alerts anytime, or dismiss studies you don&apos;t want. For
             how firms get verified, see{" "}
             <Link
               href="/about/verify"
-              className="font-semibold text-sage-800 underline"
+              className="inline-flex min-h-11 items-center font-semibold text-sage-800 underline"
             >
               How we verify sources
             </Link>

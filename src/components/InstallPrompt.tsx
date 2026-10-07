@@ -3,6 +3,24 @@
 import { useCallback, useEffect, useState } from "react";
 
 const STORAGE_KEY = "bay-studies-install-dismissed";
+const VISITS_KEY = "bay-studies-visits";
+const SESSION_KEY = "bay-studies-visit-counted";
+const SCROLL_TRIGGER_PX = 600;
+
+/** Count one visit per browser session; returns the running total. */
+function countVisit(): number {
+  try {
+    let n = Number(localStorage.getItem(VISITS_KEY) || "0") || 0;
+    if (!sessionStorage.getItem(SESSION_KEY)) {
+      n += 1;
+      localStorage.setItem(VISITS_KEY, String(n));
+      sessionStorage.setItem(SESSION_KEY, "1");
+    }
+    return n;
+  } catch {
+    return 1;
+  }
+}
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -38,6 +56,24 @@ export function InstallPrompt() {
     null
   );
   const [iosHint, setIosHint] = useState(false);
+  // Only offer install on a 2nd visit, or after the visitor scrolls a bit.
+  const [eligible, setEligible] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (countVisit() >= 2) {
+      setEligible(true);
+      return;
+    }
+    const onScroll = () => {
+      if (window.scrollY > SCROLL_TRIGGER_PX) {
+        setEligible(true);
+        window.removeEventListener("scroll", onScroll);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -100,7 +136,7 @@ export function InstallPrompt() {
     dismiss();
   }, [deferred, dismiss]);
 
-  if (!visible) return null;
+  if (!visible || !eligible) return null;
 
   return (
     <div
@@ -138,7 +174,7 @@ export function InstallPrompt() {
               <button
                 type="button"
                 onClick={install}
-                className="rounded-full bg-sage-600 px-3.5 py-1.5 text-xs font-semibold text-white transition hover:bg-sage-700"
+                className="inline-flex min-h-11 items-center rounded-full bg-sage-600 px-4 text-sm font-semibold text-white transition hover:bg-sage-700"
               >
                 Install
               </button>
@@ -146,7 +182,7 @@ export function InstallPrompt() {
             <button
               type="button"
               onClick={dismiss}
-              className="rounded-full px-2.5 py-1.5 text-xs font-medium text-stone-500 hover:bg-stone-50 hover:text-stone-700"
+              className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-medium text-stone-500 hover:bg-stone-50 hover:text-stone-700"
             >
               Not now
             </button>
@@ -155,7 +191,7 @@ export function InstallPrompt() {
         <button
           type="button"
           onClick={dismiss}
-          className="rounded-lg px-1.5 py-0.5 text-xs font-medium text-stone-400 hover:bg-stone-50 hover:text-stone-700"
+          className="-mr-2 -mt-2 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-sm font-medium text-stone-400 hover:bg-stone-50 hover:text-stone-700"
           aria-label="Dismiss"
         >
           ✕

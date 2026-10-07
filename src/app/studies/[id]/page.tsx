@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { TrustLine } from "@/components/TrustLine";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
 import { isSeedStudy } from "@/data/studies";
 import { useFeedStudies } from "@/hooks/useFeedStudies";
@@ -16,12 +15,22 @@ import {
   isProfileMatch,
 } from "@/lib/match";
 import {
-  applyCtaLabel,
-  formatStudyDuration,
-  formatStudyPay,
-} from "@/lib/enrich";
+  applyButtonText,
+  cleanDescription,
+  cleanTitle,
+  firmInitial,
+  firmName,
+  firmTone,
+  hourlyRate,
+  lengthLabel,
+  modalityLabel,
+  payBadge,
+  payDetail,
+  studyCode,
+  typeLabel,
+} from "@/lib/display";
 import { bumpOpen } from "@/lib/analytics";
-import { STUDY_TYPE_LABELS } from "@/lib/types";
+import { FillScreenerHelper } from "@/components/FillScreenerHelper";
 
 export default function StudyDetailPage() {
   const params = useParams();
@@ -32,21 +41,6 @@ export default function StudyDetailPage() {
     useProfile();
   const { seeMatch, isNewMatch } = useNotifications();
   const router = useRouter();
-  const [copiedField, setCopiedField] = useState<CopyField | null>(null);
-
-  async function copyToClipboard(field: CopyField, value: string) {
-    if (!value || !navigator.clipboard) return;
-
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopiedField(field);
-      window.setTimeout(() => {
-        setCopiedField((current) => (current === field ? null : current));
-      }, 1500);
-    } catch {
-      // Clipboard access can be unavailable outside a secure browser context.
-    }
-  }
 
   useEffect(() => {
     if (study && isProfileMatch(study, profile)) {
@@ -79,7 +73,7 @@ export default function StudyDetailPage() {
           <p className="font-serif text-xl text-sage-900">Study not found</p>
           <Link
             href="/feed"
-            className="mt-4 inline-block text-sm font-semibold text-sage-700"
+            className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-sage-700"
           >
             ← Back to feed
           </Link>
@@ -94,84 +88,81 @@ export default function StudyDetailPage() {
   const applied = profile.appliedStudyIds.includes(study.id);
   const matched = isProfileMatch(study, profile);
   const neu = isNewMatch(study.id, matched);
-  const payLabel = formatStudyPay(study);
-  const durationLabel = formatStudyDuration(study);
-  const ctaLabel = applyCtaLabel(study);
+  const title = cleanTitle(study);
+  const code = studyCode(study);
+  const pay = payBadge(study);
+  const fullPay = payDetail(study);
+  const length = lengthLabel(study);
+  const hourly = hourlyRate(study);
+  const about = cleanDescription(study);
+  const firmLabel = firmName(study);
+  const ctaText = applyButtonText(study);
 
   return (
-    <AppShell>
-      <header className="flex items-center justify-between px-4 py-3">
+    <AppShell showNav={false}>
+      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-sage-100/80 bg-cream/95 px-2 backdrop-blur">
         <button
           type="button"
-          onClick={() => router.back()}
+          onClick={() => {
+            if (window.history.length > 1) router.back();
+            else router.push("/feed");
+          }}
           className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-sage-800 hover:bg-sage-50"
         >
           ← Back
         </button>
-        <button
-          type="button"
-          onClick={() => toggleSaved(study.id)}
-          aria-label={saved ? "Unsave" : "Save"}
-          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-sage-800 hover:bg-sage-50"
+        <Link
+          href="/feed"
+          className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-sage-800 hover:bg-sage-50"
         >
-          <svg
-            className="h-6 w-6"
-            fill={saved ? "currentColor" : "none"}
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.8}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"
-            />
-          </svg>
-        </button>
+          All studies
+        </Link>
       </header>
 
-      <div className="px-5 pb-8">
-        <div className="flex flex-wrap items-center gap-2">
-          {study.verified && <VerifiedBadge href="/about/verify" />}
+      <div className="px-5 pb-36 pt-4">
+        <div className="flex items-center gap-2.5">
           <span
-            className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-              profile.onboarded
-                ? "bg-sage-100 text-sage-800"
-                : "bg-stone-100 text-stone-500"
-            }`}
-            title={
-              profile.onboarded
-                ? "Soft score from your age, metro, prefs, and pay floor"
-                : "Complete your profile for a personal match %"
-            }
+            aria-hidden
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-bold ${firmTone(study)}`}
           >
-            {profile.onboarded ? `${match}% match` : "Match TBD"}
+            {firmInitial(study)}
           </span>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-sage-900">
+              {firmLabel}
+            </p>
+            <p className="text-xs text-stone-500">{study.firmDomain}</p>
+          </div>
+          {study.verified && (
+            <div className="ml-auto shrink-0">
+              <VerifiedBadge href="/about/verify" />
+            </div>
+          )}
+        </div>
+
+        <h1 className="mt-3 break-words font-serif text-2xl font-semibold leading-snug text-stone-900">
+          {title}
+        </h1>
+
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <span
+            className={`inline-flex items-center rounded-lg px-2.5 py-1 text-xl font-bold tracking-tight ${
+              pay.known
+                ? "bg-emerald-50 text-emerald-800 ring-1 ring-inset ring-emerald-200"
+                : "bg-stone-100 text-stone-600"
+            }`}
+          >
+            {pay.text}
+          </span>
+          {hourly && <span className="text-sm text-stone-500">{hourly}</span>}
           {neu && (
             <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-violet-800">
-              New match
+              New
             </span>
           )}
           {study.expired && (
             <span className="rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-semibold text-rose-800">
               Link expired
-            </span>
-          )}
-          {study.id.startsWith("pub-") && (
-            <span
-              className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-bold text-violet-900 ring-1 ring-inset ring-violet-300/70"
-              title="Published from an inbound firm email"
-            >
-              <svg
-                className="h-3 w-3 shrink-0"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden
-              >
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-              </svg>
-              From email
             </span>
           )}
           {applied && (
@@ -180,65 +171,135 @@ export default function StudyDetailPage() {
             </span>
           )}
         </div>
-
-        {(payLabel || durationLabel) && (
-          <p className="mt-4 text-2xl font-semibold tracking-tight text-sage-900">
-            {payLabel ?? "Pay TBD"}
-            {durationLabel && (
-              <span className="text-lg font-normal text-stone-500">
-                {" "}
-                · ~{durationLabel}
-              </span>
-            )}
-          </p>
+        {fullPay && (
+          <p className="mt-1.5 text-sm text-stone-600">Pay: {fullPay}</p>
         )}
-        <p className="mt-1 text-sm text-stone-600">
-          {STUDY_TYPE_LABELS[study.type]} ·{" "}
-          {study.modality === "remote" ? "Remote" : "In-person"}
-        </p>
 
-        <h1 className="mt-4 font-serif text-2xl font-semibold leading-snug text-stone-900">
-          {study.title}
-        </h1>
-        <p className="mt-2 text-sm font-medium text-sage-800">
-          {study.firm} · {study.location}
-        </p>
-
-        <dl className="mt-6 space-y-3 rounded-2xl border border-sage-100 bg-white p-4 text-sm">
-          <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide text-stone-400">
-              When
-            </dt>
-            <dd className="mt-0.5 text-stone-800">{study.when}</dd>
-          </div>
-          <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide text-stone-400">
-              Where
-            </dt>
-            <dd className="mt-0.5 text-stone-800">
-              {study.address ?? study.location}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide text-stone-400">
-              You may match
-            </dt>
-            <dd className="mt-0.5 text-stone-800">
-              {study.eligibility.notes}
-            </dd>
-          </div>
+        <dl className="mt-5 grid grid-cols-2 gap-2">
+          <FactTile label="When" value={study.when || "On the screener"} wide />
+          <FactTile
+            label="Where"
+            value={
+              study.modality === "remote"
+                ? `From home · ${study.location}`
+                : (study.address ?? study.location)
+            }
+            wide
+          />
+          <FactTile label="Length" value={length ?? "On the screener"} />
+          <FactTile
+            label="Type"
+            value={`${typeLabel(study)} · ${modalityLabel(study)}`}
+          />
         </dl>
 
-        <section className="mt-4 rounded-2xl border border-sage-100 bg-white p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-stone-400">
-            Why you matched
-          </p>
+        <section className="mt-4 rounded-2xl border border-sage-200 bg-white p-4">
+          <h2 className="font-serif text-lg font-semibold text-sage-900">
+            How to sign up
+          </h2>
+          <ol className="mt-3 space-y-3 text-sm leading-relaxed text-stone-700">
+            <Step n={1}>
+              {study.portalNote ? (
+                <>
+                  Tap <strong className="font-semibold">{ctaText}</strong>{" "}
+                  below. {study.portalNote}
+                </>
+              ) : (
+                <>
+                  Tap <strong className="font-semibold">{ctaText}</strong>{" "}
+                  below. It opens {study.firmDomain} in a new tab.
+                </>
+              )}
+            </Step>
+            <Step n={2}>
+              {code ? (
+                <>
+                  Look for this study by its code:
+                  <CodeChip code={code} />
+                </>
+              ) : (
+                <>Find this study by its title and answer the short screener quiz.</>
+              )}
+            </Step>
+            <Step n={3}>
+              If you qualify, the firm books you and pays you directly. No fee,
+              ever.
+            </Step>
+          </ol>
+
+          <FillScreenerHelper profile={profile} firmName={study.firm} embedded />
+        </section>
+
+        {study.expired && (
+          <div className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-950">
+            <p className="font-semibold">Apply link looks dead or closed</p>
+            <p className="mt-1 text-rose-900/90">
+              Last check
+              {study.linkCheckedAt
+                ? ` ${formatPt(study.linkCheckedAt)}`
+                : " (when an admin ran Check link)"}
+              {study.linkStatus != null ? ` · HTTP ${study.linkStatus}` : ""}.
+              The firm may have filled the study. You can still try the link or{" "}
+              <a
+                href={`https://${study.firmDomain}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center font-semibold underline"
+              >
+                visit {study.firmDomain}
+              </a>
+              .
+            </p>
+          </div>
+        )}
+
+        {about && (
+          <section className="mt-5">
+            <h2 className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+              About this study
+            </h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-stone-700">
+              {about}
+            </p>
+          </section>
+        )}
+
+        {study.eligibility.notes && (
+          <section className="mt-4">
+            <h2 className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+              Who they’re looking for
+            </h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-stone-700">
+              {study.eligibility.notes}
+            </p>
+          </section>
+        )}
+
+        <section className="mt-5 rounded-2xl border border-sage-100 bg-white p-4">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+              Is it a fit?
+            </h2>
+            {profile.onboarded && (
+              <span className="rounded-full bg-sage-100 px-2.5 py-0.5 text-xs font-semibold text-sage-800">
+                {match}% match
+              </span>
+            )}
+          </div>
           <p className="mt-1 text-xs text-stone-500">
             {profile.onboarded
-              ? "Checks against your profile — green means a fit, amber means a miss or gap."
-              : "Finish onboarding to see personal fit reasons for this study."}
+              ? "Checked against your profile. Green is a fit, amber is a miss or gap."
+              : "Optional. Add your details for personal fit reasons. You can apply either way."}
           </p>
-          <ul className="mt-2.5 space-y-1.5">
+          {!profile.onboarded && (
+            <Link
+              href="/onboarding/about"
+              className="inline-flex min-h-11 items-center text-sm font-semibold text-sage-800 underline"
+            >
+              Add details for better matches
+            </Link>
+          )}
+          <ul className="mt-2 space-y-1.5">
             {reasons.map((r) => (
               <li
                 key={r.label}
@@ -260,137 +321,26 @@ export default function StudyDetailPage() {
           </ul>
         </section>
 
-        <p className="mt-5 text-sm leading-relaxed text-stone-600">
-          {study.description}
-        </p>
-
-        {study.portalNote && (
-          <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-            <p className="text-xs font-semibold uppercase tracking-wide text-amber-800/80">
-              Portal note
-            </p>
-            <p className="mt-1">{study.portalNote}</p>
-          </div>
-        )}
-
-        <div className="mt-6 space-y-2">
-          <TrustLine domain={study.firmDomain} />
-          <p className="px-0.5 text-xs leading-relaxed text-stone-500">
-            {study.verified ? (
-              <>
-                <span className="font-medium text-sage-800">Verified firm</span>
-                {" · "}
-                Allowlisted Bay Area source
-                {isSeedStudy(study.id)
-                  ? " · sample listing for local demo only"
-                  : " · human-approved for this feed"}
-                .{" "}
-              </>
-            ) : (
-              <>Pending verification · </>
-            )}
-            <Link
-              href="/about/verify"
-              className="font-medium text-sage-800 underline"
-            >
-              How we source
-            </Link>
-          </p>
-        </div>
-
-        <section className="mt-5 rounded-2xl border border-sage-100 bg-white p-4">
-          <p className="text-sm font-semibold text-sage-900">
-            Have these ready for the screener
-          </p>
-          <p className="mt-1 text-xs text-stone-500">
-            Copy a detail, then paste it into the firm&apos;s form.
-          </p>
-          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
-            <CopyButton
-              label="Copy phone"
-              value={profile.phone}
-              copied={copiedField === "phone"}
-              onClick={() => copyToClipboard("phone", profile.phone)}
-            />
-            <CopyButton
-              label="Copy email"
-              value={profile.email}
-              copied={copiedField === "email"}
-              onClick={() => copyToClipboard("email", profile.email)}
-            />
-            <CopyButton
-              label="Copy ZIP"
-              value={profile.zip}
-              copied={copiedField === "zip"}
-              onClick={() => copyToClipboard("zip", profile.zip)}
-            />
-          </div>
-          {(!profile.phone || !profile.email) && (
-            <p className="mt-3 text-xs text-stone-500">
-              {!profile.phone && !profile.email
-                ? "Phone and email not set — "
-                : !profile.phone
-                  ? "Phone not set — "
-                  : "Email not set — "}
-              <Link
-                href="/onboarding/about"
-                className="font-semibold text-sage-800 underline"
-              >
-                add in profile
-              </Link>{" "}
-              so you can paste into the screener.
-            </p>
+        <p className="mt-4 text-xs leading-relaxed text-stone-500">
+          {study.verified ? (
+            <>
+              <span className="font-medium text-sage-800">Verified firm</span>
+              {" · "}
+              Allowlisted Bay Area source
+              {isSeedStudy(study.id)
+                ? " · sample listing for local demo only"
+                : " · checked by a person before it’s listed"}
+              .{" "}
+            </>
+          ) : (
+            <>Unverified source. Confirm the firm before you share details. </>
           )}
-        </section>
-
-        {study.expired ? (
-          <div className="mt-5 space-y-3">
-            <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-950">
-              <p className="font-semibold">Apply link looks dead or closed</p>
-              <p className="mt-1 text-rose-900/90">
-                Last check
-                {study.linkCheckedAt
-                  ? ` ${formatPt(study.linkCheckedAt)}`
-                  : " (when an admin ran Check link)"}
-                {study.linkStatus != null ? ` · HTTP ${study.linkStatus}` : ""}
-                . The firm may have filled the study — you can still try the URL
-                or visit their site.
-              </p>
-            </div>
-            <a
-              href={study.applyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => markApplied(study.id)}
-              className="flex min-h-12 w-full items-center justify-center rounded-xl border border-rose-300 bg-white px-4 py-3.5 text-base font-semibold text-rose-900 transition hover:bg-rose-50"
-            >
-              Try link anyway
-            </a>
-            <a
-              href={`https://${study.firmDomain}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex min-h-11 w-full items-center justify-center rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm font-semibold text-stone-800 hover:bg-stone-50"
-            >
-              Visit {study.firmDomain}
-            </a>
-          </div>
-        ) : (
-          <a
-            href={study.applyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => markApplied(study.id)}
-            className="mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-sage-700 px-4 py-3.5 text-base font-semibold text-white transition hover:bg-sage-800"
+          <Link
+            href="/about/verify"
+            className="inline-flex min-h-11 items-center font-medium text-sage-800 underline"
           >
-            {ctaLabel}
-            <span aria-hidden className="text-sm font-normal opacity-90">
-              ↗
-            </span>
-          </a>
-        )}
-        <p className="mt-2 text-center text-xs text-stone-500">
-          Opens {study.firmDomain} in a new tab · we mark you Applied
+            How we pick studies
+          </Link>
         </p>
 
         <button
@@ -399,37 +349,127 @@ export default function StudyDetailPage() {
             dismissStudy(study.id);
             router.push("/feed");
           }}
-          className="mt-3 min-h-11 w-full py-3 text-sm font-medium text-stone-600 hover:text-stone-900"
+          className="mt-2 min-h-11 w-full py-3 text-sm font-medium text-stone-600 hover:text-stone-900"
         >
-          Not for me
+          Not for me, hide it
         </button>
+      </div>
+
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-sage-100 bg-white/95 backdrop-blur safe-bottom">
+        <div className="mx-auto flex max-w-lg items-center gap-2 px-4 pt-2.5">
+          <button
+            type="button"
+            onClick={() => toggleSaved(study.id)}
+            aria-pressed={saved}
+            aria-label={saved ? "Unsave study" : "Save study"}
+            className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border transition active:scale-95 ${
+              saved
+                ? "border-rose-200 bg-rose-50 text-rose-600"
+                : "border-sage-200 bg-white text-stone-500"
+            }`}
+          >
+            <svg
+              className="h-6 w-6"
+              fill={saved ? "currentColor" : "none"}
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.8}
+              aria-hidden
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"
+              />
+            </svg>
+          </button>
+          <a
+            href={study.applyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => markApplied(study.id)}
+            className={`flex min-h-12 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl px-4 text-base font-semibold transition ${
+              study.expired
+                ? "border border-rose-300 bg-white text-rose-900 hover:bg-rose-50"
+                : "bg-sage-700 text-white hover:bg-sage-800"
+            }`}
+          >
+            <span className="truncate">{ctaText}</span>
+            <span aria-hidden className="text-sm font-normal opacity-90">
+              ↗
+            </span>
+          </a>
+        </div>
+        <p className="mx-auto max-w-lg truncate px-4 pb-1 pt-1 text-center text-xs text-stone-500">
+          Opens {study.firmDomain} · we mark it Applied for you
+        </p>
       </div>
     </AppShell>
   );
 }
 
-type CopyField = "phone" | "email" | "zip";
-
-function CopyButton({
+function FactTile({
   label,
   value,
-  copied,
-  onClick,
+  wide = false,
 }: {
   label: string;
   value: string;
-  copied: boolean;
-  onClick: () => void;
+  wide?: boolean;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={!value}
-      className="min-h-11 rounded-xl border border-sage-200 bg-sage-50 px-3 py-2.5 text-sm font-semibold text-sage-800 transition hover:bg-sage-100 disabled:cursor-not-allowed disabled:border-stone-200 disabled:bg-stone-50 disabled:text-stone-400"
+    <div
+      className={`rounded-xl border border-sage-100 bg-white px-3 py-2.5 ${
+        wide ? "col-span-2" : ""
+      }`}
     >
-      {copied ? "Copied" : label}
-    </button>
+      <dt className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+        {label}
+      </dt>
+      <dd className="mt-0.5 break-words text-sm leading-snug text-stone-800">
+        {value}
+      </dd>
+    </div>
+  );
+}
+
+function Step({ n, children }: { n: number; children: React.ReactNode }) {
+  return (
+    <li className="flex gap-3">
+      <span
+        aria-hidden
+        className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-100 text-xs font-bold text-sage-800"
+      >
+        {n}
+      </span>
+      <span className="min-w-0 flex-1">{children}</span>
+    </li>
+  );
+}
+
+function CodeChip({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <span className="mt-1.5 flex items-center gap-2">
+      <code className="rounded-lg bg-stone-100 px-2.5 py-1.5 font-mono text-sm font-semibold text-stone-900">
+        {code}
+      </code>
+      <button
+        type="button"
+        onClick={async () => {
+          try {
+            await navigator.clipboard.writeText(code);
+            setCopied(true);
+            window.setTimeout(() => setCopied(false), 1500);
+          } catch {
+            /* clipboard unavailable */
+          }
+        }}
+        className="inline-flex min-h-11 items-center rounded-lg px-2.5 text-sm font-semibold text-sage-800 underline"
+      >
+        {copied ? "Copied" : "Copy"}
+      </button>
+    </span>
   );
 }
 

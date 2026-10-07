@@ -56,7 +56,7 @@ export default function PreferencesPage() {
       pushEnabled,
       onboarded: true,
     });
-    router.push("/feed");
+    router.push("/feed?view=foryou");
   }
 
   return (
@@ -235,6 +235,11 @@ export default function PreferencesPage() {
       >
         See my matches
       </button>
+      <p className="mt-3 text-center text-sm">
+        <Link href="/feed" className="inline-flex min-h-11 items-center font-semibold text-sage-800 underline">
+          Skip — browse all studies
+        </Link>
+      </p>
     </main>
   );
 }

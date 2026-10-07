@@ -28,10 +28,14 @@ export function VerifiedBadge({
     return (
       <Link
         href={href}
-        className={`${classes} transition hover:bg-sage-100 hover:ring-sage-300`}
+        className="group inline-flex min-h-11 items-center"
         title="Allowlisted Bay Area firm — how we verify"
       >
-        {inner}
+        <span
+          className={`${classes} transition group-hover:bg-sage-100 group-hover:ring-sage-300`}
+        >
+          {inner}
+        </span>
       </Link>
     );
   }

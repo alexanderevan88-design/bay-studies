@@ -23,7 +23,7 @@ export function TrustLine({
         {" · "}
         <Link
           href="/about/verify"
-          className="font-medium text-sage-700 underline decoration-sage-300 underline-offset-2 hover:text-sage-900"
+          className="inline-flex min-h-11 items-center font-medium text-sage-700 underline decoration-sage-300 underline-offset-2 hover:text-sage-900"
         >
           How we source
         </Link>
@@ -53,7 +53,7 @@ export function TrustLine({
       <p className="mt-2 text-xs text-sage-800">
         <Link
           href="/about/verify"
-          className="font-semibold underline decoration-sage-300 underline-offset-2 hover:text-sage-950"
+          className="inline-flex min-h-11 items-center font-semibold underline decoration-sage-300 underline-offset-2 hover:text-sage-950"
         >
           How we verify &amp; source →
         </Link>

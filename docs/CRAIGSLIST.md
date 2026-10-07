@@ -37,12 +37,21 @@ Drafts use source id `craigslist-sfbay-etc` (`From` `listings@craigslist.org`) s
 
 Open `/admin/ingest`, confirm the firm and link, then **Approve → feed**. Reject anything that still looks like a clinic or a job ad.
 
+## Already on the feed
+
+Import compares kept listings to the live published feed (`GET /api/published` on the `--post` host, otherwise production, then a local snapshot). It **skips and lists a reason** — it does not delete anything — when:
+
+- the apply URL is already on a **different** published study (the same `pub-cl-<id>` is an upsert and is left alone), or
+- the normalized title (lowercase, emoji and punctuation stripped, whitespace collapsed) and pay (number or pay label) already match a live study. If both sides list metros, they must overlap.
+
+Within-batch apply-link dedupe is unchanged. On `/admin/ingest`, a near-duplicate (similar or normalized-equal title, same pay, overlapping metro) does **not** hard-block: **Approve → feed** shows a warning and the button becomes **Approve anyway**.
+
 ## 2026-10-04 soft launch
 
 Three cards were approved onto the public feed (`verified: false`, portal note says Craigslist):
 
 - `pub-cl-7974124959` — SF market research, $400, paidfocusgroupstudies.com
 - `pub-cl-7975583982` — Research America Bay Area panel (Sacramento duplicate skipped), pay varies
-- `pub-cl-7977416475` — Jamestown / Tuolumne $300 on Oct 27 (outside Bay metros; included only because it was manually approved)
+- ~~`pub-cl-7977416475` — Jamestown / Tuolumne $300 on Oct 27~~ removed Oct 7 2026 (outside the Bay Area)
 
 Not published: Bridge HIV duplicates and the Flourish C.diff vaccine study in Walnut Creek.

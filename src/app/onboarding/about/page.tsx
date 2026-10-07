@@ -104,8 +104,9 @@ export default function AboutPage() {
         About you
       </h1>
       <p className="mt-2 text-stone-600">
-        Age + ZIP unlock better matches. Phone and email stay on this device
-        for quick screener paste.
+        Age and ZIP help us rank better matches. Optional — you can browse
+        studies anytime. Phone and email stay on this device for quick
+        screener paste.
       </p>
 
       <form
@@ -277,6 +278,13 @@ export default function AboutPage() {
         >
           {profile.onboarded ? "Save profile" : "Continue"}
         </button>
+        {!profile.onboarded && (
+          <p className="text-center text-sm">
+            <Link href="/feed" className="inline-flex min-h-11 items-center font-semibold text-sage-800 underline">
+              Skip — browse all studies
+            </Link>
+          </p>
+        )}
       </form>
     </main>
   );

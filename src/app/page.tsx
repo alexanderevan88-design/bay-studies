@@ -32,10 +32,18 @@ export default function WelcomePage() {
 
   const returning = profile.onboarded;
 
-  function continueNext() {
-    if (!metro) return;
-    update({ metro });
-    router.push(returning ? "/feed" : "/onboarding/about");
+  function rememberMetro() {
+    if (metro !== profile.metro) update({ metro });
+  }
+
+  function browseAll() {
+    rememberMetro();
+    router.push("/feed");
+  }
+
+  function seeMatches() {
+    rememberMetro();
+    router.push(returning ? "/feed?view=foryou" : "/onboarding/about");
   }
 
   return (
@@ -48,34 +56,17 @@ export default function WelcomePage() {
             Welcome back
           </p>
           <h1 className="mt-2 font-serif text-3xl font-semibold leading-[1.15] tracking-tight text-sage-900 text-balance">
-            {profile.metro
-              ? `${METRO_LABELS[profile.metro]} feed is ready`
-              : "Your Bay Area feed is ready"}
+            All open studies are ready to browse
           </h1>
           <p className="mt-3 text-base text-stone-600">
-            Jump back to matched studies, or update your metro below if you
-            moved.
+            See every approved study, or jump to the ones that fit your
+            profile.
           </p>
-          <div className="mt-6 flex flex-col gap-2">
-            <button
-              type="button"
-              onClick={() => router.push("/feed")}
-              className="min-h-12 w-full rounded-xl bg-sage-700 px-4 py-3.5 text-base font-semibold text-white transition hover:bg-sage-800"
-            >
-              Open my feed
-            </button>
-            <Link
-              href="/me"
-              className="inline-flex min-h-11 w-full items-center justify-center text-sm font-semibold text-sage-800"
-            >
-              Review profile · Me
-            </Link>
-          </div>
         </div>
       ) : (
         <div className="mt-10">
           <p className="text-xs font-bold uppercase tracking-wide text-sage-700">
-            First time here
+            Bay Area paid studies
           </p>
           <h1 className="mt-2 font-serif text-4xl font-semibold leading-[1.15] tracking-tight text-sage-900 text-balance">
             Real studies.
@@ -85,21 +76,52 @@ export default function WelcomePage() {
             <span className="text-sage-600">No scam board junk.</span>
           </h1>
           <p className="mt-4 text-base text-stone-600">
-            Bay Area only (MVP). The feed lists paid studies only after a
-            human Approve — not sample listings. You apply on the firm&apos;s
-            site. No fee. Ever.
+            See every human-approved study right away. Add your details later
+            if you want better matches. You apply on the firm&apos;s site. No
+            fee. Ever.
           </p>
         </div>
       )}
 
+      <div className="mt-8 flex flex-col gap-2">
+        <button
+          type="button"
+          onClick={browseAll}
+          className="min-h-12 w-full rounded-xl bg-sage-700 px-4 py-3.5 text-base font-semibold text-white transition hover:bg-sage-800"
+        >
+          Browse all studies
+        </button>
+        <button
+          type="button"
+          onClick={seeMatches}
+          className="min-h-12 w-full rounded-xl border border-sage-300 bg-white px-4 py-3.5 text-base font-semibold text-sage-900 transition hover:bg-sage-50"
+        >
+          {returning ? "See matches for you" : "Get better matches"}
+        </button>
+        {returning && (
+          <Link
+            href="/me"
+            className="inline-flex min-h-11 w-full items-center justify-center text-sm font-semibold text-sage-800"
+          >
+            Review profile · Me
+          </Link>
+        )}
+      </div>
+
+      <p className="mt-4 text-center text-sm leading-relaxed text-stone-600">
+        The feed is free for everyone. Optional signup saves you time on firm
+        applications and, soon, unlocks exclusive Bay Studies projects.{" "}
+        <Link href="/vault" className="inline-flex min-h-11 items-center font-semibold text-sage-800 underline">
+          See how
+        </Link>
+      </p>
+
       <section className="mt-10">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-sage-800">
-          {returning ? "Confirm metro" : "Your metro"}
+          Metro <span className="font-normal normal-case tracking-normal text-stone-500">(optional)</span>
         </h2>
         <p className="mt-1 text-xs text-stone-500">
-          {returning
-            ? "Optional — change only if your area moved."
-            : "Pick one to start matching local paid studies."}
+          Helps matching later. You can browse without picking one.
         </p>
         <div className="mt-3 grid gap-2">
           {METROS.map((m) => {
@@ -131,41 +153,31 @@ export default function WelcomePage() {
             );
           })}
         </div>
+        {metro && (
+          <button
+            type="button"
+            onClick={() => setMetro("")}
+            className="mt-2 inline-flex min-h-11 items-center text-xs font-medium text-stone-500 underline"
+          >
+            Clear metro
+          </button>
+        )}
       </section>
 
       <div className="mt-auto pt-8">
         <TrustLine />
-        {!returning && (
-          <button
-            type="button"
-            disabled={!metro}
-            onClick={continueNext}
-            className="mt-4 min-h-12 w-full rounded-xl bg-sage-700 px-4 py-3.5 text-base font-semibold text-white transition hover:bg-sage-800 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Continue
-          </button>
-        )}
-        {returning && metro && metro !== profile.metro && (
-          <button
-            type="button"
-            onClick={continueNext}
-            className="mt-4 min-h-12 w-full rounded-xl border border-sage-300 bg-white px-4 py-3.5 text-base font-semibold text-sage-900 transition hover:bg-sage-50"
-          >
-            Save metro &amp; open feed
-          </button>
-        )}
         <p className="mt-3 text-center text-xs text-stone-500">
           No account required for this demo — profile stays on your device.{" "}
           <Link
             href="/privacy"
-            className="font-medium text-sage-800 underline"
+            className="inline-flex min-h-11 items-center font-medium text-sage-800 underline"
           >
             Privacy
           </Link>
           {" · "}
           <Link
             href="/about/verify"
-            className="font-medium text-sage-800 underline"
+            className="inline-flex min-h-11 items-center font-medium text-sage-800 underline"
           >
             How we verify
           </Link>

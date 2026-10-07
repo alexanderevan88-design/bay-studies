@@ -39,7 +39,7 @@ export default function AlertsPage() {
         <p className="mt-1 text-sm leading-relaxed text-stone-600">
           In-app only for this demo — no device push yet. Matching publishes
           show a toast on{" "}
-          <Link href="/feed" className="font-semibold text-sage-800 underline">
+          <Link href="/feed" className="inline-flex min-h-11 items-center font-semibold text-sage-800 underline">
             /feed
           </Link>{" "}
           and land below.
@@ -62,7 +62,7 @@ export default function AlertsPage() {
               On{" "}
               <Link
                 href="/admin/ingest"
-                className="font-semibold text-sage-800 underline"
+                className="inline-flex min-h-11 items-center font-semibold text-sage-800 underline"
               >
                 /admin/ingest
               </Link>
@@ -242,7 +242,7 @@ export default function AlertsPage() {
                       <p className="mt-0.5 line-clamp-2 text-xs text-stone-500">
                         {n.body}
                       </p>
-                      <p className="mt-1 text-[11px] text-stone-500">
+                      <p className="mt-1 text-xs text-stone-500">
                         {formatPt(n.createdAt)}
                         {n.matched ? " · match" : " · published"}
                       </p>
@@ -259,7 +259,7 @@ export default function AlertsPage() {
                         <button
                           type="button"
                           onClick={() => markRead(n.id)}
-                          className="inline-flex min-h-9 items-center px-1 text-[11px] font-medium text-stone-500 hover:text-stone-800"
+                          className="inline-flex min-h-11 items-center px-1 text-xs font-medium text-stone-500 hover:text-stone-800"
                         >
                           Mark read
                         </button>
@@ -325,7 +325,7 @@ function Toggle({
       aria-checked={on}
       aria-label={on ? "Turn push off" : "Turn push on"}
       onClick={() => onChange(!on)}
-      className={`relative h-8 w-14 rounded-full transition ${
+      className={`relative h-8 w-14 rounded-full transition before:absolute before:-inset-x-1 before:-inset-y-1.5 before:content-[""] ${
         on ? "bg-sage-700" : "bg-stone-300"
       }`}
     >

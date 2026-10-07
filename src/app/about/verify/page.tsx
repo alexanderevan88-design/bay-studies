@@ -15,7 +15,7 @@ export default function VerifySourcesPage() {
           <Logo size="sm" />
           <Link
             href="/me"
-            className="text-sm font-medium text-sage-700 hover:underline"
+            className="inline-flex min-h-11 items-center text-sm font-medium text-sage-700 hover:underline"
           >
             ← Me
           </Link>
@@ -109,11 +109,11 @@ export default function VerifySourcesPage() {
 
         <p className="rounded-xl border border-dashed border-sage-200 bg-white px-4 py-3 text-center text-sm font-medium text-sage-800">
           No fee. Ever. · Bay Area verified firms ·{" "}
-          <Link href="/privacy" className="underline">
+          <Link href="/privacy" className="inline-flex min-h-11 items-center underline">
             Privacy
           </Link>
           {" · "}
-          <Link href="/feed" className="underline">
+          <Link href="/feed" className="inline-flex min-h-11 items-center underline">
             Back to feed
           </Link>
         </p>

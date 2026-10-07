@@ -41,6 +41,7 @@ function BottomNavInner() {
   const savedActive = pathname.startsWith("/feed") && tab === "saved";
   const meActive =
     pathname.startsWith("/me") ||
+    pathname.startsWith("/vault") ||
     pathname.startsWith("/alerts") ||
     pathname.startsWith("/about") ||
     pathname.startsWith("/privacy");
@@ -90,7 +91,7 @@ function TabLink({
         {icon === "saved" && <SavedIcon active={active} />}
         {icon === "me" && <MeIcon active={active} />}
         {badge != null && badge > 0 && (
-          <span className="absolute -right-2.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-bold leading-none text-white">
+          <span className="absolute -right-2.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-rose-500 px-1 text-xs font-bold leading-none text-white">
             {badge > 9 ? "9+" : badge}
           </span>
         )}
