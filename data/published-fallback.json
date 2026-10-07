@@ -308,8 +308,8 @@
     "pay": 150,
     "durationMinutes": 60,
     "type": "ux-interview",
-    "modality": "remote",
-    "location": "Peninsula",
+    "modality": "in-person",
+    "location": "Palo Alto, CA",
     "metro": [
       "peninsula"
     ],
