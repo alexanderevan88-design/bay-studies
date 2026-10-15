@@ -1,5 +1,35 @@
 [
  {
+  "id": "pub-em-curion-rwc-j105059",
+  "title": "Redwood City beverage home use test (RWC_J105059)",
+  "firm": "Curion",
+  "firmDomain": "curioninsights.com",
+  "verified": true,
+  "pay": 50,
+  "payLabel": "$50",
+  "durationMinutes": 0,
+  "durationLabel": "1 week",
+  "type": "product-taste",
+  "modality": "remote",
+  "location": "Redwood City pickup + in-home",
+  "metro": [
+   "peninsula"
+  ],
+  "when": "Pickup Thursday, October 22nd — Pickup sessions available from 9:00 AM - 11:30 AM · 1 week home use",
+  "address": "350 Bridge Parkway, Redwood City, CA 94065",
+  "eligibility": {
+   "notes": "See Curion screener / portal for full eligibility details."
+  },
+  "description": "Curion beverage Home Use Test with pickup in Redwood City. About 1 week. $50 incentive upon study completion. Pickup sessions available Thursday, October 22nd from 9:00 AM to 11:30 AM at 350 Bridge Parkway. Open screener to check if you qualify.",
+  "applyUrl": "https://curioninsights.com/",
+  "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
+  "sourceEmailId": "em-curion-rwc-j105059",
+  "publishedAt": "2026-10-15T02:42:13.000Z",
+  "expired": false,
+  "linkStatus": null,
+  "matchedSourceId": "curion"
+ },
+ {
   "id": "pub-em-watchlab-burlingame-tech-oct13",
   "title": "Burlingame technology study (in person, 90 min)",
   "firm": "watchLAB",
