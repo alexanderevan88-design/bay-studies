@@ -1,5 +1,95 @@
 [
   {
+    "id": "pub-em-tasteocracy-43864-oct22",
+    "title": "Livermore cat food visual study (Test #43864)",
+    "firm": "Tasteocracy",
+    "firmDomain": "tasteocracy.com",
+    "verified": true,
+    "pay": 70,
+    "payLabel": "$70",
+    "durationMinutes": 0,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Livermore, CA",
+    "metro": [
+      "east-bay"
+    ],
+    "when": "Thursday, October 22 — Sessions 10:30 AM - 4:15 PM",
+    "address": "3168 Constitution Drive, Suite 200, Livermore, CA 94551",
+    "eligibility": {
+      "ageMin": 18,
+      "ageMax": 65,
+      "notes": "Ages 18-65 with 1-4 cats in the household. See Tasteocracy screener for full eligibility."
+    },
+    "description": "Tasteocracy visual research study in Livermore: view and evaluate different cat food products and share your opinions. No tasting involved. For cat owners ages 18-65 with 1-4 cats. Thursday, October 22, sessions 10:30 AM to 4:15 PM. Pays $70. Log in to your Tasteocracy account and look for Test #43864 (\"Calling All Feline Food Inspectors!\") to see if you qualify.",
+    "applyUrl": "https://www.tasteocracy.com/become-tester",
+    "portalNote": "Join Tasteocracy free (Livermore local panel), then log in and look for Test #43864 “Calling All Feline Food Inspectors!”.",
+    "sourceEmailId": "em-tasteocracy-43864-oct22",
+    "publishedAt": "2026-10-16T15:53:22.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "tasteocracy"
+  },
+  {
+    "id": "pub-em-curion-rwc-j104414",
+    "title": "Redwood City beverage study (RWC_J104414)",
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "pay": 40,
+    "payLabel": "$40",
+    "durationMinutes": 30,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "when": "Thursday, October 22nd — Sessions available from 9:00 AM - 12:45 PM",
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "description": "Curion in-person beverage study in Redwood City. About 30 minutes. $40 incentive. Sessions available Thursday, October 22nd from 9:00 AM to 12:45 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "sourceEmailId": "em-curion-rwc-j104414",
+    "publishedAt": "2026-10-16T01:28:51.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion"
+  },
+  {
+    "id": "pub-em-curion-rwc-j105267",
+    "title": "Redwood City beverage study, 2 sessions (RWC_J105267)",
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "pay": 90,
+    "payLabel": "$90",
+    "durationMinutes": 90,
+    "durationLabel": "Two 45-min sessions",
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "when": "Tuesday, October 27th AND Wednesday, October 28th — Sessions available from 9:00 AM - 1:00 PM",
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "description": "Curion in-person beverage study in Redwood City with two 45-minute sessions, Tuesday, October 27th and Wednesday, October 28th (sessions available 9:00 AM to 1:00 PM) at 350 Bridge Parkway. $90 upon study completion. Open screener to check if you qualify.",
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "sourceEmailId": "em-curion-rwc-j105267",
+    "publishedAt": "2026-10-16T09:19:44.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion"
+  },
+  {
     "id": "pub-em-nichols-266414-oct20",
     "title": "Sunnyvale local issues study (266414)",
     "firm": "Nichols",
@@ -16,7 +106,7 @@
       "san-jose",
       "east-bay"
     ],
-    "when": "Tuesday, October 20th \u2014 Sessions at 5:45 PM and 8:00 PM",
+    "when": "Tuesday, October 20th — Sessions at 5:45 PM and 8:00 PM",
     "eligibility": {
       "notes": "See Nichols screener for full eligibility details."
     },
@@ -31,7 +121,7 @@
   },
   {
     "id": "pub-cl-7983404043",
-    "title": "San Francisco patient & caregiver interview (Sj\u00f6gren's, lupus, RA, PsA)",
+    "title": "San Francisco patient & caregiver interview (Sjögren's, lupus, RA, PsA)",
     "firm": "Research America",
     "firmDomain": "metrixmatrix.com",
     "verified": false,
@@ -48,14 +138,14 @@
       "san-jose",
       "east-bay"
     ],
-    "when": "November 9\u201312",
+    "when": "November 9–12",
     "expiresAt": "2026-11-13T08:00:00.000Z",
     "eligibility": {
-      "notes": "Diagnosed with Sj\u00f6gren's Disease, Systemic Lupus Erythematosus (SLE/Lupus), Rheumatoid Arthritis, or Psoriatic Arthritis, or a caregiver of someone with those conditions."
+      "notes": "Diagnosed with Sjögren's Disease, Systemic Lupus Erythematosus (SLE/Lupus), Rheumatoid Arthritis, or Psoriatic Arthritis, or a caregiver of someone with those conditions."
     },
-    "description": "Research America (Metrix Matrix) paid market research interview in San Francisco. About 60 minutes, $200 for qualified participants who complete the interview. Dates November 9\u201312. In-person one-on-one; no medications or treatments. Found on Craigslist SF Bay jobs \u2192 etc.",
+    "description": "Research America (Metrix Matrix) paid market research interview in San Francisco. About 60 minutes, $200 for qualified participants who complete the interview. Dates November 9–12. In-person one-on-one; no medications or treatments. Found on Craigslist SF Bay jobs → etc.",
     "applyUrl": "https://survey.metrixmatrix.com/SE/?st=vj921f4JKCQ34SJwnKJ4xEL03Cf0bWvfQ%2FlMG%2BUMl4o%3D",
-    "portalNote": "Source: Craigslist SF Bay jobs \u2192 etc. Unverified until you confirm the firm. Apply opens Research America's Metrix Matrix registration survey.",
+    "portalNote": "Source: Craigslist SF Bay jobs → etc. Unverified until you confirm the firm. Apply opens Research America's Metrix Matrix registration survey.",
     "publishedAt": "2026-10-15T16:01:52.000Z",
     "expired": false,
     "linkStatus": null
@@ -76,14 +166,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Pickup Thursday, October 22nd \u2014 Pickup sessions available from 9:00 AM - 11:30 AM \u00b7 1 week home use",
+    "when": "Pickup Thursday, October 22nd — Pickup sessions available from 9:00 AM - 11:30 AM · 1 week home use",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "See Curion screener / portal for full eligibility details."
     },
     "description": "Curion beverage Home Use Test with pickup in Redwood City. About 1 week. $50 incentive upon study completion. Pickup sessions available Thursday, October 22nd from 9:00 AM to 11:30 AM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion's homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
     "sourceEmailId": "em-curion-rwc-j105059",
     "publishedAt": "2026-10-15T02:42:13.000Z",
     "expired": false,
@@ -106,12 +196,12 @@
       "peninsula",
       "sf"
     ],
-    "when": "October 19\u201323",
+    "when": "October 19–23",
     "expiresAt": "2026-10-24T07:00:00.000Z",
     "eligibility": {
       "notes": "All genders. Take the short preliminary survey; watchLAB calls the phone number you give if you match."
     },
-    "description": "watchLAB is recruiting for a paid in-person study on technology in Burlingame, Oct 19\u201323. About 90 minutes, up to $175. Start with a few-minute preliminary survey; if your answers fit, they reach out by phone. Questions: 312-625-0099.",
+    "description": "watchLAB is recruiting for a paid in-person study on technology in Burlingame, Oct 19–23. About 90 minutes, up to $175. Start with a few-minute preliminary survey; if your answers fit, they reach out by phone. Questions: 312-625-0099.",
     "applyUrl": "https://www.tfaforms.com/5237700",
     "portalNote": "Public preliminary survey (tracking link removed).",
     "sourceEmailId": "em-watchlab-burlingame-oct13",
@@ -165,14 +255,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Thursday, October 15th \u2014 Sessions available from 3:30 PM - 6:30 PM",
+    "when": "Thursday, October 15th — Sessions available from 3:30 PM - 6:30 PM",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "Child/parent study. See Curion screener / portal for full eligibility details."
     },
     "description": "Curion in-person child study in Redwood City. About 30 minutes. $50 or $90 incentive depending on how you qualify. Sessions available Thursday, October 15th from 3:30 PM to 6:30 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion's homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
     "sourceEmailId": "em-curion-rwc-j105166",
     "publishedAt": "2026-10-15T00:04:10.000Z",
     "expired": false,
@@ -194,14 +284,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Tuesday, October 20th \u2014 Sessions available from 3:00 PM - 5:00 PM",
+    "when": "Tuesday, October 20th — Sessions available from 3:00 PM - 5:00 PM",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "See Curion screener / portal for full eligibility details."
     },
     "description": "Curion in-person beverage study in Redwood City. About 30 minutes. $40 incentive. Sessions available Tuesday, October 20th from 3:00 PM to 5:00 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion's homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
     "sourceEmailId": "em-curion-rwc-j105233",
     "publishedAt": "2026-10-13T16:20:08.000Z",
     "expired": false,
@@ -223,14 +313,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Monday, October 26th \u2014 Sessions available from 9:00 AM - 2:00 PM",
+    "when": "Monday, October 26th — Sessions available from 9:00 AM - 2:00 PM",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "See Curion screener / portal for full eligibility details."
     },
     "description": "Curion in-person food study in Redwood City. About 30 minutes. $40 incentive. Sessions available Monday, October 26th from 9:00 AM to 2:00 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion's homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
     "sourceEmailId": "em-curion-rwc-j105261",
     "publishedAt": "2026-10-10T16:06:00.000Z",
     "expired": false,
@@ -252,14 +342,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Friday, October 16th \u2014 Sessions available from 9:00 AM - 1:00 PM",
+    "when": "Friday, October 16th — Sessions available from 9:00 AM - 1:00 PM",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "See Curion screener / portal for full eligibility details."
     },
     "description": "Curion in-person beverage study in Redwood City. About 45 minutes. $45 incentive. Sessions available Friday, October 16th from 9:00 AM to 1:00 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion's homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
     "sourceEmailId": "em-curion-rwc-j105037",
     "publishedAt": "2026-10-10T16:06:00.000Z",
     "expired": false,
@@ -282,14 +372,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Pickup Tuesday, October 20th \u2014 Sessions available from 2:00 PM - 5:30 PM \u00b7 1 week home use",
+    "when": "Pickup Tuesday, October 20th — Sessions available from 2:00 PM - 5:30 PM · 1 week home use",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "See Curion screener / portal for full eligibility details."
     },
     "description": "Curion food Home Use Test with pickup in Redwood City. About 1 week. $50 or $80 incentive depending on how you qualify, upon study completion. Pickup sessions available Tuesday, October 20th from 2:00 PM to 5:30 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion's homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
     "sourceEmailId": "em-curion-rwc-j105215",
     "publishedAt": "2026-10-09T16:21:05.000Z",
     "expired": false,
@@ -311,14 +401,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Tuesday, October 13th \u2014 Sessions available from 9:00 AM - 12:00 PM",
+    "when": "Tuesday, October 13th — Sessions available from 9:00 AM - 12:00 PM",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "See Curion screener / portal for full eligibility details."
     },
     "description": "Curion in-person beverage study in Redwood City. About 30 minutes. $40 incentive. Sessions available Tuesday, October 13th from 9:00 AM to 12:00 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion's homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
     "sourceEmailId": "em-curion-rwc-j105218",
     "publishedAt": "2026-10-09T00:52:00.000Z",
     "expired": false,
@@ -345,13 +435,13 @@
       "san-jose",
       "east-bay"
     ],
-    "when": "October 19th \u2013 November 6th",
+    "when": "October 19th – November 6th",
     "eligibility": {
-      "notes": "Music lovers ages 16\u201335. Non-disclosure agreement required. See screener for full eligibility."
+      "notes": "Music lovers ages 16–35. Non-disclosure agreement required. See screener for full eligibility."
     },
-    "description": "Opinions for Cash (via dscout) seeking music lovers for an online community board plus individual interview about music and AI platforms. OBB is 5 days / about 20 minutes per day ($200). IDI is 60 minutes ($90). Online, US nationwide, October 19\u2013November 6. Completing the pre-screen does not confirm participation.",
+    "description": "Opinions for Cash (via dscout) seeking music lovers for an online community board plus individual interview about music and AI platforms. OBB is 5 days / about 20 minutes per day ($200). IDI is 60 minutes ($90). Online, US nationwide, October 19–November 6. Completing the pre-screen does not confirm participation.",
     "applyUrl": "https://app.dscout.com/panels-ui/s/24e1b7d7-b1d3-4d46-8ae1-df9b0307a936",
-    "portalNote": "Direct dscout panel screener. Recruiter is Opinions for Cash (unverified aggregator) \u2014 confirm before you apply. Personal tracking params stripped from the Apply link.",
+    "portalNote": "Direct dscout panel screener. Recruiter is Opinions for Cash (unverified aggregator) — confirm before you apply. Personal tracking params stripped from the Apply link.",
     "sourceEmailId": "em-opinions-music-lovers-oct8",
     "publishedAt": "2026-10-09T00:52:00.000Z",
     "expired": false,
@@ -372,14 +462,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Friday, October 16th \u2014 Sessions available from 2:00 PM - 6:30 PM",
+    "when": "Friday, October 16th — Sessions available from 2:00 PM - 6:30 PM",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "See Curion screener / portal for full eligibility details."
     },
     "description": "Curion in-person beverage study in Redwood City. About 30 minutes. $40 incentive. Sessions available Friday, October 16th from 2:00 PM to 6:30 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion's homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
     "sourceEmailId": "em-live-muyrwc01-ovnrzz",
     "publishedAt": "2026-10-07T22:35:48.000Z",
     "expired": false,
@@ -402,14 +492,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Tuesday, October 13th AND Friday, October 16th \u2014 Sessions available from 2:30 PM - 6:30 PM",
+    "when": "Tuesday, October 13th AND Friday, October 16th — Sessions available from 2:30 PM - 6:30 PM",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "See Curion screener / portal for full eligibility details."
     },
     "description": "Curion in-person beverage study in Redwood City. Two 45-minute sessions. $100 upon study completion. Sessions available Tuesday, October 13th and Friday, October 16th from 2:30 PM to 6:30 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion's homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
     "publishedAt": "2026-10-07T04:00:28.289Z",
     "expired": false,
     "linkStatus": null,
@@ -430,14 +520,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Wednesday, October 14th \u2014 Sessions available from 4:00 PM - 6:15 PM",
+    "when": "Wednesday, October 14th — Sessions available from 4:00 PM - 6:15 PM",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "See Curion screener / portal for full eligibility details."
     },
     "description": "Curion in-person food study in Redwood City. About 30 minutes. $90 incentive. Sessions available Wednesday, October 14th from 4:00 PM to 6:15 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion's homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
     "publishedAt": "2026-10-07T04:00:28.289Z",
     "expired": false,
     "linkStatus": null,
@@ -463,11 +553,11 @@
       "san-jose",
       "east-bay"
     ],
-    "when": "Starting Oct 2 2026 \u2014 3 weeks",
+    "when": "Starting Oct 2 2026 — 3 weeks",
     "eligibility": {
       "notes": "Skin Care product testers who complete the pre-qualification questionnaire. Focus Group/Sago contacts qualifiers within about 72 hours."
     },
-    "description": "Focus Group (Sago) Consumer Skin Care product test. About $90 for members who qualify and complete the study. In-home product use plus online questionnaires, about 3 weeks. Reference HUT261097860. Completing the screener does not confirm participation \u2014 the firm follows up if you are selected.",
+    "description": "Focus Group (Sago) Consumer Skin Care product test. About $90 for members who qualify and complete the study. In-home product use plus online questionnaires, about 3 weeks. Reference HUT261097860. Completing the screener does not confirm participation — the firm follows up if you are selected.",
     "applyUrl": "https://www.focusgroup.com/Account/Join",
     "portalNote": "Sago screeners are per-member invites, so there's no shareable study link. Join Focus Group by Sago free (or log in), then look for this study on your Survey Dashboard. It only shows up if Sago invites you based on your profile.",
     "publishedAt": "2026-10-07T04:00:28.289Z",
@@ -490,14 +580,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Wednesday, October 14th or Thursday, October 15th \u2014 Sessions available from 9:00 AM - 12:00 PM",
+    "when": "Wednesday, October 14th or Thursday, October 15th — Sessions available from 9:00 AM - 12:00 PM",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "See Curion screener / portal for full eligibility details."
     },
     "description": "Curion in-person food study in Redwood City. About 30 minutes. $40 incentive. Sessions available Wednesday, October 14th or Thursday, October 15th from 9:00 AM to 12:00 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion's homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
     "publishedAt": "2026-10-07T04:00:28.289Z",
     "expired": false,
     "linkStatus": null,
@@ -523,11 +613,11 @@
       "san-jose",
       "east-bay"
     ],
-    "when": "Research happening 02-Nov-2026 \u2014 11 days",
+    "when": "Research happening 02-Nov-2026 — 11 days",
     "eligibility": {
       "notes": "Members who complete the pre-qualification questionnaire. Focus Group/Sago contacts qualifiers within about 72 hours."
     },
-    "description": "Focus Group (Sago) Oral Care research study. About $70 for members who qualify and complete the study. Online, research happening 02-Nov-2026 for about 11 days. Reference HUT261100192. Completing the screener does not confirm participation \u2014 the firm follows up if you are selected.",
+    "description": "Focus Group (Sago) Oral Care research study. About $70 for members who qualify and complete the study. Online, research happening 02-Nov-2026 for about 11 days. Reference HUT261100192. Completing the screener does not confirm participation — the firm follows up if you are selected.",
     "applyUrl": "https://www.focusgroup.com/Account/Join",
     "portalNote": "Sago screeners are per-member invites, so there's no shareable study link. Join Focus Group by Sago free (or log in), then look for this study on your Survey Dashboard. It only shows up if Sago invites you based on your profile.",
     "sourceEmailId": "em-live-muxktm9u-z5d4ys",
@@ -551,14 +641,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Monday, October 12th \u2014 Sessions available from 3:30 PM - 6:30 PM",
+    "when": "Monday, October 12th — Sessions available from 3:30 PM - 6:30 PM",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "Child/parent study. See Curion screener / portal for full eligibility details."
     },
     "description": "Curion in-person child study in Redwood City. About 30 minutes. $50 or $90 incentive depending on how you qualify. Sessions available Monday, October 12th from 3:30 PM to 6:30 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion's homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
     "sourceEmailId": "em-live-muxktr8w-yj9bl3",
     "publishedAt": "2026-10-07T03:58:36.879Z",
     "expired": false,
@@ -585,11 +675,11 @@
       "san-jose",
       "east-bay"
     ],
-    "when": "Starting Oct 23 2026 \u2014 4 weeks",
+    "when": "Starting Oct 23 2026 — 4 weeks",
     "eligibility": {
       "notes": "Dog owners / Pet Food product testers who complete the pre-qualification questionnaire. Focus Group/Sago contacts qualifiers within about 72 hours."
     },
-    "description": "Focus Group (Sago) in-home Pet Food product test. About $150 for members who qualify and complete the study. In-home product use plus online questionnaires, starting Oct 23 2026 for about 4 weeks. Reference HUT261094315. Completing the screener does not confirm participation \u2014 the firm follows up if you are selected.",
+    "description": "Focus Group (Sago) in-home Pet Food product test. About $150 for members who qualify and complete the study. In-home product use plus online questionnaires, starting Oct 23 2026 for about 4 weeks. Reference HUT261094315. Completing the screener does not confirm participation — the firm follows up if you are selected.",
     "applyUrl": "https://www.focusgroup.com/Account/Join",
     "portalNote": "Sago screeners are per-member invites, so there's no shareable study link. Join Focus Group by Sago free (or log in), then look for this study on your Survey Dashboard. It only shows up if Sago invites you based on your profile.",
     "publishedAt": "2026-10-05T17:34:33.000Z",
@@ -616,11 +706,11 @@
       "san-jose",
       "east-bay"
     ],
-    "when": "Oct 22\u2013Dec 17 2026",
+    "when": "Oct 22–Dec 17 2026",
     "eligibility": {
       "notes": "Hair Care product testers who complete the pre-qualification questionnaire. Focus Group/Sago contacts qualifiers within about 72 hours."
     },
-    "description": "Focus Group (Sago) in-home Hair Care product test. About $200 for 8 weeks of testing and recalls, with optional picture ($24) and video blog ($40) add-ons. In-home product use plus online surveys, Oct 22\u2013Dec 17 2026. Reference HUT261099264. Completing the screener does not confirm participation \u2014 the firm follows up if you are selected.",
+    "description": "Focus Group (Sago) in-home Hair Care product test. About $200 for 8 weeks of testing and recalls, with optional picture ($24) and video blog ($40) add-ons. In-home product use plus online surveys, Oct 22–Dec 17 2026. Reference HUT261099264. Completing the screener does not confirm participation — the firm follows up if you are selected.",
     "applyUrl": "https://www.focusgroup.com/Account/Join",
     "portalNote": "Sago screeners are per-member invites, so there's no shareable study link. Join Focus Group by Sago free (or log in), then look for this study on your Survey Dashboard. It only shows up if Sago invites you based on your profile.",
     "publishedAt": "2026-10-05T16:40:00.000Z",
@@ -629,7 +719,7 @@
   },
   {
     "id": "pub-cl-7974124959",
-    "title": "Participants needed, paid Market Research Study \u2014 pays $400",
+    "title": "Participants needed, paid Market Research Study — pays $400",
     "firm": "paidfocusgroupstudies.com",
     "firmDomain": "paidfocusgroupstudies.com",
     "verified": false,
@@ -649,16 +739,16 @@
     "eligibility": {
       "notes": "Resident of San Francisco County or a surrounding county. See the screener."
     },
-    "description": "Paid focus group on social issues. $400 for San Francisco County residents or surrounding counties. Found on Craigslist SF Bay jobs \u2192 etc. The firm is an unverified aggregator \u2014 confirm before you apply.",
+    "description": "Paid focus group on social issues. $400 for San Francisco County residents or surrounding counties. Found on Craigslist SF Bay jobs → etc. The firm is an unverified aggregator — confirm before you apply.",
     "applyUrl": "https://paidfocusgroupstudies.com",
-    "portalNote": "Source: Craigslist SF Bay jobs \u2192 etc. Unverified aggregator \u2014 confirm the firm before you apply.",
+    "portalNote": "Source: Craigslist SF Bay jobs → etc. Unverified aggregator — confirm the firm before you apply.",
     "publishedAt": "2026-10-04T17:50:00.000Z",
     "expired": false,
     "linkStatus": null
   },
   {
     "id": "pub-cl-7975583982",
-    "title": "Get paid for your opinions \u2014 Research America panel (Bay Area)",
+    "title": "Get paid for your opinions — Research America panel (Bay Area)",
     "firm": "Research America",
     "firmDomain": "metrixmatrix.com",
     "verified": false,
@@ -675,13 +765,13 @@
       "san-jose",
       "east-bay"
     ],
-    "when": "Ongoing panel \u2014 invites vary",
+    "when": "Ongoing panel — invites vary",
     "eligibility": {
       "notes": "Adults. Panel signup, not one session. Pay varies by study."
     },
     "description": "Research America panel signup from a Craigslist Bay Area posting (Sacramento duplicate not listed). Surveys, interviews, or focus groups, online or occasionally in person. Pay varies. Confirm the signup link before you join.",
     "applyUrl": "https://survey.metrixmatrix.com/SE/?st=tV6aAl7DSRd1VVaA33cNMZ78Z3luCjlalwqpRB7u+rc=",
-    "portalNote": "Source: Craigslist SF Bay jobs \u2192 etc. Generic research panel \u2014 pay varies. Unverified until you confirm the firm.",
+    "portalNote": "Source: Craigslist SF Bay jobs → etc. Generic research panel — pay varies. Unverified until you confirm the firm.",
     "publishedAt": "2026-10-04T17:50:00.000Z",
     "expired": false,
     "linkStatus": null
@@ -704,7 +794,7 @@
     "eligibility": {
       "notes": "See screener for full eligibility details"
     },
-    "description": "---------- Forwarded message ----------\r\nFrom: *User Interviews* <>\r\nDate: Sun, Oct 4, 2026 at 1:53 PM\r\nSubject: You've been matched! Earn $150 for November Palo Alto Customer\r\nClinic 1:1 Research Session with Sarah\r\nTo: Jake Alexander <>\r\n\r\n[image: ui-logo]\r\n\r\n\ud83d\udc4b\r\nYou've been matched with a study based on your professional profile!\r\nInterested? Start screener here\r\n<https://www.userinterviews.com/projects/WG08mjKwIA/apply",
+    "description": "---------- Forwarded message ----------\r\nFrom: *User Interviews* <>\r\nDate: Sun, Oct 4, 2026 at 1:53 PM\r\nSubject: You've been matched! Earn $150 for November Palo Alto Customer\r\nClinic 1:1 Research Session with Sarah\r\nTo: Jake Alexander <>\r\n\r\n[image: ui-logo]\r\n\r\n👋\r\nYou've been matched with a study based on your professional profile!\r\nInterested? Start screener here\r\n<https://www.userinterviews.com/projects/WG08mjKwIA/apply",
     "applyUrl": "https://www.userinterviews.com/projects/WG08mjKwIA/apply",
     "publishedAt": "2026-10-04T16:21:04.508Z",
     "expired": false,
@@ -727,7 +817,7 @@
       "sf",
       "san-jose"
     ],
-    "when": "November \u2014 see screener for dates",
+    "when": "November — see screener for dates",
     "eligibility": {
       "notes": "Early applicant invite; see screener for full eligibility."
     },
@@ -739,7 +829,7 @@
   },
   {
     "id": "pub-em-live-muta8tdg-sb57lw",
-    "title": "\ud83d\udd25 New Study: Get Paid to Workout! NEW On-Site Study (Fremont, CA) - Earn $75.00 via Visa gift card",
+    "title": "🔥 New Study: Get Paid to Workout! NEW On-Site Study (Fremont, CA) - Earn $75.00 via Visa gift card",
     "firm": "User Interviews",
     "firmDomain": "userinterviews.com",
     "verified": true,
@@ -759,7 +849,7 @@
     "eligibility": {
       "notes": "See screener for full eligibility details"
     },
-    "description": "\ud83d\udc4b Apply below to be considered if you think you may be a fit!\r\n\r\nInterested? Start screener here!\r\nhttps://www.userinterviews.com/projects/XfxPIhjs7g/apply\r\n\r\nTitle: Get Paid to Workout! NEW On-Site Study (Fremont, CA)\r\n\r\nIncentive: $75.00 via Visa gift card\r\n\r\n\r\nSession length: 60 minutes\r\n\r\nFormat:\r\n\r\n Focus Group in Fremont, CA\r\n\r\n\r\nIf selecte",
+    "description": "👋 Apply below to be considered if you think you may be a fit!\r\n\r\nInterested? Start screener here!\r\nhttps://www.userinterviews.com/projects/XfxPIhjs7g/apply\r\n\r\nTitle: Get Paid to Workout! NEW On-Site Study (Fremont, CA)\r\n\r\nIncentive: $75.00 via Visa gift card\r\n\r\n\r\nSession length: 60 minutes\r\n\r\nFormat:\r\n\r\n Focus Group in Fremont, CA\r\n\r\n\r\nIf selecte",
     "applyUrl": "https://www.userinterviews.com/projects/XfxPIhjs7g/apply",
     "publishedAt": "2026-10-04T04:18:00.134Z",
     "expired": false,
@@ -779,12 +869,12 @@
     "metro": [
       "sf"
     ],
-    "when": "Thursday, Oct 15 \u2014 2-hour focus groups",
+    "when": "Thursday, Oct 15 — 2-hour focus groups",
     "address": "Fieldwork San Francisco (see portal for facility)",
     "eligibility": {
       "notes": "SF-area respondents. See the Fieldwork portal for full eligibility."
     },
-    "description": "Fieldwork in-person focus group in San Francisco. About 2 hours. $300 incentive. Sessions on Oct 15 for SF-area respondents. Open the Fieldwork dashboard to check if you qualify and pick a slot. Does not overlap the Curion Redwood City sessions on Oct 12\u201313.",
+    "description": "Fieldwork in-person focus group in San Francisco. About 2 hours. $300 incentive. Sessions on Oct 15 for SF-area respondents. Open the Fieldwork dashboard to check if you qualify and pick a slot. Does not overlap the Curion Redwood City sessions on Oct 12–13.",
     "applyUrl": "https://pate.fieldwork.com",
     "portalNote": "Listed on the Fieldwork respondent dashboard. Open the portal to confirm times and apply.",
     "publishedAt": "2026-10-03T16:29:57.608088Z",
@@ -804,14 +894,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Tuesday, October 13th \u2014 Sessions available from 9:00 AM - 2:15 PM",
+    "when": "Tuesday, October 13th — Sessions available from 9:00 AM - 2:15 PM",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "See Curion screener / portal for full eligibility details."
     },
-    "description": "Curion in-person beverage study in Redwood City. About 30 minutes. $40 incentive. Tuesday, October 13th \u2014 Sessions available from 9:00 AM - 2:15 PM. Location: 350 Bridge Parkway, Redwood City, CA 94065. Open screener to check if you qualify.",
+    "description": "Curion in-person beverage study in Redwood City. About 30 minutes. $40 incentive. Tuesday, October 13th — Sessions available from 9:00 AM - 2:15 PM. Location: 350 Bridge Parkway, Redwood City, CA 94065. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion\u2019s homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
     "sourceEmailId": "em-live-murjji27-epj6ow",
     "publishedAt": "2026-10-02T22:36:32.915838Z",
     "matchedSourceId": "curion"
@@ -830,14 +920,14 @@
     "metro": [
       "peninsula"
     ],
-    "when": "Monday, Oct 12 \u2014 sessions 9:00 AM\u20135:30 PM",
+    "when": "Monday, Oct 12 — sessions 9:00 AM–5:30 PM",
     "address": "350 Bridge Parkway, Redwood City, CA 94065",
     "eligibility": {
       "notes": "See Curion screener / portal for full eligibility."
     },
     "description": "Curion in-person study in Redwood City. About 30 minutes. $40 incentive. Sessions available Oct 12 from 9:00 AM to 5:30 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
     "applyUrl": "https://curioninsights.com/",
-    "portalNote": "Opens Curion\u2019s homepage \u2014 join or sign in with your own free panel account to find open screeners.",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
     "sourceEmailId": "em-live-murgxgsl-rmrgy7",
     "publishedAt": "2026-10-02T21:35:58.010420Z",
     "matchedSourceId": "curion"
