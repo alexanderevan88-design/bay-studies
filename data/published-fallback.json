@@ -1,5 +1,34 @@
 [
   {
+    "id": "pub-em-le-heart-monitor-sf-oct16",
+    "title": "San Francisco wearable heart monitor feedback study (3 hr)",
+    "firm": "L&E Opinions",
+    "firmDomain": "leopinions.com",
+    "verified": true,
+    "pay": 350,
+    "payLabel": "$350",
+    "durationMinutes": 180,
+    "type": "ux-interview",
+    "modality": "in-person",
+    "location": "San Francisco, CA",
+    "metro": [
+      "sf"
+    ],
+    "when": "Dates not listed yet (sessions in San Francisco)",
+    "eligibility": {
+      "ageMin": 18,
+      "notes": "Adults over 18, all genders. Photo ID required. U.S. citizens only (L&E rule). See the L&E screener for full eligibility."
+    },
+    "description": "L&E Research in-person study in San Francisco: share feedback on a wearable heart monitor and its packaging. About 3 hours including a 15-minute break. Pays $350. No medication is involved. Take the screener to see if you qualify; if you're a fit, an L&E recruiter reaches out to schedule.",
+    "applyUrl": "https://participant.facilitymanagerplus.com/StudyDetails.aspx?k=bd737f8b-3378-4eb7-987b-1b8560aab11e",
+    "portalNote": "Public L&E study page with the screener (no personal tracking). Joining L&E Opinions free helps you get future invites.",
+    "sourceEmailId": "em-le-heart-monitor-oct16",
+    "publishedAt": "2026-10-16T17:39:22.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "le-opinions"
+  },
+  {
     "id": "pub-em-tasteocracy-43864-oct22",
     "title": "Livermore cat food visual study (Test #43864)",
     "firm": "Tasteocracy",
