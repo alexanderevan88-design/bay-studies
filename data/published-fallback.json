@@ -1,5 +1,38 @@
 [
   {
+    "id": "pub-em-focusgroup-hut261103045",
+    "title": "Bodywash in-home product test (HUT261103045)",
+    "firm": "Focus Group (Sago)",
+    "firmDomain": "focusgroup.com",
+    "verified": true,
+    "pay": 20,
+    "payLabel": "$20",
+    "durationMinutes": 20,
+    "durationLabel": "20 min",
+    "type": "product-taste",
+    "modality": "remote",
+    "location": "Internet / online",
+    "metro": [
+      "sf",
+      "oakland",
+      "peninsula",
+      "san-jose",
+      "east-bay"
+    ],
+    "when": "Research happening 20-Oct-2026 — 20 min",
+    "eligibility": {
+      "notes": "Members who complete the pre-qualification questionnaire. Focus Group/Sago contacts qualifiers within about 72 hours."
+    },
+    "description": "Focus Group (Sago) Bodywash research study. $20 for members who qualify and complete it. Offsite, research happening 20-Oct-2026, 20 minutes. Reference HUT261103045. The screener is a recruitment survey: if you qualify, they send you a product to test and you complete a follow-up survey; the incentive is paid only after all surveys are done. Completing the screener does not confirm participation — the firm follows up if you are selected.",
+    "applyUrl": "https://www.focusgroup.com/Account/Join",
+    "portalNote": "Sago screeners are per-member invites, so there's no shareable study link. Join Focus Group by Sago free (or log in), then look for this study on your Survey Dashboard. It only shows up if Sago invites you based on your profile.",
+    "sourceEmailId": "em-focusgroup-hut261103045",
+    "publishedAt": "2026-10-17T19:35:24.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "focusgroup"
+  },
+  {
     "firm": "Curion",
     "firmDomain": "curioninsights.com",
     "verified": true,
