@@ -1,5 +1,65 @@
 [
   {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105167",
+    "title": "Redwood City beverage study, 4 sessions (RWC_J105167)",
+    "pay": 200,
+    "payLabel": "$200",
+    "durationMinutes": 240,
+    "durationLabel": "Four 60-min sessions",
+    "when": "Tuesday, October 20th, Wednesday, October 21st, Thursday, October 22nd AND Friday October 23rd — Sessions available from 9:00 AM - 6:15 PM",
+    "description": "Curion in-person beverage study in Redwood City with four 60-minute sessions, Tuesday, October 20th through Friday, October 23rd (sessions available 9:00 AM to 6:15 PM) at 350 Bridge Parkway. $200 upon study completion. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105167",
+    "publishedAt": "2026-10-17T01:13:25.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105230",
+    "title": "Redwood City home goods study (RWC_J105230)",
+    "pay": 50,
+    "payLabel": "$50",
+    "durationMinutes": 60,
+    "durationLabel": "60 min",
+    "when": "Tuesday, October 27th — Sessions available from 9:00 AM - 5:45 PM",
+    "description": "Curion in-person home goods study in Redwood City, Tuesday, October 27th (sessions available 9:00 AM to 5:45 PM), 60 minutes at 350 Bridge Parkway. $50 incentive. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105230",
+    "publishedAt": "2026-10-17T01:32:28.000Z"
+  },
+  {
     "id": "pub-em-le-heart-monitor-sf-oct16",
     "title": "San Francisco wearable heart monitor feedback study (3 hr)",
     "firm": "L&E Opinions",
