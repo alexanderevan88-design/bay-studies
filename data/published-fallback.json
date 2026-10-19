@@ -1,5 +1,33 @@
 [
   {
+    "id": "pub-em-nichols-266427-oct28",
+    "title": "San Francisco sports, technology & AI focus groups (266427)",
+    "firm": "Nichols",
+    "firmDomain": "nicholsresearch.com",
+    "verified": true,
+    "pay": 175,
+    "payLabel": "$175",
+    "durationMinutes": 120,
+    "type": "focus-group",
+    "modality": "in-person",
+    "location": "San Francisco, CA",
+    "metro": [
+      "sf"
+    ],
+    "when": "Wednesday, October 28 — Sessions at 3:00 PM and 5:30 PM",
+    "eligibility": {
+      "notes": "See Nichols screener for full eligibility details."
+    },
+    "description": "Nichols Research in-person focus groups about sports, technology, and AI in San Francisco. About 2 hours. $175 VISA or MasterCard for those who qualify, are invited, and participate. Sessions Wednesday, October 28 at 3:00 PM and 5:30 PM. Open the public screener to check if you qualify.",
+    "applyUrl": "https://www.surveymonkey.com/r/26-6427",
+    "portalNote": "Public SurveyMonkey screener (study 266427). Completing the screener does not confirm participation.",
+    "sourceEmailId": "em-nichols-266427-oct28",
+    "publishedAt": "2026-10-19T16:35:00.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "nichols"
+  },
+  {
     "id": "pub-em-focusgroup-hut261103045",
     "title": "Bodywash in-home product test (HUT261103045)",
     "firm": "Focus Group (Sago)",
