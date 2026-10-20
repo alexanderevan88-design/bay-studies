@@ -1,5 +1,35 @@
 [
   {
+    "id": "pub-em-curion-rwc-j105281",
+    "title": "Redwood City food home use test (RWC_J105281)",
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "pay": 70,
+    "payLabel": "$70",
+    "durationMinutes": 0,
+    "durationLabel": "1 week",
+    "type": "product-taste",
+    "modality": "remote",
+    "location": "Redwood City pickup + in-home",
+    "metro": [
+      "peninsula"
+    ],
+    "when": "Pickup Thursday, October 29th — Pickup sessions available from 9:00 AM - 11:00 AM · 1 week home use",
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "description": "Curion food Home Use Test with pickup in Redwood City. About 1 week. $70 upon study completion. Pickup sessions available Thursday, October 29th from 9:00 AM to 11:00 AM at 350 Bridge Parkway. Open screener to check if you qualify.",
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
+    "sourceEmailId": "em-curion-rwc-j105281",
+    "publishedAt": "2026-10-20T17:07:49.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion"
+  },
+  {
     "id": "pub-em-nichols-266427-oct28",
     "title": "San Francisco sports, technology & AI focus groups (266427)",
     "firm": "Nichols",
@@ -169,9 +199,9 @@
     "eligibility": {
       "ageMin": 18,
       "ageMax": 65,
-      "notes": "Ages 18-65 with 1-4 cats in the household. See Tasteocracy screener for full eligibility."
+      "notes": "Ages 18-44 with 1-4 cats in the household. See Tasteocracy screener for full eligibility."
     },
-    "description": "Tasteocracy visual research study in Livermore: view and evaluate different cat food products and share your opinions. No tasting involved. For cat owners ages 18-65 with 1-4 cats. Thursday, October 22, sessions 10:30 AM to 4:15 PM. Pays $70. Log in to your Tasteocracy account and look for Test #43864 (\"Calling All Feline Food Inspectors!\") to see if you qualify.",
+    "description": "Tasteocracy visual research study in Livermore: view and evaluate different cat food products and share your opinions. No tasting involved. For cat owners ages 18-44 with 1-4 cats. Thursday, October 22, sessions 10:30 AM to 4:15 PM. Pays $70. Log in to your Tasteocracy account and look for Test #43864 (\"Calling All Feline Food Inspectors!\") to see if you qualify.",
     "applyUrl": "https://www.tasteocracy.com/become-tester",
     "portalNote": "Join Tasteocracy free (Livermore local panel), then log in and look for Test #43864 “Calling All Feline Food Inspectors!”.",
     "sourceEmailId": "em-tasteocracy-43864-oct22",
