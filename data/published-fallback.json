@@ -1,5 +1,93 @@
 [
   {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "pay": 45,
+    "payLabel": "$45",
+    "durationMinutes": 45,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105095",
+    "title": "Redwood City food study (RWC_J105095)",
+    "when": "Friday, October 30th — Sessions available from 9:00 AM - 6:00 PM",
+    "description": "Curion in-person food study in Redwood City. About 45 minutes. $45 incentive. Sessions available Friday, October 30th from 9:00 AM to 6:00 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105095",
+    "publishedAt": "2026-10-21T07:58:38.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "pay": 45,
+    "payLabel": "$45",
+    "durationMinutes": 45,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105275",
+    "title": "Redwood City food study, Nov 3-5 (RWC_J105275)",
+    "when": "Tuesday, November 3rd, Wednesday, November 4th OR Thursday, November 5th — Sessions available from 9:00 AM - 4:15 PM",
+    "description": "Curion in-person food study in Redwood City. About 45 minutes. $45 incentive. Pick one day: Tuesday, November 3rd, Wednesday, November 4th or Thursday, November 5th, sessions 9:00 AM to 4:15 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105275",
+    "publishedAt": "2026-10-21T09:04:41.000Z"
+  },
+  {
+    "id": "pub-em-tasteocracy-43832-oct27",
+    "title": "Livermore crunchy food taste test (Test #43832)",
+    "firm": "Tasteocracy",
+    "firmDomain": "tasteocracy.com",
+    "verified": true,
+    "pay": 50,
+    "payLabel": "$50",
+    "durationMinutes": 45,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Livermore, CA",
+    "metro": [
+      "east-bay"
+    ],
+    "when": "Tuesday, October 27 — Sessions 11 AM - 3:15 PM",
+    "eligibility": {
+      "ageMin": 18,
+      "ageMax": 60,
+      "notes": "Ages 18-60. See Tasteocracy screener for full eligibility."
+    },
+    "description": "Tasteocracy taste test in Livermore for a new food product with flavor and crunch. Ages 18-60. Tuesday, October 27, sessions 11 AM to 3:15 PM, about 45 minutes. Pays $50. Log in to your Tasteocracy account and look for Test #43832 to see if you qualify.",
+    "applyUrl": "https://www.tasteocracy.com/become-tester",
+    "portalNote": "Join Tasteocracy free (Livermore local panel), then log in and look for Test #43832.",
+    "sourceEmailId": "em-tasteocracy-43832-oct27",
+    "publishedAt": "2026-10-21T14:43:12.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "tasteocracy"
+  },
+  {
     "id": "pub-em-curion-rwc-j105281",
     "title": "Redwood City food home use test (RWC_J105281)",
     "firm": "Curion",
