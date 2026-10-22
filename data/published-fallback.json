@@ -1322,5 +1322,32 @@
     "sourceEmailId": "em-live-murgxgsl-rmrgy7",
     "publishedAt": "2026-10-02T21:35:58.010420Z",
     "matchedSourceId": "curion"
+  },
+  {
+    "id": "pub-cl-7986418431",
+    "title": "$300 — Paid online focus group (Nov 4, Alameda County)",
+    "firm": "realfocusgroup.com",
+    "firmDomain": "realfocusgroup.com",
+    "verified": false,
+    "pay": 300,
+    "durationMinutes": 600,
+    "durationLabel": "8:00 a.m.–6:00 p.m.",
+    "type": "focus-group",
+    "modality": "remote",
+    "location": "Online (Zoom) — Alameda County residents",
+    "metro": [
+      "oakland",
+      "east-bay"
+    ],
+    "when": "Wednesday, November 4",
+    "eligibility": {
+      "notes": "Alameda County residents. No experience necessary; all ages and backgrounds welcome. Eligible applicants get a short screening call."
+    },
+    "description": "Paid online focus group over Zoom on Wednesday, November 4, from 8:00 a.m. to 6:00 p.m. $300. For Alameda County residents. Fill out the application; if eligible, someone from their team calls to schedule a short screening. Found on Craigslist — confirm the firm before you apply.",
+    "applyUrl": "https://realfocusgroup.com/groups/online-alameda-county-ca-november-4/?utm_source=craigslist&utm_medium=post&utm_campaign=alameda-nov-4",
+    "portalNote": "Source: Craigslist SF Bay jobs → etc (Oakland). Unverified — confirm before you apply.",
+    "publishedAt": "2026-10-22T16:02:00.000Z",
+    "expired": false,
+    "linkStatus": null
   }
 ]
