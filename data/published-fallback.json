@@ -1,5 +1,65 @@
 [
   {
+    "id": "pub-em-sago-uom261103049",
+    "title": "Mountain View in-person technology study (UOM261103049)",
+    "firm": "Focus Group (Sago)",
+    "firmDomain": "focusgroup.com",
+    "verified": true,
+    "pay": 175,
+    "payLabel": "$175",
+    "durationMinutes": 60,
+    "durationLabel": "60 min",
+    "type": "focus-group",
+    "modality": "in-person",
+    "location": "Mountain View, CA (offsite location)",
+    "metro": [
+      "peninsula",
+      "san-jose"
+    ],
+    "when": "Tuesday, October 27th - Wednesday, October 28th",
+    "eligibility": {
+      "notes": "Members who complete the pre-qualification questionnaire. Sago contacts qualifiers within about 72 hours to verify participation."
+    },
+    "description": "Focus Group (Sago) in-person research study on technology usage at an offsite location in Mountain View. 60 minutes. $175 for members who qualify and complete it. Study dates Tuesday, October 27th to Wednesday, October 28th. Reference UOM261103049. Completing the screener does not confirm participation.",
+    "applyUrl": "https://www.focusgroup.com/Account/Join",
+    "portalNote": "Sago screeners are per-member invites, so there's no shareable study link. Join Focus Group by Sago free (or log in), then look for this study on your Survey Dashboard. It only shows up if Sago invites you based on your profile.",
+    "sourceEmailId": "em-sago-uom261103049",
+    "publishedAt": "2026-10-22T16:05:00.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "focusgroup"
+  },
+  {
+    "id": "pub-em-curion-rwc-j105288",
+    "title": "Redwood City food study (RWC_J105288)",
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "pay": 45,
+    "payLabel": "$40 or $45",
+    "durationMinutes": 45,
+    "durationLabel": "30 or 45 min",
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "when": "Thursday, October 29th — Sessions available from 9:00 AM - 2:00 PM",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "description": "Curion in-person food study in Redwood City. 30 or 45 minutes, with a $40 or $45 incentive depending on how you qualify. Sessions available Thursday, October 29th from 9:00 AM to 2:00 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "sourceEmailId": "em-curion-rwc-j105288",
+    "publishedAt": "2026-10-22T16:05:00.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion"
+  },
+  {
     "id": "pub-em-curion-rwc-j104980",
     "title": "Redwood City personal care home use test (RWC_J104980)",
     "firm": "Curion",
