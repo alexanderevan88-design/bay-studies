@@ -1,5 +1,68 @@
 [
   {
+    "id": "pub-em-curion-rwc-j104980",
+    "title": "Redwood City personal care home use test (RWC_J104980)",
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "pay": 125,
+    "payLabel": "$125",
+    "durationMinutes": 0,
+    "durationLabel": "20 days",
+    "type": "product-taste",
+    "modality": "remote",
+    "location": "Redwood City pickup + in-home",
+    "metro": [
+      "peninsula"
+    ],
+    "when": "Pickup Monday, November 2nd — Pickup sessions available from 9:30 AM - 11:00 AM · 20 day home use",
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "description": "Curion personal care Home Use Test with pickup in Redwood City. 20 days. $125 upon study completion. Pickup sessions available Monday, November 2nd from 9:30 AM to 11:00 AM at 350 Bridge Parkway. Open screener to check if you qualify.",
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion's homepage — join or sign in with your own free panel account to find open screeners.",
+    "sourceEmailId": "em-curion-rwc-j104980",
+    "publishedAt": "2026-10-22T00:10:00.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion"
+  },
+  {
+    "id": "pub-em-sago-hut261102635",
+    "title": "Household Paper Products home use test (HUT261102635)",
+    "firm": "Focus Group (Sago)",
+    "firmDomain": "focusgroup.com",
+    "verified": true,
+    "pay": 30,
+    "payLabel": "$30",
+    "durationMinutes": 20,
+    "durationLabel": "20 min + product test",
+    "type": "product-taste",
+    "modality": "remote",
+    "location": "Offsite / at home",
+    "metro": [
+      "sf",
+      "oakland",
+      "peninsula",
+      "san-jose",
+      "east-bay"
+    ],
+    "when": "Research happening 27-Oct-2026",
+    "eligibility": {
+      "notes": "Members who complete the pre-qualification questionnaire. Sago contacts qualifiers within about 72 hours."
+    },
+    "description": "Focus Group (Sago) Household Paper Products study. $30 for members who qualify and complete it. The 20-minute screener is a recruitment survey; qualifiers are sent a product to test and must complete a follow-up survey before the incentive is paid. Study date 27-Oct-2026. Reference HUT261102635. Completing the screener does not confirm participation.",
+    "applyUrl": "https://www.focusgroup.com/Account/Join",
+    "portalNote": "Sago screeners are per-member invites, so there's no shareable study link. Join Focus Group by Sago free (or log in), then look for this study on your Survey Dashboard. It only shows up if Sago invites you based on your profile.",
+    "sourceEmailId": "em-sago-hut261102635",
+    "publishedAt": "2026-10-22T00:10:00.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "focusgroup"
+  },
+  {
     "firm": "Curion",
     "firmDomain": "curioninsights.com",
     "verified": true,
