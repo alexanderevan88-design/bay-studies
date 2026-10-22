@@ -1,5 +1,65 @@
 [
   {
+    "id": "pub-em-curion-rwc-j105257",
+    "title": "Redwood City beverage study (RWC_J105257)",
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "pay": 40,
+    "payLabel": "$40",
+    "durationMinutes": 30,
+    "durationLabel": "30 min",
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "when": "Monday, November 2nd — Sessions available from 9:00 AM - 10:30 AM",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "description": "Curion in-person beverage study in Redwood City. 30 minutes, $40 incentive. Sessions available Monday, November 2nd from 9:00 AM to 10:30 AM at 350 Bridge Parkway. Open screener to check if you qualify.",
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "sourceEmailId": "em-curion-rwc-j105257",
+    "publishedAt": "2026-10-23T00:05:01.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion"
+  },
+  {
+    "id": "pub-em-curion-rwc-j105265",
+    "title": "Redwood City food study (RWC_J105265)",
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "pay": 45,
+    "payLabel": "$45",
+    "durationMinutes": 45,
+    "durationLabel": "45 min",
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "when": "Monday, October 26th — Sessions available from 9:00 AM - 3:00 PM",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "description": "Curion in-person food study in Redwood City. 45 minutes, $45 incentive. Sessions available Monday, October 26th from 9:00 AM to 3:00 PM at 350 Bridge Parkway. Open screener to check if you qualify.",
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "sourceEmailId": "em-curion-rwc-j105265",
+    "publishedAt": "2026-10-23T00:05:00.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion"
+  },
+  {
     "id": "pub-em-sago-uom261103049",
     "title": "Mountain View in-person technology study (UOM261103049)",
     "firm": "Focus Group (Sago)",
