@@ -1589,5 +1589,65 @@
     "publishedAt": "2026-10-22T16:02:00.000Z",
     "expired": false,
     "linkStatus": null
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105183",
+    "title": "Redwood City food study (RWC_J105183)",
+    "pay": 40,
+    "payLabel": "$40",
+    "durationMinutes": 30,
+    "durationLabel": "30 min",
+    "when": "Tuesday, November 3rd — Sessions available from 9:00 AM - 12:45 PM",
+    "description": "Curion in-person food study in Redwood City on Tuesday, November 3rd (sessions available 9:00 AM to 12:45 PM) at 350 Bridge Parkway. 30-minute session, $40. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105183",
+    "publishedAt": "2026-10-27T00:07:00.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j104981",
+    "title": "Redwood City parent/child study, 2 days (RWC_J104981)",
+    "pay": 125,
+    "payLabel": "$125",
+    "durationMinutes": 60,
+    "durationLabel": "Two 30-min sessions",
+    "when": "Monday, November 2nd AND Tuesday, November 3rd — Sessions available from 4:00 PM - 6:15 PM",
+    "description": "Curion in-person parent/child study in Redwood City over two days, Monday, November 2nd and Tuesday, November 3rd (sessions available 4:00 PM to 6:15 PM) at 350 Bridge Parkway. Two 30-minute sessions, $125. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j104981",
+    "publishedAt": "2026-10-27T00:07:00.000Z"
   }
 ]
