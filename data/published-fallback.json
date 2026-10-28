@@ -1649,5 +1649,126 @@
     "description": "Curion in-person parent/child study in Redwood City over two days, Monday, November 2nd and Tuesday, November 3rd (sessions available 4:00 PM to 6:15 PM) at 350 Bridge Parkway. Two 30-minute sessions, $125. Open screener to check if you qualify.",
     "sourceEmailId": "em-curion-rwc-j104981",
     "publishedAt": "2026-10-27T00:07:00.000Z"
+  },
+  {
+    "id": "pub-em-tasteocracy-43129-oct27",
+    "title": "Afternoon treats home use test (Test #43129)",
+    "firm": "Tasteocracy",
+    "firmDomain": "tasteocracy.com",
+    "verified": true,
+    "pay": 100,
+    "payLabel": "$100",
+    "durationMinutes": null,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Product pickup (see Tasteocracy portal)",
+    "metro": [
+      "east-bay"
+    ],
+    "when": "Pickup Monday, November 2, 10:00 AM - 11:00 AM",
+    "eligibility": {
+      "ageMin": 25,
+      "ageMax": 54,
+      "notes": "Ages 25-54. See Tasteocracy screener for full eligibility."
+    },
+    "description": "Tasteocracy home use test for afternoon snacks and treats: pick up a product, try it at home, and share feedback. Ages 25-54. Pickup Monday, November 2, 10 to 11 AM. Pays $100 on completion. Log in to your Tasteocracy account and look for Test #43129 to see if you qualify.",
+    "applyUrl": "https://www.tasteocracy.com/become-tester",
+    "portalNote": "Join Tasteocracy free, then log in and look for Test #43129.",
+    "sourceEmailId": "em-tasteocracy-43129-oct27",
+    "publishedAt": "2026-10-28T00:10:00.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "tasteocracy"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105308",
+    "title": "Redwood City food study (RWC_J105308)",
+    "pay": 50,
+    "payLabel": "$50",
+    "durationMinutes": 60,
+    "durationLabel": "60 min",
+    "when": "Friday, November 6th — Sessions available from 9:00 AM - 10:15 AM",
+    "description": "Curion in-person food study in Redwood City on Friday, November 6th (sessions available 9:00 AM to 10:15 AM) at 350 Bridge Parkway. 60-minute session, $50. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105308",
+    "publishedAt": "2026-10-28T16:05:00.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105346",
+    "title": "Redwood City food study (RWC_J105346)",
+    "pay": 45,
+    "payLabel": "$45",
+    "durationMinutes": 45,
+    "durationLabel": "45 min",
+    "when": "Monday, November 9th OR Tuesday, November 10th — Sessions available from 9:00 AM - 5:45 PM",
+    "description": "Curion in-person food study in Redwood City on Monday, November 9th or Tuesday, November 10th (sessions available 9:00 AM to 5:45 PM) at 350 Bridge Parkway. 45-minute session, $45. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105346",
+    "publishedAt": "2026-10-28T16:05:00.000Z"
+  },
+  {
+    "id": "pub-em-tasteocracy-43712-oct28",
+    "title": "Chewy fruity treat taste test (Test #43712)",
+    "firm": "Tasteocracy",
+    "firmDomain": "tasteocracy.com",
+    "verified": true,
+    "pay": 60,
+    "payLabel": "$60",
+    "durationMinutes": 60,
+    "durationLabel": "60 min",
+    "type": "product-taste",
+    "modality": "in-person",
+    "location": "Livermore",
+    "metro": [
+      "east-bay"
+    ],
+    "when": "Wednesday, November 4, sessions 10:00 AM - 3:00 PM",
+    "eligibility": {
+      "ageMin": 25,
+      "ageMax": 64,
+      "notes": "Ages 25-64. See Tasteocracy screener for full eligibility."
+    },
+    "description": "Tasteocracy in-person taste test in Livermore for a fruity, chewy product. Ages 25-64. Wednesday, November 4, sessions 10 AM to 3 PM. 60 minutes, $60. Log in to your Tasteocracy account and look for Test #43712 to see if you qualify.",
+    "applyUrl": "https://www.tasteocracy.com/become-tester",
+    "portalNote": "Join Tasteocracy free, then log in and look for Test #43712.",
+    "sourceEmailId": "em-tasteocracy-43712-oct28",
+    "publishedAt": "2026-10-28T16:05:00.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "tasteocracy"
   }
 ]
