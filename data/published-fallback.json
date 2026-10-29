@@ -4,6 +4,69 @@
     "firmDomain": "curioninsights.com",
     "verified": true,
     "type": "product-taste",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105306",
+    "title": "Redwood City beverage study (RWC_J105306)",
+    "pay": 40,
+    "payLabel": "$40",
+    "durationMinutes": 30,
+    "durationLabel": "30 min",
+    "when": "Friday, November 6th — Sessions available from 9:00 AM - 11:15 AM",
+    "description": "Curion in-person beverage study in Redwood City on Friday, November 6th (sessions available 9:00 AM to 11:15 AM) at 350 Bridge Parkway. 30-minute session, $40. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105306",
+    "publishedAt": "2026-10-29T00:10:00.000Z"
+  },
+  {
+    "id": "pub-em-sago-tig261103486",
+    "title": "TV Owners online interview (TIG261103486)",
+    "firm": "Focus Group (Sago)",
+    "firmDomain": "focusgroup.com",
+    "verified": true,
+    "pay": 200,
+    "payLabel": "$200",
+    "durationMinutes": 90,
+    "durationLabel": "90 min",
+    "type": "interview",
+    "modality": "remote",
+    "location": "Online interview",
+    "metro": [
+      "sf",
+      "oakland",
+      "peninsula",
+      "san-jose",
+      "east-bay"
+    ],
+    "when": "Between 04-Nov-2026 and 06-Nov-2026",
+    "eligibility": {
+      "notes": "TV owners who complete the pre-qualification questionnaire. Sago contacts qualifiers within about 72 hours to verify participation."
+    },
+    "description": "Focus Group (Sago) 90-minute online interview with TV owners about their experiences with TVs and what matters when choosing one. $200 for members who qualify and complete it. Study dates between 04-Nov-2026 and 06-Nov-2026. Reference TIG261103486. Completing the screener does not confirm participation.",
+    "applyUrl": "https://www.focusgroup.com/Account/Join",
+    "portalNote": "Sago screeners are per-member invites, so there's no shareable study link. Join Focus Group by Sago free (or log in), then look for this study on your Survey Dashboard. It only shows up if Sago invites you based on your profile.",
+    "sourceEmailId": "em-sago-tig261103486",
+    "publishedAt": "2026-10-29T00:10:00.000Z",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "focusgroup"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
     "metro": [
       "peninsula"
     ],
