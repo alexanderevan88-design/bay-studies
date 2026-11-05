@@ -4,6 +4,66 @@
     "firmDomain": "curioninsights.com",
     "verified": true,
     "type": "product-taste",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105339",
+    "title": "Redwood City food study (RWC_J105339)",
+    "pay": 45,
+    "payLabel": "$45",
+    "durationMinutes": 45,
+    "durationLabel": "45 min",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "when": "Thursday, November 19th — Sessions available from 3:00 PM - 6:00 PM",
+    "description": "Curion in-person food study in Redwood City on Thursday, November 19th (sessions available 3:00 PM to 6:00 PM) at 350 Bridge Parkway. 45-minute session, $45. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105339",
+    "publishedAt": "2026-11-05T17:10:00.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105331",
+    "title": "Redwood City food study (RWC_J105331)",
+    "pay": 50,
+    "payLabel": "$50",
+    "durationMinutes": 60,
+    "durationLabel": "60 min",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "when": "Thursday, November 12th — Sessions available from 9:00 AM - 12:45 PM",
+    "description": "Curion in-person food study in Redwood City on Thursday, November 12th (sessions available 9:00 AM to 12:45 PM) at 350 Bridge Parkway. 60-minute session, $50. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105331",
+    "publishedAt": "2026-11-03T01:00:00.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
     "modality": "in-person",
     "location": "Redwood City / Peninsula",
     "metro": [
@@ -1833,5 +1893,185 @@
     "expired": false,
     "linkStatus": null,
     "matchedSourceId": "tasteocracy"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105303",
+    "title": "Redwood City food study, 2 days (RWC_J105303)",
+    "pay": 100,
+    "payLabel": "$100",
+    "durationMinutes": 120,
+    "durationLabel": "Two 60-min sessions",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "when": "Thursday, November 12th AND Friday, November 13th — Sessions available from 9:00 AM - 2:00 PM",
+    "description": "Curion in-person food study in Redwood City over two days, Thursday, November 12th and Friday, November 13th (sessions available 9:00 AM to 2:00 PM) at 350 Bridge Parkway. Two 60-minute sessions, $100 upon study completion. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105303",
+    "publishedAt": "2026-10-30T16:05:00.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105315",
+    "title": "Redwood City beverage home use test (RWC_J105315)",
+    "pay": 50,
+    "payLabel": "$50",
+    "durationMinutes": 0,
+    "durationLabel": "5 days",
+    "modality": "remote",
+    "location": "Redwood City pickup + in-home",
+    "when": "Pickup Wednesday, November 4th OR Thursday, November 5th — Pickup sessions available from 10:00 AM - 4:30 PM · 5 day home use",
+    "description": "Curion beverage Home Use Test with pickup in Redwood City. 5-day home use, $50 upon study completion. Pickup Wednesday, November 4th or Thursday, November 5th (sessions available 10:00 AM to 4:30 PM) at 350 Bridge Parkway. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105315",
+    "publishedAt": "2026-10-30T16:05:00.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105180",
+    "title": "Redwood City food study (RWC_J105180)",
+    "pay": 45,
+    "payLabel": "$45",
+    "durationMinutes": 45,
+    "durationLabel": "45 min",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "when": "Wednesday, November 11th — Sessions available from 9:00 AM - 7:30 PM",
+    "description": "Curion in-person food study in Redwood City on Wednesday, November 11th (sessions available 9:00 AM to 7:30 PM) at 350 Bridge Parkway. 45-minute session, $45. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105180",
+    "publishedAt": "2026-10-30T16:05:00.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105270",
+    "title": "Redwood City home goods home use test (RWC_J105270)",
+    "pay": 80,
+    "payLabel": "$80",
+    "durationMinutes": 0,
+    "durationLabel": "4.5 weeks",
+    "modality": "remote",
+    "location": "Redwood City pickup + in-home",
+    "when": "Pickup Tuesday, November 10th / Return Wednesday, December 16th — Pickup/return sessions available from 9:00 AM - 10:30 AM · 4.5 week home use",
+    "description": "Curion home goods Home Use Test with pickup and return in Redwood City. 4.5 weeks of home use, $80 upon study completion. Pickup Tuesday, November 10th and return Wednesday, December 16th (sessions 9:00 AM to 10:30 AM) at 350 Bridge Parkway. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105270",
+    "publishedAt": "2026-10-30T16:05:00.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105283",
+    "title": "Redwood City beverage study (RWC_J105283)",
+    "pay": 40,
+    "payLabel": "$40",
+    "durationMinutes": 30,
+    "durationLabel": "30 min",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "when": "Tuesday, November 10th — Sessions available from 9:00 AM - 12:45 PM",
+    "description": "Curion in-person beverage study in Redwood City on Tuesday, November 10th (sessions available 9:00 AM to 12:45 PM) at 350 Bridge Parkway. 30-minute session, $40. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105283",
+    "publishedAt": "2026-10-31T00:10:00.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105304",
+    "title": "Redwood City beauty home use test (RWC_J105304)",
+    "pay": 70,
+    "payLabel": "$70",
+    "durationMinutes": 0,
+    "durationLabel": "10 days",
+    "modality": "remote",
+    "location": "Redwood City pickup + in-home",
+    "when": "Pickup Thursday, November 12th — Pickup sessions available from 12:00 PM - 1:30 PM · 10 day home use",
+    "description": "Curion beauty Home Use Test with pickup in Redwood City. 10 days of home use, $70 upon study completion. Pickup Thursday, November 12th (sessions 12:00 PM to 1:30 PM) at 350 Bridge Parkway. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105304",
+    "publishedAt": "2026-10-31T00:10:00.000Z"
   }
 ]
