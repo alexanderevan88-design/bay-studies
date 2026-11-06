@@ -16,6 +16,96 @@
     "expired": false,
     "linkStatus": null,
     "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105371",
+    "title": "Redwood City beverage study (RWC_J105371)",
+    "pay": 45,
+    "payLabel": "$45",
+    "durationMinutes": 45,
+    "durationLabel": "45 min",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "when": "Friday, November 20th — Sessions available from 9:00 AM - 2:00 PM",
+    "description": "Curion in-person beverage study in Redwood City on Friday, November 20th (sessions available 9:00 AM to 2:00 PM) at 350 Bridge Parkway. 45-minute session, $45. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105371",
+    "publishedAt": "2026-11-06T17:05:00.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "Parent/child study. See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105350",
+    "title": "Redwood City parent/child study (RWC_J105350)",
+    "pay": 90,
+    "payLabel": "$90",
+    "durationMinutes": 45,
+    "durationLabel": "45 min",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "when": "Wednesday, November 18th, Friday, November 20th, or Monday, November 23rd — Sessions available from 4:30 PM - 5:45 PM",
+    "description": "Curion in-person parent/child study in Redwood City on Wednesday, November 18th, Friday, November 20th, or Monday, November 23rd (sessions available 4:30 PM to 5:45 PM) at 350 Bridge Parkway. 45-minute session, $90. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105350",
+    "publishedAt": "2026-11-06T17:05:00.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
+    "id": "pub-em-curion-rwc-j105327",
+    "title": "Redwood City food study (RWC_J105327)",
+    "pay": 40,
+    "payLabel": "$40",
+    "durationMinutes": 30,
+    "durationLabel": "30 min",
+    "modality": "in-person",
+    "location": "Redwood City / Peninsula",
+    "when": "Tuesday, November 10th — Sessions available from 1:30 PM - 4:30 PM",
+    "description": "Curion in-person food study in Redwood City on Tuesday, November 10th (sessions available 1:30 PM to 4:30 PM) at 350 Bridge Parkway. 30-minute session, $40. Open screener to check if you qualify.",
+    "sourceEmailId": "em-curion-rwc-j105327",
+    "publishedAt": "2026-11-06T17:05:00.000Z"
+  },
+  {
+    "firm": "Curion",
+    "firmDomain": "curioninsights.com",
+    "verified": true,
+    "type": "product-taste",
+    "metro": [
+      "peninsula"
+    ],
+    "address": "350 Bridge Parkway, Redwood City, CA 94065",
+    "eligibility": {
+      "notes": "See Curion screener / portal for full eligibility details."
+    },
+    "applyUrl": "https://curioninsights.com/",
+    "portalNote": "Opens Curion’s homepage — join or sign in with your own free panel account to find open screeners.",
+    "expired": false,
+    "linkStatus": null,
+    "matchedSourceId": "curion",
     "id": "pub-em-curion-rwc-j105339",
     "title": "Redwood City food study (RWC_J105339)",
     "pay": 45,
